@@ -14,13 +14,12 @@ If you would like to submit a pull request make sure to
 
 - add test cases for the problem you are solving
 - stick to project coding conventions
+- make sure commit message follows [camunda commit message conventions](https://github.com/camunda/camunda.org/blob/master/COMMIT_MESSAGES.md)	
 
 
 ## Project Setup
 
 _Perform the following steps to get a development setup up and running._
 
-- step1
-- step2
-- ...
-- stepN
+- check out the project
+- run mvn clean install

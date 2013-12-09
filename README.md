@@ -2,21 +2,25 @@
 
 camunda BPM community extension providing support for camunda BPM platform inside OSGi containers
 
-![Screenshot or code snippet](http://placehold.it/550x350&text=Image%20or%20code%20snippet%20if%20applicable)
+```
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: camunda BPM Platform OSGi
+Bundle-SymbolicName: org.camunda.bpm.osgi
+Bundle-Version: 
+Export-Package: [...]
+Import-Package: [...]
+```
 
 ## Get started
 
-_A quick description how your project can be used, including where the relevant resources can be obtained from.
-Put into another file if too big._
-
+Build the project and drop it into an OSGi-environment. 
+Alternatively you may use Apache Karaf and install camunda-bpm-osgi with the camunda-engine-karaf-feature. 
 
 ## Resources
 
 * [Issue Tracker](https://github.com/camunda/camunda-bpm-platform-osgi/issues)
-* [Roadmap](link-to-issue-tracker-filter) _if in terms of tagged issues_
-* [Changelog](link-to-changelog) _lets users track progress on what has been happening_
-* [Download](link-to-downloadable-archive) _if downloadable_
-* [Contributing](link-to-contribute-guide) _if desired, best to put it into a CONTRIBUTE.md file_
+* [Contributing](https://github.com/camunda/camunda-bpm-platform-osgi/blob/master/CONTRIBUTING.md)
 
 
 ## Roadmap
