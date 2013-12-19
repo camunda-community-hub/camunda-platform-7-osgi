@@ -25,14 +25,16 @@ Alternatively you may use Apache Karaf and install camunda-bpm-osgi with the cam
 
 ## Roadmap
 
-_specify a short list of things that yet need to be done (unless you organize it elsewhere)_
+_a short list of things that yet need to be done (until we organize it elsewhere ;) )_
 
 **todo**
-- add feature B
-- integrate with technology X
-
+- QA, integration tests (resolve engine-bundle)
+- create example for configuring engine using Blueprint
+- adapt Process Application API for OSGi
+- camunda webapp WAB (cockpit, tasklist, admin)
+- create example for configuring engine using PAX-CDI
 **done**
-- add feature A
+- nothing yet
 
 
 ## Maintainers:
