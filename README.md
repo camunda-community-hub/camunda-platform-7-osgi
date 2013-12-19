@@ -33,6 +33,7 @@ _a short list of things that yet need to be done (until we organize it elsewhere
 - adapt Process Application API for OSGi
 - camunda webapp WAB (cockpit, tasklist, admin)
 - create example for configuring engine using PAX-CDI
+
 **done**
 - nothing yet
 
