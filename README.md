@@ -14,7 +14,7 @@ Import-Package: [...]
 
 ## Get started
 
-Build the project and drop it into an OSGi-environment. 
+Build the project and drop it into an OSGi-environment. Add camunda-bpm-engine 7.1.0-alpha1 or a higher version and add mybatis and yodatime.
 Alternatively you may use Apache Karaf and install camunda-bpm-osgi with the camunda-engine-karaf-feature. 
 
 ## Resources
