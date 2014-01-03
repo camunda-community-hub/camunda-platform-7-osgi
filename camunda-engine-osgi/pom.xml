@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.camunda.bpm.osgi</groupId>
 		<artifactId>camunda-osgi-root</artifactId>
-		<version>7.0.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
   <build>
@@ -26,6 +26,15 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <extensions>true</extensions>
+        <executions>
+        <!-- This execution makes sure that the manifest is available 
+             when the tests are executed -->
+        	<execution>
+            	<goals>
+                	<goal>manifest</goal>
+                </goals>
+            </execution>
+         </executions>
       </plugin>
 	</plugins>
   </build>
@@ -53,6 +62,72 @@
           <artifactId>org.apache.felix.fileinstall</artifactId>
           <version>3.0.2</version>
           <optional>true</optional>
+        </dependency>
+        <dependency>
+        	<groupId>junit</groupId>
+        	<artifactId>junit</artifactId>
+        	<version>${junit.version}</version>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.exam</groupId>
+        	<artifactId>pax-exam-junit4</artifactId>
+        	<version>${paxexam.version}</version>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.exam</groupId>
+        	<artifactId>pax-exam-container-forked</artifactId>
+        	<version>${paxexam.version}</version>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.exam</groupId>
+        	<artifactId>pax-exam-link-mvn</artifactId>
+        	<version>${paxexam.version}</version>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.url</groupId>
+        	<artifactId>pax-url-aether</artifactId>
+        	<version>1.6.0</version>
+        	<type>bundle</type>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.felix</groupId>
+        	<artifactId>org.apache.felix.framework</artifactId>
+        	<version>4.2.1</version>
+        	<type>bundle</type>
+        </dependency>
+        <dependency>
+        	<groupId>ch.qos.logback</groupId>
+        	<artifactId>logback-core</artifactId>
+        	<version>1.0.13</version>
+        </dependency>
+        <dependency>
+        	<groupId>ch.qos.logback</groupId>
+        	<artifactId>logback-classic</artifactId>
+        	<version>1.0.13</version>
+        </dependency>
+        <dependency>
+        	<groupId>javax.inject</groupId>
+        	<artifactId>javax.inject</artifactId>
+        	<version>1</version>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.url</groupId>
+        	<artifactId>pax-url-reference</artifactId>
+        	<version>1.6.0</version>
+        	<type>bundle</type>
+        </dependency>
+        <dependency>
+        	<groupId>org.ops4j.pax.tinybundles</groupId>
+        	<artifactId>tinybundles</artifactId>
+        	<version>2.0.0</version>
+        	<type>bundle</type>
+        	<scope>test</scope>
         </dependency>
   </dependencies>
 
