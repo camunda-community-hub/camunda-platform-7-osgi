@@ -3,24 +3,34 @@ package org.camunda.bpm.engine.osgi;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.ops4j.pax.exam.util.Filter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.url.URLStreamHandlerService;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class BundleStartTestWithoutFileinstall extends OSGiTestCase {
 
+	@Inject
+	@Filter("(url.handler.protocol=bpmn)")
+	private URLStreamHandlerService bpmnUrlHandler;
+	
+	@Inject
+	@Filter("(url.handler.protocol=bar)")
+	private URLStreamHandlerService barUrlHandler;
+	
 	@Test
 	public void bundleStarted() {
 		try {
@@ -35,26 +45,10 @@ public class BundleStartTestWithoutFileinstall extends OSGiTestCase {
 
 	@Test
 	public void checkServices() {
-		try {
-			startBundle("org.camunda.bpm.engine.osgi");
-			ServiceReference[] service = ctx.getServiceReferences(
-					URLStreamHandlerService.class.getName(),
-					"(url.handler.protocol=bpmn)");
-			assertThat(service.length, is(1));
-			assertThat(ctx.getService(service[0]),
-					is(instanceOf(BpmnURLHandler.class)));
-			ServiceReference[] service2 = ctx.getServiceReferences(
-					URLStreamHandlerService.class.getName(),
-					"(url.handler.protocol=bar)");
-			assertThat(service2.length, is(1));
-			assertThat(ctx.getService(service2[0]),
-					is(instanceOf(BarURLHandler.class)));
-		} catch (InvalidSyntaxException e) {
-			fail(e.toString());
-		} catch (BundleException e) {
-			fail(e.toString());
-		}
-
+		assertThat(bpmnUrlHandler, is(notNullValue()));
+		assertThat(bpmnUrlHandler, is(instanceOf(BpmnURLHandler.class)));
+		assertThat(barUrlHandler, is(notNullValue()));
+		assertThat(barUrlHandler, is(instanceOf(BarURLHandler.class)));
 	}
 
 }
