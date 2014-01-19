@@ -10,6 +10,7 @@
     <modules>
         <module>camunda-engine-osgi</module>
         <module>camunda-engine-karaf-feature</module>
+        <module>camunda-engine-blueprint-wrapper</module>
     </modules>
 
     <properties>
