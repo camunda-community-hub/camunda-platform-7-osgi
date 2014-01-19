@@ -137,7 +137,7 @@ public class BlueprintIntegrationTest {
 		ctx.registerService(JavaDelegate.class.getName(), new TestDelegate(),
 				properties);
 		//wait a little bit
-		Thread.sleep(1000L);
+		Thread.sleep(2000L);
 		ProcessInstance processInstance = runService.startProcessInstanceByKey("Process_1");
 		assertThat(processInstance.isEnded(), is(true));
 		assertThat(delegateVisited, is(true));
