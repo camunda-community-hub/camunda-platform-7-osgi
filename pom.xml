@@ -20,6 +20,7 @@
     	<junit.version>4.11</junit.version>
     	<paxexam.version>3.3.0</paxexam.version>
 		<logback.version>0.9.20</logback.version>
+		<osgi.version>4.2.0</osgi.version>
     </properties>
 
     <build>
