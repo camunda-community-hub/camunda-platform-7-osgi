@@ -22,6 +22,15 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+/**
+ * Integration test to check that the camunda-engine-osgi bundle will start in
+ * the configured environment. Additionally this class adds the Apache Felix
+ * Fileinstall bundle to check that the optional {@link ArtifactUrlTransformer}
+ * and {@link ArtifactListener} services are registered after startup.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class BundleStartTestWithFileinstall extends OSGiTestCase {

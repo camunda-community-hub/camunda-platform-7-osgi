@@ -14,9 +14,23 @@ import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.Constants;
 
+/**
+ * This test checks that the deployment listener will parse a process definition
+ * to which the header
+ * <p>
+ * <code>
+ * org.camunda.bpm.engine.osgi.Constants.BUNDLE_PROCESS_DEFINITIONS_HEADER
+ * </code>
+ * <p>
+ * in the MANIFEST.MF inside a bundle points to.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class DeploymentListenerManifestHeaderTest extends AbstractDeploymentListenerTest {
+public class DeploymentListenerManifestHeaderTest extends
+		AbstractDeploymentListenerTest {
 
 	protected InputStream createTestBundleWithProcessDefinition() {
 		try {

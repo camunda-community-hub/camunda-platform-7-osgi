@@ -14,6 +14,19 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
+/**
+ * Superclass for OSGi-Integration tests. It contains a field for the
+ * {@link BundleContext}, creates the basic Pax Exam configuration for the
+ * environment and defines two helper methods.
+ * <p>
+ * This class is also referenced as default configuration in<br/>
+ * <code>
+ * src/test/resources/META-INF/services/org.ops4j.pax.exam.ConfigurationFactory
+ * </code>
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 public class OSGiTestCase implements ConfigurationFactory {
 
 	@Inject
@@ -34,7 +47,8 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-api").version("2.0-beta9"),
 				mavenBundle().groupId("org.apache.logging.log4j")
-						.artifactId("log4j-core").version("2.0-beta9").noStart(),
+						.artifactId("log4j-core").version("2.0-beta9")
+						.noStart(),
 				// make sure compiled classes from src/main are included
 				bundle("reference:file:target/classes"));
 		return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles());

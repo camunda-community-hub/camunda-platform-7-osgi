@@ -19,6 +19,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.service.url.URLStreamHandlerService;
 
+/**
+ * Integration test to check that the camunda-engine and camunda-engine-osgi
+ * bundles will start in the configured environment. This test also checks that
+ * the expected services will be registered.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class BundleStartTestWithoutFileinstall extends OSGiTestCase {
@@ -26,11 +34,11 @@ public class BundleStartTestWithoutFileinstall extends OSGiTestCase {
 	@Inject
 	@Filter("(url.handler.protocol=bpmn)")
 	private URLStreamHandlerService bpmnUrlHandler;
-	
+
 	@Inject
 	@Filter("(url.handler.protocol=bar)")
 	private URLStreamHandlerService barUrlHandler;
-	
+
 	@Test
 	public void bundleStarted() {
 		try {

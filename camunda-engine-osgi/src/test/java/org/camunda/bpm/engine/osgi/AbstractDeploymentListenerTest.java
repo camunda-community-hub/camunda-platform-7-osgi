@@ -24,6 +24,14 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
 import org.osgi.framework.BundleException;
 
+/**
+ * Abstract superclass for the DeploymentListener-tests. This class creates the
+ * in-memory {@link DataSource} and initializes the {@link ProcessEngine} for
+ * the tests.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 	protected ProcessEngine processEngine;
 

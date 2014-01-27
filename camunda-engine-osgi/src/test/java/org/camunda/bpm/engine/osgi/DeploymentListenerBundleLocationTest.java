@@ -14,6 +14,19 @@ import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.Constants;
 
+/**
+ * This test checks that the deployment listener will parse a process definition
+ * which is placed at the default location defined by
+ * <p>
+ * <code>
+ * org.camunda.bpm.engine.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT
+ * </code>
+ * <p>
+ * inside a bundle.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
 public class DeploymentListenerBundleLocationTest extends
