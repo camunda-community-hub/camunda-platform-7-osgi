@@ -12,7 +12,6 @@
  */
 package org.camunda.bpm.engine.osgi;
 
-import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Set;
