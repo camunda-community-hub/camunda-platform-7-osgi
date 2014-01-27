@@ -83,11 +83,11 @@ public class Activator implements BundleActivator {
 
         private final ServiceRegistration registration;
 
-        public Service(BundleContext context, String clazz, Object service, Dictionary props) {
+        public Service(BundleContext context, String clazz, Object service, Dictionary<String, String> props) {
             this.registration = context.registerService(clazz, service, props);
         }
 
-        public Service(BundleContext context, String[] clazz, Object service, Dictionary props) {
+        public Service(BundleContext context, String[] clazz, Object service, Dictionary<String, String> props) {
             this.registration = context.registerService(clazz, service, props);
         }
 
