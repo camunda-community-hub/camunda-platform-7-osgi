@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class BundleStartTestWithFileinstall extends OSGiTestCase {
+public class BundleStartWithFileinstallTest extends OSGiTestCase {
 
 	@Override
 	@Configuration

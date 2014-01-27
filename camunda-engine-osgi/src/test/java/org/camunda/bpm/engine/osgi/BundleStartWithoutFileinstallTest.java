@@ -29,7 +29,7 @@ import org.osgi.service.url.URLStreamHandlerService;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class BundleStartTestWithoutFileinstall extends OSGiTestCase {
+public class BundleStartWithoutFileinstallTest extends OSGiTestCase {
 
 	@Inject
 	@Filter("(url.handler.protocol=bpmn)")
