@@ -19,7 +19,7 @@
   	<bundle>mvn:org.apache.juli/com.springsource.org.apache.juli.extras/6.0.24</bundle>
   	<bundle>mvn:org.apache.commons/commons-email/1.3.2</bundle>
   	<bundle>mvn:org.apache.ant/com.springsource.org.apache.tools.ant/1.7.1</bundle>
-  	<bundle>mvn:org.camunda.bpm.osgi/camunda-engine-osgi/1.0.0-SNAPSHOT</bundle>
+  	<bundle>mvn:org.camunda.bpm.osgi/camunda-engine-osgi/${project.version}</bundle>
   	<bundle></bundle>
   </feature>
   
@@ -33,7 +33,7 @@
     <bundle>mvn:com.google.protobuf/protobuf-java/2.5.0</bundle>
     <bundle>mvn:org.jvnet.staxex/stax-ex/1.7.5</bundle>
     <bundle>mvn:org.camunda.bpm/camunda-engine/${camunda-bpm.version}</bundle>
-    <bundle>mvn:org.camunda.bpm/camunda-engine-osgi/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.osgi/camunda-engine-osgi/${project.version}</bundle>
     <bundle>mvn:com.fasterxml.uuid/java-uuid-generator/3.1.3</bundle>
   </feature>
   
