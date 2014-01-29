@@ -43,6 +43,7 @@
   
   <feature name="camunda-engine-karaf-feature-full" version="${project.version}">
   	<feature version="${spring.version}">spring</feature>
+    <feature version="${camunda-bpm.version}">camunda-optionals</feature>
     <feature version="${camunda-bpm.version}">camunda</feature>
   </feature>
 </features>
