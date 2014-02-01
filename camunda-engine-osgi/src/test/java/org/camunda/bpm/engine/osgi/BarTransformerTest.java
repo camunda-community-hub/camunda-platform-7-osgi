@@ -12,12 +12,14 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.Constants;
 
 public class BarTransformerTest {
 
 	@Test
+	@Ignore
 	public void transformSimpleJar() throws Exception {
 		JarFileBuilder builder = new JarFileBuilder("foo.jar");
 		builder.addDirEntries("com/foo/bar/");

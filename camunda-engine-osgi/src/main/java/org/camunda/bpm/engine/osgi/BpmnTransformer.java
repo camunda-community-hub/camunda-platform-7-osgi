@@ -22,8 +22,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
@@ -76,9 +76,8 @@ public class BpmnTransformer {
                 String text = e.getTextContent();
                 Properties props = new Properties();
                 props.load(new ByteArrayInputStream(text.trim().getBytes()));
-                Enumeration en = props.propertyNames();
-                while (en.hasMoreElements()) {
-                    String k = (String) en.nextElement();
+                Set<String> en = props.stringPropertyNames();
+                for (String k : en) {
                     String v = props.getProperty(k);
                     m.getMainAttributes().putValue(k, v);
                 }

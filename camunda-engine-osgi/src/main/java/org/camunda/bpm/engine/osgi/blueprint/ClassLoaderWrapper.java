@@ -25,11 +25,11 @@ public class ClassLoaderWrapper extends ClassLoader {
     /**
      * {@inheritDoc}
      */
-    protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //
         // Check if class is in the loaded classes cache
         //
-        Class cachedClass = findLoadedClass(name);
+        Class<?> cachedClass = findLoadedClass(name);
         if (cachedClass != null) {
             if (resolve) {
                 resolveClass(cachedClass);
@@ -43,7 +43,7 @@ public class ClassLoaderWrapper extends ClassLoader {
         for (int i = 0; i < parents.length; i++) {
             ClassLoader parent = parents[i];
             try {
-                Class clazz = parent.loadClass(name);
+                Class<?> clazz = parent.loadClass(name);
                 if (resolve) {
                     resolveClass(clazz);
                 }
@@ -77,15 +77,15 @@ public class ClassLoaderWrapper extends ClassLoader {
     /**
      * {@inheritDoc}
      */
-    public Enumeration findResources(String name) throws IOException {
-        List resources = new ArrayList();
+    public Enumeration<URL> findResources(String name) throws IOException {
+        List<URL> resources = new ArrayList<URL>();
 
         //
         // Add parent resources
         //
         for (int i = 0; i < parents.length; i++) {
             ClassLoader parent = parents[i];
-            List parentResources = Collections.list(parent.getResources(name));
+            List<URL> parentResources = Collections.list(parent.getResources(name));
             resources.addAll(parentResources);
         }
 

@@ -236,7 +236,7 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
   }
 
   private void addEntries(Bundle bundle, String path, String filePattern, List<URL> pathList) {
-    Enumeration e = bundle.findEntries(path, filePattern, false);
+    Enumeration<?> e = bundle.findEntries(path, filePattern, false);
     while (e != null && e.hasMoreElements()) {
       URL u = (URL) e.nextElement();
       URL override = getOverrideURL(bundle, u, path);
@@ -318,7 +318,7 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
 
   protected void registerScriptEngines(Bundle bundle, List<BundleScriptEngineResolver> resolvers) {
     URL configURL = null;
-    for (Enumeration e = bundle.findEntries(META_INF_SERVICES_DIR, SCRIPT_ENGINE_SERVICE_FILE, false); e != null && e.hasMoreElements();) {
+    for (Enumeration<?> e = bundle.findEntries(META_INF_SERVICES_DIR, SCRIPT_ENGINE_SERVICE_FILE, false); e != null && e.hasMoreElements();) {
       configURL = (URL) e.nextElement();
     }
     if (configURL != null) {
@@ -356,7 +356,7 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
         BufferedReader in = new BufferedReader(new InputStreamReader(configFile.openStream()));
         String className = in.readLine();
         in.close();
-        Class cls = bundle.loadClass(className);
+        Class<?> cls = bundle.loadClass(className);
         if (!ScriptEngineFactory.class.isAssignableFrom(cls)) {
             throw new IllegalStateException("Invalid ScriptEngineFactory: " + cls.getName());
         }
