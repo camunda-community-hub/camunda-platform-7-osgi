@@ -14,8 +14,9 @@ import org.camunda.bpm.engine.impl.javax.el.ELResolver;
  * @see org.camunda.bpm.engine.test.spring.ApplicationContextElResolver
  */
 public class BlueprintELResolver extends ELResolver {
-	
-  private static final Logger LOGGER = Logger.getLogger(BlueprintELResolver.class.getName());
+
+	private static final Logger LOGGER = Logger
+			.getLogger(BlueprintELResolver.class.getName());
 	private Map<String, JavaDelegate> delegateMap = new HashMap<String, JavaDelegate>();
 
 	public Object getValue(ELContext context, Object base, Object property) {
@@ -23,28 +24,27 @@ public class BlueprintELResolver extends ELResolver {
 			// according to javadoc, can only be a String
 			String key = (String) property;
 			for (String name : delegateMap.keySet()) {
-	      if(name.equalsIgnoreCase(key)) {
-	      	context.setPropertyResolved(true);
-	      	return delegateMap.get(name);
-	      }
-	    }
+				if (name.equalsIgnoreCase(key)) {
+					context.setPropertyResolved(true);
+					return delegateMap.get(name);
+				}
+			}
 		}
-
 		return null;
 	}
-	
-	public void bindService(JavaDelegate delegate, Map<?,?> props) {
-    String name = (String) props.get("osgi.service.blueprint.compname");
-    delegateMap.put(name, delegate);
-    LOGGER.info("added service to delegate cache " + name);
+
+	public void bindService(JavaDelegate delegate, Map<?, ?> props) {
+		String name = (String) props.get("osgi.service.blueprint.compname");
+		delegateMap.put(name, delegate);
+		LOGGER.info("added service to delegate cache " + name);
 	}
 
-	public void unbindService(JavaDelegate delegate, Map<?,?> props) {
+	public void unbindService(JavaDelegate delegate, Map<?, ?> props) {
 		String name = (String) props.get("osgi.service.blueprint.compname");
-    if(delegateMap.containsKey(name)) {
-    	delegateMap.remove(name);
-    }
-    LOGGER.info("removed service from delegate cache " + name);
+		if (delegateMap.containsKey(name)) {
+			delegateMap.remove(name);
+		}
+		LOGGER.info("removed service from delegate cache " + name);
 	}
 
 	public boolean isReadOnly(ELContext context, Object base, Object property) {
@@ -52,7 +52,7 @@ public class BlueprintELResolver extends ELResolver {
 	}
 
 	public void setValue(ELContext context, Object base, Object property,
-	    Object value) {
+			Object value) {
 	}
 
 	public Class<?> getCommonPropertyType(ELContext context, Object arg) {
@@ -60,7 +60,7 @@ public class BlueprintELResolver extends ELResolver {
 	}
 
 	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
-	    Object arg) {
+			Object arg) {
 		return null;
 	}
 
