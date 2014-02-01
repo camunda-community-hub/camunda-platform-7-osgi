@@ -4,19 +4,14 @@ import static org.camunda.bpm.engine.osgi.Constants.BUNDLE_PROCESS_DEFINITIONS_H
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.Constants;
 
@@ -24,61 +19,65 @@ public class BarTransformerTest {
 
 	@Test
 	public void transformSimpleJar() throws Exception {
-		String packageName = "com/foo/bar/";
-		File jar = createJar("foo.jar", packageName);
-		File result = new File("result.jar");
-		result.deleteOnExit();
-		FileOutputStream fos = new FileOutputStream(result);
-		BarTransformer.transform(jar.toURI().toURL(), fos);
-		assertThat(result.exists(), is(true));
+		JarFileBuilder builder = new JarFileBuilder("foo.jar");
+		builder.addDirEntries("com/foo/bar/");
+		File jar = builder.createJarFile();
+		File result = getResultFromTransformer(jar);
 		// FIXME why should the symbolic name of foo.jar be foo.jar?
-		checkResultJar(result, "0.0.0", packageName);
+		checkResultJar(result, "0.0.0", "com/foo/bar/", "");
 	}
 
 	@Test
 	public void transformJarWithVersionInName() throws Exception {
+		JarFileBuilder builder = new JarFileBuilder("foo-1.0.0.jar");
 		String packageName = "com/foo/bar/";
-		File jar = createJar("foo-1.0.0.jar", packageName);
-		File result = new File("result.jar");
-		result.deleteOnExit();
-		FileOutputStream fos = new FileOutputStream(result);
-		BarTransformer.transform(jar.toURI().toURL(), fos);
-		assertThat(result.exists(), is(true));
-		checkResultJar(result, "1.0.0", packageName);
+		File jar = builder
+				.addDirEntries(packageName)
+				.addFileEntry("com/foo/bar/testprocess.bpmn",
+						new File("src/test/resources/testprocess.bpmn"))
+				.createJarFile();
+		File result = getResultFromTransformer(jar);
+		checkResultJar(result, "1.0.0", packageName, packageName);
 	}
 
 	@Test
 	public void transformJarWithVersionAndModifierInName() throws Exception {
-		String packageName = "com/foo/bar/";
-		File jar = createJar("foo-1.0.0-SNAPSHOT.jar", packageName);
-		File result = new File("result.jar");
-		result.deleteOnExit();
-		FileOutputStream fos = new FileOutputStream(result);
-		BarTransformer.transform(jar.toURI().toURL(), fos);
-		assertThat(result.exists(), is(true));
-		checkResultJar(result, "1.0.0.SNAPSHOT", packageName);
+		File jar = new JarFileBuilder("foo-1.0.0-SNAPSHOT.jar").addDirEntries(
+				"com/foo/bar/").createJarFile();
+		File result = getResultFromTransformer(jar);
+		checkResultJar(result, "1.0.0.SNAPSHOT", "com/foo/bar", "");
 	}
 
 	@Test
 	public void transformJarWithoutPackage() throws Exception {
-		String packageName = "/";
-		File jar = createJar("foo-1.0.0.jar", packageName);
-		File result = new File("result.jar");
-		result.deleteOnExit();
-		FileOutputStream fos = new FileOutputStream(result);
-		BarTransformer.transform(jar.toURI().toURL(), fos);
-		assertThat(result.exists(), is(true));
-		checkResultJar(result, "1.0.0", packageName);
+		String packageName = "";
+		File jar = new JarFileBuilder("foo-1.0.0.jar").addDirEntry(packageName)
+				.createJarFile();
+		File result = getResultFromTransformer(jar);
+		checkResultJar(result, "1.0.0", packageName, "/");
 	}
-	
 
 	@Test
-	@Ignore("to implement")
 	public void transformJarWithManifest() throws Exception {
+		File jar = new JarFileBuilder("foo-1.0.0.jar")
+				.addDirEntries("com/foo/bar")
+				.addManifest(
+						"Manifest-Version: 1.0\nBundle-SymbolicName: com.foo\nBundle-Version: 1.0.0\n")
+				.createJarFile();
+		File result = getResultFromTransformer(jar);
+		checkResultJar(result, "1.0.0", "com/foo/bar", "", "com.foo");
 	}
 
 	private void checkResultJar(File result, String expectedVersion,
-			String expectedPackage) throws Exception {
+			String expectedPackage, String expectedProcessDefHeader)
+			throws Exception {
+		checkResultJar(result, expectedVersion, expectedPackage,
+				expectedProcessDefHeader, "foo");
+	}
+
+	private void checkResultJar(File result, String expectedVersion,
+			String expectedPackage, String expectedProcessDefHeader,
+			String expectedSymbolicName) throws Exception {
 		JarInputStream jarInputStream = new JarInputStream(new FileInputStream(
 				result));
 		Manifest manifest = jarInputStream.getManifest();
@@ -87,32 +86,27 @@ public class BarTransformerTest {
 		assertThat(attributes.getValue(Constants.BUNDLE_MANIFESTVERSION),
 				is("2"));
 		assertThat(attributes.getValue(Constants.BUNDLE_SYMBOLICNAME),
-				is("foo"));
+				is(expectedSymbolicName));
 		assertThat(attributes.getValue(Constants.BUNDLE_VERSION),
 				is(expectedVersion));
 		assertThat(attributes.getValue(BUNDLE_PROCESS_DEFINITIONS_HEADER),
-				is(""));
-		assertThat(jarInputStream.getNextJarEntry().getName(),
-				is(expectedPackage));
+				is(expectedProcessDefHeader));
 		jarInputStream.close();
 
 	}
 
-	private File createJar(String jarName, String packageName) {
+	private File getResultFromTransformer(File jar) {
+		File result = new File("result.jar");
+		result.deleteOnExit();
+		FileOutputStream fos;
 		try {
-			File file = new File(jarName);
-			file.deleteOnExit();
-			FileOutputStream fout = new FileOutputStream(file);
-			JarOutputStream jarOut = new JarOutputStream(fout);
-			jarOut.putNextEntry(new ZipEntry(packageName));
-			jarOut.closeEntry();
-			jarOut.close();
-			fout.close();
-			return file;
-		} catch (IOException ioe) {
-			fail(ioe.toString());
+			fos = new FileOutputStream(result);
+			BarTransformer.transform(jar.toURI().toURL(), fos);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		return null;
+		assertThat(result.exists(), is(true));
+		return result;
 	}
-	
+
 }
