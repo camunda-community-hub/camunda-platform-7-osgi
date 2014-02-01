@@ -60,7 +60,7 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 		try {
 			startBundle("org.camunda.bpm.osgi.example");
 			// wait, so the engine can process the bpmn-file
-			Thread.sleep(1000L);
+			Thread.sleep(3000L);
 			assertThat(
 					processEngine.getRepositoryService()
 							.createProcessDefinitionQuery()
