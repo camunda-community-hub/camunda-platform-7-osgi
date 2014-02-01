@@ -39,7 +39,8 @@ public class BpmnDeploymentListener implements ArtifactUrlTransformer {
 
     public boolean canHandle(File artifact) {
         try {
-            if (artifact.isFile() && artifact.getName().endsWith(".xml")) {
+            String artifactName = artifact.getName();
+			if (artifact.isFile() && (artifactName.endsWith(".xml") || artifactName.endsWith(".bpmn"))) {
                 Document doc = parse(artifact);
                 String name = doc.getDocumentElement().getLocalName();
                 String uri  = doc.getDocumentElement().getNamespaceURI();
