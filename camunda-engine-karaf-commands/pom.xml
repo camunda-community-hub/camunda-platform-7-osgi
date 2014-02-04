@@ -8,7 +8,6 @@
         <artifactId>camunda-osgi-root</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.camunda.bpm.osgi</groupId>
     <artifactId>camunda-engine-karaf-commands</artifactId>
     <name>camunda-karaf-commands</name>
     <packaging>bundle</packaging>
@@ -20,7 +19,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.3.4</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -50,7 +48,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
