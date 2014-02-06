@@ -27,7 +27,7 @@ public class ProcessEngineFactory {
 
     protected ProcessEngine processEngine;
 
-    public void init() throws Exception {
+    public void init() {
         ClassLoader previous = Thread.currentThread().getContextClassLoader();
 
         try {
@@ -49,13 +49,13 @@ public class ProcessEngineFactory {
         }
     }
 
-    public void destroy() throws Exception {
+    public void destroy() {
         if (processEngine != null) {
             processEngine.close();
         }
     }
 
-    public ProcessEngine getObject() throws Exception {
+    public ProcessEngine getObject() {
         return processEngine;
     }
 

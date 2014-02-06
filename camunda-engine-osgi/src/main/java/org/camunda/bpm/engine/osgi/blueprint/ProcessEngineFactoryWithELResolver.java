@@ -24,7 +24,7 @@ public class ProcessEngineFactoryWithELResolver extends ProcessEngineFactory {
     private BlueprintELResolver blueprintELResolver;
 
     @Override
-    public void init() throws Exception {
+    public void init() {
       ProcessEngineConfigurationImpl configImpl = (ProcessEngineConfigurationImpl) getProcessEngineConfiguration();
       configImpl.setExpressionManager(new BlueprintExpressionManager());
       
