@@ -43,7 +43,8 @@ public class NameVersionTypeExtractor {
 					Pattern.DOTALL);
 	private static final Pattern FUZZY_MODIFIDER = Pattern.compile(
 			"(?:\\d+[.-])*(.*)", Pattern.DOTALL);
-
+	private static Pattern SIMPLE_FILENAME_MATCHER = Pattern.compile("(.+)\\.(.+)", Pattern.DOTALL);
+	
 	/**
 	 * Tries to extract name, version and type from a jar name.
 	 * The return String-array contains either
@@ -58,7 +59,13 @@ public class NameVersionTypeExtractor {
 	public static String[] extractNameVersionType(String jarName) {
 		Matcher m = ARTIFACT_MATCHER.matcher(jarName);
 		if (!m.matches()) {
-			return new String[] { jarName, DEFAULT_VERSION };
+			m = SIMPLE_FILENAME_MATCHER.matcher(jarName);
+			if(m.matches()) {
+				return new String[] { m.group(1), DEFAULT_VERSION, m.group(2) };
+			} else {
+				//we definitely cannot find a meaningful name
+				return new String[] { jarName, DEFAULT_VERSION };
+			}
 		} else {
 			StringBuffer v = new StringBuffer();
 			String d1 = m.group(1); //name

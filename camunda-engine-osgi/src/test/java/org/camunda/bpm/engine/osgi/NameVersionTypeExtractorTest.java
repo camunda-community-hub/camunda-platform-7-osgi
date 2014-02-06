@@ -21,9 +21,6 @@ public class NameVersionTypeExtractorTest {
 		checkStrings(strings, "foo", "0.0.0", "jar");
 	}
 
-	// FIXME gotta check if I duplicate some tests
-	// with BarTransformerTest (could be a lot)
-
 	@Test
 	public void basicJarNameWithVersion() {
 		String jarName = "foo-1.0.0.jar";
@@ -111,7 +108,7 @@ public class NameVersionTypeExtractorTest {
 				.extractNameVersionType(jarName);
 		checkStrings(strings, "foo", "1.0.0.RC2", "bar");
 	}
-
+	
 	private void checkStrings(String[] toCheck, String expectedName,
 			String expectedVersion, String expectedType) {
 		if (expectedType == null) {
