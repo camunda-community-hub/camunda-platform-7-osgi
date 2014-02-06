@@ -19,7 +19,6 @@ import static org.osgi.framework.Constants.BUNDLE_SYMBOLICNAME;
 import static org.osgi.framework.Constants.BUNDLE_VERSION;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Properties;
@@ -43,13 +42,14 @@ import org.w3c.dom.NodeList;
  * Helper class to actually transform the BPMN xml file into a bundle.
  * 
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
+ * @author Ronny Bräunlich
  */
 public class BpmnTransformer {
 
-	static DocumentBuilderFactory dbf;
-	static TransformerFactory tf;
+	private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	private static final TransformerFactory tf = TransformerFactory.newInstance();
 
-	public static void transform(URL url, OutputStream os) throws Exception {
+	public void transform(URL url, OutputStream os) throws Exception {
 		// Build dom document
 		Document doc = parse(url);
 		// Heuristicly retrieve name and version
@@ -91,38 +91,23 @@ public class BpmnTransformer {
 		out.closeEntry();
 		e = new ZipEntry("OSGI-INF/");
 		out.putNextEntry(e);
-		e = new ZipEntry(BUNDLE_PROCESS_DEFINTIONS_DEFAULT);
+		String processDefDir = m.getMainAttributes().getValue(BUNDLE_PROCESS_DEFINITIONS_HEADER);
+		e = new ZipEntry(processDefDir);
 		out.putNextEntry(e);
 		out.closeEntry();
-		e = new ZipEntry(BUNDLE_PROCESS_DEFINTIONS_DEFAULT + name);
+		e = new ZipEntry(processDefDir + name);
 		out.putNextEntry(e);
 		// Copy the new DOM
-		if (tf == null) {
-			tf = TransformerFactory.newInstance();
-		}
 		tf.newTransformer()
 				.transform(new DOMSource(doc), new StreamResult(out));
 		out.closeEntry();
 		out.close();
 	}
 
-	protected static Document parse(URL url) throws Exception {
-		if (dbf == null) {
-			dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-		}
+	private Document parse(URL url) throws Exception {
+		dbf.setNamespaceAware(true);
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		return db.parse(url.toString());
-	}
-
-	protected static void copyInputStream(InputStream in, OutputStream out)
-			throws Exception {
-		byte[] buffer = new byte[4096];
-		int len = in.read(buffer);
-		while (len >= 0) {
-			out.write(buffer, 0, len);
-			len = in.read(buffer);
-		}
 	}
 
 }

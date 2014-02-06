@@ -73,7 +73,7 @@ public class BpmnURLHandler extends AbstractURLStreamHandlerService {
         public InputStream getInputStream() throws IOException {
             try {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
-                BpmnTransformer.transform(bpmnXmlURL, os);
+                new BpmnTransformer().transform(bpmnXmlURL, os);
                 os.close();
                 return new ByteArrayInputStream(os.toByteArray());
             } catch (Exception e) {
