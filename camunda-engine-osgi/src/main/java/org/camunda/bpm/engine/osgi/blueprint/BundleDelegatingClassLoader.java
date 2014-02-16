@@ -86,7 +86,7 @@ public class BundleDelegatingClassLoader extends ClassLoader {
                 @SuppressWarnings("unchecked")
                 public Enumeration<URL> run() throws IOException
                 {
-                    return (Enumeration<URL>)bundle.getResources(name);
+                    return bundle.getResources(name);
                 }
 
             });
