@@ -37,6 +37,12 @@ public class OSGiTestCase implements ConfigurationFactory {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
 						.artifactId("camunda-engine").version("7.1.0-SNAPSHOT"),
+				mavenBundle().groupId("org.camunda.bpm.model")
+				 .artifactId("camunda-xml-model")
+				 .version("7.1.0-SNAPSHOT"),
+				mavenBundle().groupId("org.camunda.bpm.model")
+				 .artifactId("camunda-bpmn-model")
+				 .version("7.1.0-SNAPSHOT"),
 				mavenBundle().groupId("joda-time").artifactId("joda-time")
 						.version("2.1"),
 				mavenBundle().groupId("com.h2database").artifactId("h2")

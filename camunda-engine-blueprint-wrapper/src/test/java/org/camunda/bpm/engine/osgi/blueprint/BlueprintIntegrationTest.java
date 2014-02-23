@@ -72,7 +72,13 @@ public class BlueprintIntegrationTest {
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.1.0-SNAPSHOT"),
+						.artifactId("camunda-engine").version("7.1.0-SNAPSHOT"),				 
+				mavenBundle().groupId("org.camunda.bpm.model")
+						 .artifactId("camunda-xml-model")
+						 .version("7.1.0-SNAPSHOT"),
+				mavenBundle().groupId("org.camunda.bpm.model")
+						 .artifactId("camunda-bpmn-model")
+						 .version("7.1.0-SNAPSHOT"),
 				mavenBundle().groupId("org.camunda.bpm.osgi")
 						.artifactId("camunda-engine-osgi")
 						.version("1.0.0-SNAPSHOT"),
@@ -88,6 +94,8 @@ public class BlueprintIntegrationTest {
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-core").version("2.0-beta9")
 						.noStart(),
+				mavenBundle().groupId("org.assertj")
+						.artifactId("assertj-core").version("1.5.0"),
 				mavenBundle().groupId("org.apache.aries.blueprint")
 						.artifactId("org.apache.aries.blueprint.core")
 						.version("1.0.0"),
