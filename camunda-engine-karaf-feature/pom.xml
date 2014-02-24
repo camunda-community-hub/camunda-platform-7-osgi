@@ -95,4 +95,54 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-container-karaf</artifactId>
+			<version>${paxexam.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-junit4</artifactId>
+			<version>${paxexam.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam</artifactId>
+			<version>${paxexam.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-aether</artifactId>
+			<version>1.6.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
