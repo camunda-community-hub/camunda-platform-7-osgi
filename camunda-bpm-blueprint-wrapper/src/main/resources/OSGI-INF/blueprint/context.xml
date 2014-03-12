@@ -1,0 +1,65 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0">
+
+	<ext:property-placeholder />
+
+	<bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
+		<property name="URL" value="jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1" />
+		<property name="user" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<bean id="configurationFactory" class="org.camunda.bpm.extension.osgi.blueprint.ConfigurationFactory">
+		<property name="dataSource" ref="dataSource" />
+		<property name="databaseSchemaUpdate" value="true" />
+	</bean>
+
+	<bean id="configuration" factory-ref="configurationFactory"
+		factory-method="getConfiguration">
+	</bean>
+	
+	<bean id="blueprintELResolver"
+		class="org.camunda.bpm.extension.osgi.blueprint.BlueprintELResolver" />
+
+	<bean id="processEngineFactory"
+		class="org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactoryWithELResolver"
+		init-method="init" destroy-method="destroy">
+		<property name="processEngineConfiguration" ref="configuration" />
+		<property name="bundle" ref="blueprintBundle" />
+		<property name="blueprintELResolver" ref="blueprintELResolver" />
+	</bean>
+
+	<bean id="processEngine" factory-ref="processEngineFactory"
+		factory-method="getObject" destroy-method="close" />
+	<!-- ############ Start BPM services ############ -->
+	<bean id="runtimeService" factory-ref="processEngine"
+		factory-method="getRuntimeService" />
+	<bean id="repositoryService" factory-ref="processEngine"
+		factory-method="getRepositoryService" />
+	<bean id="formService" factory-ref="processEngine" factory-method="getFormService" />
+	<bean id="taskService" factory-ref="processEngine" factory-method="getTaskService" />
+	<bean id="historyService" factory-ref="processEngine"
+		factory-method="getHistoryService" />
+	<bean id="identityService" factory-ref="processEngine"
+		factory-method="getIdentityService" />
+	<bean id="managementService" factory-ref="processEngine"
+		factory-method="getManagementService" />
+
+	<service ref="processEngine" interface="org.camunda.bpm.engine.ProcessEngine" />
+	<service ref="runtimeService" interface="org.camunda.bpm.engine.RuntimeService" />
+	<service ref="repositoryService" interface="org.camunda.bpm.engine.RepositoryService" />
+	<service ref="formService" interface="org.camunda.bpm.engine.FormService" />
+	<service ref="taskService" interface="org.camunda.bpm.engine.TaskService" />
+	<service ref="historyService" interface="org.camunda.bpm.engine.HistoryService" />
+	<service ref="identityService" interface="org.camunda.bpm.engine.IdentityService" />
+	<service ref="managementService" interface="org.camunda.bpm.engine.ManagementService" />
+	<!-- ############ End BPM services ############ -->
+
+	<reference-list id="activityProviders" availability="optional"
+		interface="org.camunda.bpm.engine.delegate.JavaDelegate" activation="eager">
+		<reference-listener ref="blueprintELResolver"
+			bind-method="bindService" unbind-method="unbindService" />
+	</reference-list>
+
+</blueprint>
+

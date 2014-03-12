@@ -6,7 +6,7 @@ camunda BPM community extension providing support for camunda BPM platform insid
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: camunda BPM Platform OSGi
-Bundle-SymbolicName: org.camunda.bpm.osgi
+Bundle-SymbolicName: org.camunda.bpm.extension.osgi
 Bundle-Version: 
 Export-Package: [...]
 Import-Package: [...]

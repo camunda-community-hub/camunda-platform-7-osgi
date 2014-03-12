@@ -1,0 +1,78 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <reference id="processEngine" interface="org.camunda.bpm.engine.ProcessEngine"/>
+    <command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
+        <command name="camunda/deployment-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.DeploymentList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+        </command>
+        <command name="camunda/export-diagram">
+            <action class="org.camunda.bpm.extension.osgi.commands.ExportDiagram">
+                <argument index="0" ref="processEngine"/>
+            </action>
+            <completers>
+                <ref component-id="processDefinitionCompleter"/>
+            </completers>
+        </command>
+        <command name="camunda/activity-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.ActivityList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+            <completers>
+                <ref component-id="processInstanceCompleter"/>
+            </completers>
+        </command>
+
+        <command name="camunda/execution-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.ExecutionList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+
+        </command>
+        <command name="camunda/instance-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.InstanceList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+            <completers>
+                <ref component-id="processDefinitionCompleter"/>
+            </completers>
+        </command>
+        <command name="camunda/process-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.ProcessList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+            <completers>
+                <ref component-id="deploymentCompleter"/>
+            </completers>
+        </command>
+        <command name="camunda/task-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.TaskList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+            <completers>
+                <ref component-id="processDefinitionCompleter"/>
+            </completers>
+        </command>
+
+        <command name="camunda/variable-list">
+            <action class="org.camunda.bpm.extension.osgi.commands.VariableList">
+                <argument index="0" ref="processEngine"/>
+            </action>
+        </command>
+
+
+    </command-bundle>
+
+    <bean id="deploymentCompleter" class="org.camunda.bpm.extension.osgi.commands.completer.DeploymentCompleter">
+        <argument index="0" ref="processEngine"></argument>
+    </bean>
+
+    <bean id="processDefinitionCompleter" class="org.camunda.bpm.extension.osgi.commands.completer.ProcessDefinitionCompleter">
+        <argument index="0" ref="processEngine"></argument>
+    </bean>
+
+    <bean id="processInstanceCompleter" class="org.camunda.bpm.extension.osgi.commands.completer.ProcessInstanceCompleter">
+        <argument index="0" ref="processEngine"></argument>
+    </bean>
+
+</blueprint>
