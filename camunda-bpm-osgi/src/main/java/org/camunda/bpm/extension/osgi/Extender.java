@@ -42,28 +42,25 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.BundleTracker;
-import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  */
-public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomizer, ProcessDefintionChecker {
+public class Extender implements ServiceTrackerCustomizer, ProcessDefintionChecker {
 
   private static final Logger LOGGER = Logger.getLogger(Extender.class.getName());
 
   private static BundleContext context;
   private final BundleTracker bundleTracker;
   private final ServiceTracker engineServiceTracker;
-  private final BundleTrackerCustomizer bundleTrackerCustomizer;
   private long timeout = 5000;
 
   public Extender(BundleContext context) {
     Extender.context = context;
     this.engineServiceTracker = new ServiceTracker(context, ProcessEngine.class.getName(), this);
-    this.bundleTracker = new BundleTracker(context, Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE, this);
-    this.bundleTrackerCustomizer = new ScriptEngineBundleTrackerCustomizer(this);
+    this.bundleTracker = new BundleTracker(context, Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE, new ScriptEngineBundleTrackerCustomizer(this));
   }
   
   public static BundleContext getBundleContext() {
@@ -95,20 +92,6 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
     if (engineServiceTracker.size() == 0) {
       bundleTracker.close();
     }
-  }
-
-  public Object addingBundle(Bundle bundle, BundleEvent event) {
-	  return bundleTrackerCustomizer.addingBundle(bundle, event);
-  }
-  
-  public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
-	  bundleTrackerCustomizer.modifiedBundle(bundle, event, object);
-  }
-
-  // don't think we would be interested in removedBundle, as that is
-  // called when bundle is removed from the tracker
-  public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
-    bundleTrackerCustomizer.removedBundle(bundle, event, object);
   }
 
   public void bundleChanged(BundleEvent event) {
