@@ -25,8 +25,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,22 +49,21 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  */
-public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomizer {
+public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomizer, ProcessDefintionChecker {
 
   private static final Logger LOGGER = Logger.getLogger(Extender.class.getName());
-  private static final String META_INF_SERVICES_DIR = "META-INF/services";
-  private static final String SCRIPT_ENGINE_SERVICE_FILE = "javax.script.ScriptEngineFactory";
 
   private static BundleContext context;
   private final BundleTracker bundleTracker;
   private final ServiceTracker engineServiceTracker;
+  private final BundleTrackerCustomizer bundleTrackerCustomizer;
   private long timeout = 5000;
-  private Map<Long, List<BundleScriptEngineResolver>> resolvers = new ConcurrentHashMap<Long, List<BundleScriptEngineResolver>>();
 
   public Extender(BundleContext context) {
     Extender.context = context;
     this.engineServiceTracker = new ServiceTracker(context, ProcessEngine.class.getName(), this);
     this.bundleTracker = new BundleTracker(context, Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE, this);
+    this.bundleTrackerCustomizer = new ScriptEngineBundleTrackerCustomizer(this);
   }
   
   public static BundleContext getBundleContext() {
@@ -101,57 +98,17 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
   }
 
   public Object addingBundle(Bundle bundle, BundleEvent event) {
-    if (event == null) {
-      // existing bundles first added to the tracker with no event change
-      checkInitialBundle(bundle);
-    } else {
-      bundleChanged(event);
-    }
-
-    List<BundleScriptEngineResolver> r = new ArrayList<BundleScriptEngineResolver>();
-    registerScriptEngines(bundle, r);
-    for (BundleScriptEngineResolver service : r) {
-        service.register();
-    }
-    resolvers.put(bundle.getBundleId(), r);
-    
-    return bundle;
+	  return bundleTrackerCustomizer.addingBundle(bundle, event);
   }
-
-  public void modifiedBundle(Bundle bundle, BundleEvent event, Object arg2) {
-    if (event == null) {
-      // cannot think of why we would be interested in a modified bundle with no bundle event
-      return;
-    }
-    bundleChanged(event);
-
+  
+  public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+	  bundleTrackerCustomizer.modifiedBundle(bundle, event, object);
   }
 
   // don't think we would be interested in removedBundle, as that is
   // called when bundle is removed from the tracker
-  public void removedBundle(Bundle bundle, BundleEvent event, Object arg2) {
-    List<BundleScriptEngineResolver> r = resolvers.remove(bundle.getBundleId());
-    if (r != null) {
-      for (BundleScriptEngineResolver service : r) {
-        service.unregister();
-      }
-    }
-  }
-
-
-
-  /**
-   * this method checks the initial bundle that are installed/active before
-   * bundle tracker is opened.
-   *
-   * @param b the bundle to check
-   */
-  private void checkInitialBundle(Bundle b) {
-    // If the bundle is active, check it
-    if (b.getState() == Bundle.RESOLVED || b.getState() == Bundle.STARTING
-            || b.getState() == Bundle.ACTIVE) {
-      checkBundle(b);
-    }
+  public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+    bundleTrackerCustomizer.removedBundle(bundle, event, object);
   }
 
   public void bundleChanged(BundleEvent event) {
@@ -161,7 +118,7 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
     }
   }
 
-  private void checkBundle(Bundle bundle) {
+  public void checkBundle(Bundle bundle) {
     LOGGER.log(Level.FINE, "Scanning bundle {} for process", bundle.getSymbolicName());
     try {
       List<URL> pathList = new ArrayList<URL>();
@@ -316,24 +273,12 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
     return null;
   }
 
-
-  protected void registerScriptEngines(Bundle bundle, List<BundleScriptEngineResolver> resolvers) {
-    URL configURL = null;
-    for (Enumeration<?> e = bundle.findEntries(META_INF_SERVICES_DIR, SCRIPT_ENGINE_SERVICE_FILE, false); e != null && e.hasMoreElements();) {
-      configURL = (URL) e.nextElement();
-    }
-    if (configURL != null) {
-      LOGGER.info("Found ScriptEngineFactory in " + bundle.getSymbolicName());
-      resolvers.add(new BundleScriptEngineResolver(bundle, configURL));
-    }
-  } 
-
   public static interface ScriptEngineResolver {
     ScriptEngine resolveScriptEngine(String name);
   }
 
   protected static class BundleScriptEngineResolver implements ScriptEngineResolver {
-    protected final Bundle bundle;
+    private final Bundle bundle;
     private ServiceRegistration reg;
     private final URL configFile;
 
@@ -386,7 +331,16 @@ public class Extender implements BundleTrackerCustomizer, ServiceTrackerCustomiz
       }
     }
 
-    @Override
+    public Bundle getBundle() {
+		return bundle;
+	}
+	public ServiceRegistration getServiceRegistration() {
+		return reg;
+	}
+	public URL getConfigFile() {
+		return configFile;
+	}
+	@Override
     public String toString() {
       return "OSGi script engine resolver for " + bundle.getSymbolicName();
     }
