@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import javax.script.ScriptEngineFactory;
 
-import org.camunda.bpm.extension.osgi.Extender.BundleScriptEngineResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.util.tracker.BundleTrackerCustomizer;

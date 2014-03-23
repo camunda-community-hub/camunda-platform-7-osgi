@@ -1,5 +1,6 @@
 package org.camunda.bpm.extension.osgi;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
 
-import org.camunda.bpm.extension.osgi.Extender.BundleScriptEngineResolver;
-import org.camunda.bpm.extension.osgi.Extender.ScriptEngineResolver;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -43,7 +42,7 @@ public class ScriptEngineBundleTrackerCustomizerTest {
 				Collections.enumeration(Collections.emptyList()));
 		ScriptEngineBundleTrackerCustomizer customizer = new ScriptEngineBundleTrackerCustomizer(
 				processDefintionChecker);
-		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<Extender.BundleScriptEngineResolver>(
+		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<BundleScriptEngineResolver>(
 				0);
 		customizer.registerScriptEngines(bundle, resolvers);
 		assertThat(resolvers.isEmpty(), is(true));
@@ -57,7 +56,7 @@ public class ScriptEngineBundleTrackerCustomizerTest {
 						anyBoolean())).thenReturn(null);
 		ScriptEngineBundleTrackerCustomizer customizer = new ScriptEngineBundleTrackerCustomizer(
 				processDefintionChecker);
-		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<Extender.BundleScriptEngineResolver>(
+		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<BundleScriptEngineResolver>(
 				0);
 		customizer.registerScriptEngines(bundle, resolvers);
 		assertThat(resolvers.isEmpty(), is(true));
@@ -68,13 +67,12 @@ public class ScriptEngineBundleTrackerCustomizerTest {
 		Bundle bundle = mockBundleWithSkriptEngine(435L);
 		ScriptEngineBundleTrackerCustomizer customizer = new ScriptEngineBundleTrackerCustomizer(
 				processDefintionChecker);
-		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<Extender.BundleScriptEngineResolver>(
+		ArrayList<BundleScriptEngineResolver> resolvers = new ArrayList<BundleScriptEngineResolver>(
 				1);
 		customizer.registerScriptEngines(bundle, resolvers);
 		assertThat(resolvers.size(), is(1));
 		BundleScriptEngineResolver resolver = resolvers.get(0);
-		assertThat(resolver.getBundle(), is(bundle));
-		assertThat(resolver.getConfigFile(), is(scriptEngineUrl));
+		assertThat(resolver, is(instanceOf(BundleScriptEngineResolver.class)));
 	}
 
 	@Test
@@ -160,7 +158,6 @@ public class ScriptEngineBundleTrackerCustomizerTest {
 
 	@Test
 	public void addingBundleWithService() throws MalformedURLException {
-		URL scriptEngineUrl = new URL("http://localhost");
 		long bundleId = 123L;
 		Bundle bundle = mockBundleWithSkriptEngine(bundleId);
 		BundleContext bundleContext = mock(BundleContext.class);
@@ -171,8 +168,6 @@ public class ScriptEngineBundleTrackerCustomizerTest {
 		assertThat(addedBundle, is(bundle));
 		BundleScriptEngineResolver bundleScriptEngineResolver = customizer
 				.getResolvers().get(bundleId).get(0);
-		assertThat(bundleScriptEngineResolver.getConfigFile(),
-				is(scriptEngineUrl));
 		verify(bundleContext).registerService(
 				eq(ScriptEngineResolver.class.getName()),
 				eq(bundleScriptEngineResolver), (Dictionary<?, ?>) isNull());

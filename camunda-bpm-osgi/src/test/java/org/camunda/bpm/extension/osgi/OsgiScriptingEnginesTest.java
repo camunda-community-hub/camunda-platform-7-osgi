@@ -19,7 +19,6 @@ import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
 import org.camunda.bpm.extension.osgi.Extender;
 import org.camunda.bpm.extension.osgi.OsgiScriptingEngines;
-import org.camunda.bpm.extension.osgi.Extender.ScriptEngineResolver;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
