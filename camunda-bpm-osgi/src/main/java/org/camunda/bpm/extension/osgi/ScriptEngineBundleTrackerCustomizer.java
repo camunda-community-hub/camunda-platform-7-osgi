@@ -16,11 +16,14 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 /**
- * Customized tracker, which searches the {@link Bundle}s for {@link ScriptEngineFactory}s.
+ * Customized tracker, which searches the {@link Bundle}s for
+ * {@link ScriptEngineFactory}s.
+ * 
  * @author Ronny Bräunlich
  * 
  */
-public class ScriptEngineBundleTrackerCustomizer implements BundleTrackerCustomizer {
+public class ScriptEngineBundleTrackerCustomizer implements
+		BundleTrackerCustomizer {
 
 	private static final String META_INF_SERVICES_DIR = "META-INF/services";
 	private static final String SCRIPT_ENGINE_SERVICE_FILE = "javax.script.ScriptEngineFactory";
@@ -82,8 +85,8 @@ public class ScriptEngineBundleTrackerCustomizer implements BundleTrackerCustomi
 	 *            the bundle to check
 	 */
 	private void checkInitialBundle(Bundle b) {
-		//TODO do we have to check the state? This method only gets called from
-		//addingBundle()
+		// TODO do we have to check the state? This method only gets called from
+		// addingBundle()
 		// If the bundle is active, check it
 		if (b.getState() == Bundle.RESOLVED || b.getState() == Bundle.STARTING
 				|| b.getState() == Bundle.ACTIVE) {
@@ -91,6 +94,11 @@ public class ScriptEngineBundleTrackerCustomizer implements BundleTrackerCustomi
 		}
 	}
 
+	/**
+	 * Did the bundle get resolved?
+	 * 
+	 * @param event
+	 */
 	private void bundleChanged(BundleEvent event) {
 		Bundle bundle = event.getBundle();
 		if (event.getType() == BundleEvent.RESOLVED) {

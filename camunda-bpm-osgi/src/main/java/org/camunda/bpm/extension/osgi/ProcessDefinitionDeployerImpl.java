@@ -13,8 +13,15 @@ import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.osgi.framework.Bundle;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * Basic implementation to deploy a processes to the repository by using a
+ * {@link ServiceTracker} that tracks a {@link ProcessEngine}.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer {
-	
+
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionDeployerImpl.class.getName());
 
@@ -58,10 +65,12 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to deploy bundle", e);
 		}
-	}	
-	
-	// remove bundle protocol specific part, so that resource can be accessed by
-	// path relative to bundle root
+	}
+
+	/**
+	 * remove bundle protocol specific part, so that resource can be accessed by
+	 * path relative to bundle root
+	 */
 	private String getPath(URL url) {
 		String path = url.toExternalForm();
 		return path.replaceAll("bundle://[^/]*/", "");

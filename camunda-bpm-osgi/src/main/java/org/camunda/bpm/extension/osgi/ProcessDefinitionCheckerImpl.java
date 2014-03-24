@@ -7,6 +7,13 @@ import java.util.logging.Logger;
 
 import org.osgi.framework.Bundle;
 
+/**
+ * Implementation of the {@link ProcessDefintionChecker} that tries to deploy
+ * processes using a {@link ProcessDefinitionDeployer}.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 public class ProcessDefinitionCheckerImpl implements ProcessDefintionChecker {
 
 	private static final Logger LOGGER = Logger

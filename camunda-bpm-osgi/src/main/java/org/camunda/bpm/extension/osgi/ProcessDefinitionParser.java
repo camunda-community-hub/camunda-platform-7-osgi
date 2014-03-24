@@ -13,6 +13,12 @@ import java.util.logging.Logger;
 import org.camunda.bpm.extension.osgi.HeaderParser.PathElement;
 import org.osgi.framework.Bundle;
 
+/**
+ * Helper class to parse the paths of process definitions inside a bundle.
+ * 
+ * @author Ronny Bräunlich
+ * 
+ */
 public final class ProcessDefinitionParser {
 
 	private ProcessDefinitionParser() {
@@ -21,6 +27,15 @@ public final class ProcessDefinitionParser {
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionParser.class.getName());
 
+	/**
+	 * Scans a bundle if it contains process definitions at the place pointed to
+	 * by the {@link Constants#BUNDLE_PROCESS_DEFINITIONS_HEADER} or at the
+	 * default location {@link Constants#BUNDLE_PROCESS_DEFINTIONS_DEFAULT}.
+	 * 
+	 * @param bundle
+	 * @return list of URLs pointing to process definitions or an empty list
+	 * 
+	 */
 	public static List<URL> scanForProcesses(Bundle bundle) {
 		LOGGER.log(Level.FINE, "Scanning bundle {} for process",
 				bundle.getSymbolicName());
@@ -34,6 +49,14 @@ public final class ProcessDefinitionParser {
 		return pathList;
 	}
 
+	/**
+	 * Takes the list of {@link PathElement}s and uses the bundle to find the
+	 * URLs of those elements.
+	 * 
+	 * @param paths
+	 * @param bundle
+	 * @return
+	 */
 	private static List<URL> parsePaths(List<PathElement> paths, Bundle bundle) {
 		List<URL> pathList = new ArrayList<URL>();
 		for (PathElement path : paths) {
@@ -67,6 +90,15 @@ public final class ProcessDefinitionParser {
 		return path.indexOf("*") >= 0;
 	}
 
+	/**
+	 * Searches the bundle for files matching the path and filepattern and puts
+	 * them into the list.
+	 * 
+	 * @param bundle
+	 * @param path
+	 * @param filePattern
+	 * @param pathList
+	 */
 	private static void addEntries(Bundle bundle, String path,
 			String filePattern, List<URL> pathList) {
 		Enumeration<?> e = bundle.findEntries(path, filePattern, false);
