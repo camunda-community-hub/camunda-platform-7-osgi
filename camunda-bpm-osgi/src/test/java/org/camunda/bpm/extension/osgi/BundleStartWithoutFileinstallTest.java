@@ -9,8 +9,8 @@ import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 
-import org.camunda.bpm.extension.osgi.BarURLHandler;
-import org.camunda.bpm.extension.osgi.BpmnURLHandler;
+import org.camunda.bpm.extension.osgi.url.bar.BarURLHandler;
+import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;

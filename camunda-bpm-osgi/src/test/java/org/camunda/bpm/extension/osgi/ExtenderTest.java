@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import javax.script.ScriptEngine;
 
+import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.Bundle;

@@ -16,7 +16,7 @@ import org.camunda.bpm.engine.impl.scripting.BeansResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.ResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
 import org.camunda.bpm.engine.impl.scripting.VariableScopeResolverFactory;
-import org.camunda.bpm.extension.osgi.OsgiScriptingEngines;
+import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
 
 
 public class ProcessEngineFactoryWithELResolver extends ProcessEngineFactory {

@@ -17,6 +17,11 @@ import java.util.logging.Logger;
 import javax.script.ScriptEngine;
 
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.extension.osgi.internal.ProcessDefintionChecker;
+import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionCheckerImpl;
+import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionDeployerImpl;
+import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
+import org.camunda.bpm.extension.osgi.scripting.impl.ScriptEngineBundleTrackerCustomizer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;

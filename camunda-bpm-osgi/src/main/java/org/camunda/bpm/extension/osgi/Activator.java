@@ -21,6 +21,10 @@ import java.util.logging.Logger;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
+import org.camunda.bpm.extension.osgi.url.bar.BarDeploymentListener;
+import org.camunda.bpm.extension.osgi.url.bar.BarURLHandler;
+import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
+import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;

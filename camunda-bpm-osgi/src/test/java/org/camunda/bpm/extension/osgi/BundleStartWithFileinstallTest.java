@@ -9,8 +9,8 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
-import org.camunda.bpm.extension.osgi.BarDeploymentListener;
-import org.camunda.bpm.extension.osgi.BpmnDeploymentListener;
+import org.camunda.bpm.extension.osgi.url.bar.BarDeploymentListener;
+import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
