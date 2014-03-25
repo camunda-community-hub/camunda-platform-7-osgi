@@ -31,7 +31,7 @@ After you successfully deployed the camunda BPM OSGi bundle your next step is to
 
 #### Using the ProcessEngineFactory
 
-To help a little bit with the creating of a process engine you can use the ProcessEngineFactory class. You'll have to pass a ProcessEngineConfiguration object and the current bundle to it by calling the setBundle() and setProcessEngineConfiguration() methods. Finally you'll have to call init(). After that you may call getObject() to get a reference to the process engine.
+To help a little bit with the creating of a process engine you can use the `ProcessEngineFactory` class. You'll have to pass a `ProcessEngineConfiguration` object and the current bundle to it by calling the setBundle() and setProcessEngineConfiguration() methods. Finally you'll have to call init(). After that you may call getObject() to get a reference to the process engine.
 Please be aware that the order is mandatory or else getObject() will return null.
 
 Please note also, that the process engine won't be exported automatically. If you want to share it, you can do that by yourself.
@@ -40,19 +40,19 @@ Please note also, that the process engine won't be exported automatically. If yo
 
 There is already a project with a pre-filled Blueprint context.xml. Basically you'll only have to edit the Datasource properties or you use the pre-defined in memory H2 database.
 
-This approach uses the deprecated ConfigurationFactory right now, so please be careful. To see the reason why the ConfigurationFactory is deprecated see [here](https://groups.google.com/forum/#!topic/camunda-bpm-dev/toZEYMzUJpQ)
+This approach uses the deprecated `ConfigurationFactory` right now, so please be careful. To see the reason why the `ConfigurationFactory` is deprecated see [here](https://groups.google.com/forum/#!topic/camunda-bpm-dev/toZEYMzUJpQ)
 
-If your Blueprint implementation supports non-void setters you can replace the ConfigurationFactory by directly configuring a StandaloneProcessEngineConfiguration. 
+If your Blueprint implementation supports non-void setters you can replace the `ConfigurationFactory` by directly configuring a `StandaloneProcessEngineConfiguration`. 
 
 #### Old school
 
 If you wanna stay old school and use core OSGi you can do that, too.
-Import the package org.camunda.bpm.engine and org.camunda.bpm.engine.impl.cfg and instantiate your own StandaloneProcessEngineConfiguration.
+Import the package `org.camunda.bpm.engine` and `org.camunda.bpm.engine.impl.cfg` and instantiate your own `StandaloneProcessEngineConfiguration`.
 
 ### Part 3 Deploying process definitions
 
-After you created a ProcessEngine you can start to deploy process definitions.
-The following steps only work when you exported a ProcessEngine as OSGi service.
+After you created a `ProcessEngine` you can start to deploy process definitions.
+The following steps only work when you exported a `ProcessEngine` as OSGi service.
 
 #### Inside a bundle
 
@@ -61,7 +61,7 @@ For the process definition to be found, you'll have to do one of the following t
 - place it in the OSGI-INF/processes/ directory
 - set the "Process-Definitions" header in the MANIFEST.MF and let it point to a file or directory
 
-If you reference any JavaDelegates or ActivityBehaviors from within your process defniition please take a look at Part 4
+If you reference any `JavaDelegate`s or `ActivityBehavior`s from within your process defniition please take a look at Part 4
 
 #### BPMN-XML file
 
@@ -69,10 +69,10 @@ If your OSGi runtime supports Apache Felix Fileinstall you can drop a single pro
 
 ### Part 4 referencing inside processes
 
-Right now the BlueprintELResolver is the only cares for JavaDelegates. You'll have to use the BlueprintELResolver as ELResolver and register it to listen for JavaDelegates.
+Right now the `BlueprintELResolver` is the only cares for `JavaDelegates`. You'll have to use the `BlueprintELResolver` as ELResolver and register it to listen for `JavaDelegates`.
 If you use the camunda BPM Blueprint wrapper this will be done for you automatically.
 
-The only other ways is to use the setBeans() method on the ProcessEngineConfiguration
+The only other ways is to use the setBeans() method on the `ProcessEngineConfiguration`.
 
 ## Resources
 
