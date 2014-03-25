@@ -56,7 +56,7 @@ public class KarafIntegrationTest {
 //								.version("1.0.0-SNAPSHOT")
 //								.classifier("features").type("xml"),
 //						"camunda-engine-karaf-feature-minimal")
-				features(new File("target/classes/features.xml").toURI().toString(), "camunda-engine-karaf-feature-minimal")
+				features(new File("target/classes/features.xml").toURI().toString(), "camunda-bpm-karaf-feature-minimal")
 						};
 	}
 
