@@ -5,8 +5,8 @@ Check out this project and run mvm install on it. Then start Karaf and type the 
 feature:repo-add mvn:org.camunda.bpm.extension.osgi/camunda-bpm-karaf-feature/{version}/xml/features
 
 Now you can install two versions:
-feature:install camunda-engine-karaf-feature-minimal
+feature:install camunda-bpm-karaf-feature-minimal
 or
-feature:install camunda-engine-karaf-feature-full
+feature:install camunda-bpm-karaf-feature-full
 
 The full version contains bundles for all the optional imports.
