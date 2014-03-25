@@ -1,14 +1,13 @@
 package org.camunda.bpm.extension.osgi.commands;
 
+import java.util.List;
+
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.extension.osgi.commands.asciitable.ASCIITable;
-
-import java.util.List;
 
 /**
  * List available process deployments.

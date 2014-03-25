@@ -1,12 +1,11 @@
 package org.camunda.bpm.extension.osgi.commands.completer;
 
+import java.util.List;
+
 import org.apache.karaf.shell.console.Completer;
 import org.apache.karaf.shell.console.completer.StringsCompleter;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-
-import java.util.List;
 
 /**
  * Autocomplete helper lists available process definition ids..

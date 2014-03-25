@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.extension.osgi.blueprint.ConfigurationFactory;
 import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
@@ -72,12 +71,8 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 	}
 
 	private void createProcessEngine() {
-		ConfigurationFactory configurationFactory = new ConfigurationFactory();
-		configurationFactory.setDatabaseSchemaUpdate("create-drop");
-		configurationFactory.setDataSource(createDatasource());
-		configurationFactory.setJobExecutorActivate(false);
-		StandaloneProcessEngineConfiguration configuration = configurationFactory
-				.getConfiguration();
+		StandaloneProcessEngineConfiguration configuration = new StandaloneProcessEngineConfiguration();
+		configuration.setDatabaseSchemaUpdate("create-drop").setDataSource(createDatasource()).setJobExecutorActivate(false);
 		ProcessEngineFactory processEngineFactory = new ProcessEngineFactory();
 		processEngineFactory.setProcessEngineConfiguration(configuration);
 		processEngineFactory
