@@ -14,8 +14,11 @@ package org.camunda.bpm.extension.osgi;
 
 /**
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
+ * @author Ronny Bräunlich
  */
-public class Constants {
+public enum Constants {
+	
+	;
 
     public static final String BUNDLE_PROCESS_DEFINITIONS_HEADER = "Process-Definitions";
 
