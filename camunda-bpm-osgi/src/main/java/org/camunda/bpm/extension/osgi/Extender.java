@@ -12,20 +12,14 @@
  */
 package org.camunda.bpm.extension.osgi;
 
-import java.util.logging.Logger;
-
-import javax.script.ScriptEngine;
-
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.extension.osgi.internal.ProcessDefintionChecker;
 import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionCheckerImpl;
 import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionDeployerImpl;
-import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
 import org.camunda.bpm.extension.osgi.scripting.impl.ScriptEngineBundleTrackerCustomizer;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.ServiceTracker;
@@ -37,16 +31,13 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class Extender implements ServiceTrackerCustomizer {
 
-	private static final Logger LOGGER = Logger.getLogger(Extender.class
-			.getName());
-
-	private static BundleContext context;
+	private final BundleContext context;
 	private final BundleTracker bundleTracker;
 	private final ServiceTracker engineServiceTracker;
 	private final ProcessDefintionChecker procDefChecker;
 
 	public Extender(BundleContext context) {
-		Extender.context = context;
+		this.context = context;
 		this.engineServiceTracker = new ServiceTracker(context,
 				ProcessEngine.class.getName(), this);
 		procDefChecker = new ProcessDefinitionCheckerImpl(
@@ -54,10 +45,6 @@ public class Extender implements ServiceTrackerCustomizer {
 		this.bundleTracker = new BundleTracker(context, Bundle.RESOLVED
 				| Bundle.STARTING | Bundle.ACTIVE,
 				new ScriptEngineBundleTrackerCustomizer(procDefChecker));
-	}
-
-	public static BundleContext getBundleContext() {
-		return context;
 	}
 
 	public void open() {
@@ -93,34 +80,4 @@ public class Extender implements ServiceTrackerCustomizer {
 			procDefChecker.checkBundle(bundle);
 		}
 	}
-
-	// script engine part
-
-	public static ScriptEngine resolveScriptEngine(String scriptEngineName)
-			throws InvalidSyntaxException {
-		ServiceReference[] refs = context.getServiceReferences(
-				ScriptEngineResolver.class.getName(), null);
-		if (refs == null) {
-			LOGGER.info("No OSGi script engine resolvers available!");
-			return null;
-		}
-
-		LOGGER.fine("Found " + refs.length
-				+ " OSGi ScriptEngineResolver services");
-
-		for (ServiceReference ref : refs) {
-			ScriptEngineResolver resolver = (ScriptEngineResolver) context
-					.getService(ref);
-			ScriptEngine engine = resolver
-					.resolveScriptEngine(scriptEngineName);
-			context.ungetService(ref);
-			LOGGER.fine("OSGi resolver " + resolver + " produced "
-					+ scriptEngineName + " engine " + engine);
-			if (engine != null) {
-				return engine;
-			}
-		}
-		return null;
-	}
-
 }
