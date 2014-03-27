@@ -14,7 +14,6 @@ package org.camunda.bpm.extension.osgi.scripting.impl;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
@@ -31,10 +30,6 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 
   public OsgiScriptingEngines(ScriptBindingsFactory scriptBindingsFactory) {
     super(scriptBindingsFactory);
-  }
-
-  public OsgiScriptingEngines(ScriptEngineManager scriptEngineManager) {
-    super(scriptEngineManager);
   }
 
   public Object evaluate(String script, String language, VariableScope variableScope) {

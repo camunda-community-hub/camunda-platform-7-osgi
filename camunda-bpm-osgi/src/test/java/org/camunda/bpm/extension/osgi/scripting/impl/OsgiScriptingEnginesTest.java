@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
@@ -19,7 +18,6 @@ import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
 import org.camunda.bpm.extension.osgi.Extender;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
-import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -33,12 +31,6 @@ public class OsgiScriptingEnginesTest {
 		OsgiScriptingEngines osgiScriptingEngines = new OsgiScriptingEngines(
 				mock);
 		assertThat(osgiScriptingEngines.getScriptBindingsFactory(), is(mock));
-	}
-
-	@Test
-	public void engineManagerConstructor() {
-		ScriptEngineManager mock = mock(ScriptEngineManager.class);
-		new OsgiScriptingEngines(mock);
 	}
 
 	@Test(expected = ProcessEngineException.class)
