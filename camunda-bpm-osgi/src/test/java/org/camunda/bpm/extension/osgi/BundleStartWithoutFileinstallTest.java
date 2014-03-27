@@ -9,7 +9,6 @@ import static org.junit.Assert.fail;
 
 import javax.inject.Inject;
 
-import org.camunda.bpm.extension.osgi.url.bar.BarURLHandler;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,10 +36,6 @@ public class BundleStartWithoutFileinstallTest extends OSGiTestCase {
 	@Filter("(url.handler.protocol=bpmn)")
 	private URLStreamHandlerService bpmnUrlHandler;
 
-	@Inject
-	@Filter("(url.handler.protocol=bar)")
-	private URLStreamHandlerService barUrlHandler;
-
 	@Test
 	public void bundleStarted() {
 		try {
@@ -57,8 +52,6 @@ public class BundleStartWithoutFileinstallTest extends OSGiTestCase {
 	public void checkServices() {
 		assertThat(bpmnUrlHandler, is(notNullValue()));
 		assertThat(bpmnUrlHandler, is(instanceOf(BpmnURLHandler.class)));
-		assertThat(barUrlHandler, is(notNullValue()));
-		assertThat(barUrlHandler, is(instanceOf(BarURLHandler.class)));
 	}
 
 }

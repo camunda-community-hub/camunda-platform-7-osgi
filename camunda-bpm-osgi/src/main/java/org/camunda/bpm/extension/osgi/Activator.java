@@ -21,8 +21,6 @@ import java.util.logging.Logger;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
-import org.camunda.bpm.extension.osgi.url.bar.BarDeploymentListener;
-import org.camunda.bpm.extension.osgi.url.bar.BarURLHandler;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.osgi.framework.BundleActivator;
@@ -32,86 +30,81 @@ import org.osgi.service.url.URLStreamHandlerService;
 
 /**
  * OSGi Activator
+ * 
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  */
 public class Activator implements BundleActivator {
 
-    private static final Logger LOGGER = Logger.getLogger(Activator.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Activator.class
+			.getName());
 
-    private List<Runnable> callbacks = new ArrayList<Runnable>();
+	private List<Runnable> callbacks = new ArrayList<Runnable>();
 
-    public void start(BundleContext context) throws Exception {
-        callbacks.add(new Service(
-                context,
-                URLStreamHandlerService.class.getName(),
-                new BpmnURLHandler(),
-                props("url.handler.protocol", "bpmn")));
-        callbacks.add(new Service(
-                context,
-                URLStreamHandlerService.class.getName(),
-                new BarURLHandler(),
-                props("url.handler.protocol", "bar")));
-        try {
-            callbacks.add(new Service(
-                    context,
-                    new String[] { ArtifactUrlTransformer.class.getName(), ArtifactListener.class.getName() },
-                    new BpmnDeploymentListener(),
-                    null));
-            callbacks.add(new Service(
-                    context,
-                    new String[] { ArtifactUrlTransformer.class.getName(), ArtifactListener.class.getName() },
-                    new BarDeploymentListener(),
-                    null));
-        } catch (NoClassDefFoundError e) {
-            LOGGER.log( Level.WARNING, "FileInstall package is not available, disabling fileinstall support" );
-            LOGGER.log( Level.FINE, "FileInstall package is not available, disabling fileinstall support", e );
-        }
-        callbacks.add(new Tracker(new Extender(context)));
-    }
+	public void start(BundleContext context) throws Exception {
+		callbacks.add(new Service(context, URLStreamHandlerService.class
+				.getName(), new BpmnURLHandler(), props("url.handler.protocol",
+				"bpmn")));
+		try {
+			callbacks.add(new Service(context, new String[] {
+					ArtifactUrlTransformer.class.getName(),
+					ArtifactListener.class.getName() },
+					new BpmnDeploymentListener(), null));
+		} catch (NoClassDefFoundError e) {
+			LOGGER.log(Level.WARNING,
+					"FileInstall package is not available, disabling fileinstall support");
+			LOGGER.log(
+					Level.FINE,
+					"FileInstall package is not available, disabling fileinstall support",
+					e);
+		}
+		callbacks.add(new Tracker(new Extender(context)));
+	}
 
-    public void stop(BundleContext context) throws Exception {
-        for (Runnable r : callbacks) {
-            r.run();
-        }
-    }
+	public void stop(BundleContext context) throws Exception {
+		for (Runnable r : callbacks) {
+			r.run();
+		}
+	}
 
-    private static Dictionary<String,String> props(String... args) {
-        Dictionary<String, String> props = new Hashtable<String, String>();
-        for (int i = 0; i < args.length / 2; i++) {
-            props.put(args[2*i], args[2*i+1]);
-        }
-        return props;
-    }
+	private static Dictionary<String, String> props(String... args) {
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		for (int i = 0; i < args.length / 2; i++) {
+			props.put(args[2 * i], args[2 * i + 1]);
+		}
+		return props;
+	}
 
-    private static class Service implements Runnable {
+	private static class Service implements Runnable {
 
-        private final ServiceRegistration registration;
+		private final ServiceRegistration registration;
 
-        public Service(BundleContext context, String clazz, Object service, Dictionary<String, String> props) {
-            this.registration = context.registerService(clazz, service, props);
-        }
+		public Service(BundleContext context, String clazz, Object service,
+				Dictionary<String, String> props) {
+			this.registration = context.registerService(clazz, service, props);
+		}
 
-        public Service(BundleContext context, String[] clazz, Object service, Dictionary<String, String> props) {
-            this.registration = context.registerService(clazz, service, props);
-        }
+		public Service(BundleContext context, String[] clazz, Object service,
+				Dictionary<String, String> props) {
+			this.registration = context.registerService(clazz, service, props);
+		}
 
-        public void run() {
-            registration.unregister();
-        }
-    }
+		public void run() {
+			registration.unregister();
+		}
+	}
 
-    private static class Tracker implements Runnable {
+	private static class Tracker implements Runnable {
 
-        private final Extender extender;
+		private final Extender extender;
 
-        private Tracker(Extender extender) {
-            this.extender = extender;
-            this.extender.open();
-        }
+		private Tracker(Extender extender) {
+			this.extender = extender;
+			this.extender.open();
+		}
 
-        public void run() {
-            extender.close();
-        }
-    }
+		public void run() {
+			extender.close();
+		}
+	}
 
 }

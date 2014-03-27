@@ -1,6 +1,5 @@
 package org.camunda.bpm.extension.osgi;
 
-import static org.hamcrest.core.AnyOf.anyOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -9,7 +8,6 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
-import org.camunda.bpm.extension.osgi.url.bar.BarDeploymentListener;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +55,7 @@ public class BundleStartWithFileinstallTest extends OSGiTestCase {
 			checkInstance(services);
 			ServiceReference[] services2 = ctx.getServiceReferences(
 					ArtifactListener.class.getName(), null);
-			assertThat(services2.length, is(2));
+			assertThat(services2.length, is(1));
 			checkNumber(services2);
 			checkInstance(services2);
 		} catch (BundleException e) {
@@ -70,14 +68,11 @@ public class BundleStartWithFileinstallTest extends OSGiTestCase {
 	private void checkInstance(ServiceReference[] services) {
 		for (ServiceReference ref : services) {
 			Object service = ctx.getService(ref);
-			assertThat(
-					service,
-					is((anyOf(instanceOf(BpmnDeploymentListener.class),
-							instanceOf(BarDeploymentListener.class)))));
+			assertThat(service, is((instanceOf(BpmnDeploymentListener.class))));
 		}
 	}
 
 	private void checkNumber(ServiceReference[] services) {
-		assertThat(services.length, is(2));
+		assertThat(services.length, is(1));
 	}
 }
