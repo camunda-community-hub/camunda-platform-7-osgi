@@ -23,7 +23,6 @@ import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
 import org.camunda.bpm.engine.impl.scripting.ScriptingEngines;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -31,13 +30,14 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * @author Tijs Rademakers
+ * @author Ronny Bräunlich
  */
 public class OsgiScriptingEngines extends ScriptingEngines {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(OsgiScriptingEngines.class.getName());
 
-	private Bundle bundle = FrameworkUtil.getBundle(getClass());
+	private BundleContext context;
 
 	public OsgiScriptingEngines(ScriptBindingsFactory scriptBindingsFactory) {
 		super(scriptBindingsFactory);
@@ -67,17 +67,16 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 		}
 	}
 
-	/**
-	 * test-only helper method
-	 */
-	void setBundle(Bundle bundle) {
-		this.bundle = bundle;
+	protected BundleContext getBundleContext() {
+		if (context == null) {
+			context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+		}
+		return context;
 	}
 
 	ScriptEngine resolveScriptEngine(String scriptEngineName)
 			throws InvalidSyntaxException {
-		BundleContext context = bundle.getBundleContext();
-		ServiceReference[] refs = context.getServiceReferences(
+		ServiceReference[] refs = getBundleContext().getServiceReferences(
 				ScriptEngineResolver.class.getName(), null);
 		if (refs == null) {
 			LOGGER.info("No OSGi script engine resolvers available!");
@@ -88,11 +87,11 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 				+ " OSGi ScriptEngineResolver services");
 
 		for (ServiceReference ref : refs) {
-			ScriptEngineResolver resolver = (ScriptEngineResolver) context
+			ScriptEngineResolver resolver = (ScriptEngineResolver) getBundleContext()
 					.getService(ref);
 			ScriptEngine engine = resolver
 					.resolveScriptEngine(scriptEngineName);
-			context.ungetService(ref);
+			getBundleContext().ungetService(ref);
 			LOGGER.fine("OSGi resolver " + resolver + " produced "
 					+ scriptEngineName + " engine " + engine);
 			if (engine != null) {
