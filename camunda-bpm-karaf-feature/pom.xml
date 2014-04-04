@@ -85,8 +85,8 @@
 								<descriptor>file://${project.basedir}/target/classes/features.xml</descriptor>
 							</descriptors>
 							<features>
-								<feature>camunda-engine-karaf-feature-minimal</feature>
-								<feature>camunda-engine-karaf-feature-full</feature>
+								<feature>camunda-bpm-karaf-feature-minimal</feature>
+								<feature>camunda-bpm-karaf-feature-full</feature>
 							</features>
 							<repository>target/features-repo</repository>
 						</configuration>
