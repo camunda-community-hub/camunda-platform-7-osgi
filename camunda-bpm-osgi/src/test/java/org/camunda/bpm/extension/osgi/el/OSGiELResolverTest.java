@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import org.camunda.bpm.extension.osgi.TestActivityBehaviour;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
