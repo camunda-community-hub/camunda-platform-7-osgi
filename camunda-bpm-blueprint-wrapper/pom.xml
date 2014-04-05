@@ -22,8 +22,8 @@
 			<version>${camunda-bpm.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.camunda.bpm.osgi</groupId>
-			<artifactId>camunda-engine-osgi</artifactId>
+			<groupId>org.camunda.bpm.extension.osgi</groupId>
+			<artifactId>camunda-bpm-osgi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

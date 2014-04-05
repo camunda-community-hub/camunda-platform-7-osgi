@@ -9,7 +9,6 @@
 	<artifactId>camunda-bpm-karaf-feature</artifactId>
 	<properties>
 		<spring.framework.version>3.1.2.RELEASE</spring.framework.version>
-		<camunda-bpm.version>7.1.0-SNAPSHOT</camunda-bpm.version>
 		<jboss.version>7.1.0</jboss.version>
 	</properties>
 	<repositories>

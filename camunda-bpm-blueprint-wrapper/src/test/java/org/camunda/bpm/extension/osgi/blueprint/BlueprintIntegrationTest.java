@@ -27,7 +27,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.osgi.blueprint.BlueprintELResolver;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,13 +72,13 @@ public class BlueprintIntegrationTest {
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.1.0-SNAPSHOT"),				 
+						.artifactId("camunda-engine").version("7.1.0-Final"),				 
 				mavenBundle().groupId("org.camunda.bpm.model")
 						 .artifactId("camunda-xml-model")
-						 .version("7.1.0-SNAPSHOT"),
+						 .version("7.1.0-Final"),
 				mavenBundle().groupId("org.camunda.bpm.model")
 						 .artifactId("camunda-bpmn-model")
-						 .version("7.1.0-SNAPSHOT"),
+						 .version("7.1.0-Final"),
 				mavenBundle().groupId("org.camunda.bpm.extension.osgi")
 						.artifactId("camunda-bpm-osgi")
 						.version("1.0.0-SNAPSHOT"),
@@ -114,7 +113,7 @@ public class BlueprintIntegrationTest {
 		try {
 			return TinyBundles
 					.bundle()
-					.add(org.camunda.bpm.engine.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT
+					.add(org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT
 							+ "testProcess.bpmn",
 							new FileInputStream(new File(
 									"src/test/resources/testProcess.bpmn")))
