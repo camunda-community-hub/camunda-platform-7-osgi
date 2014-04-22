@@ -1,6 +1,5 @@
 package org.camunda.bpm.extension.osgi.blueprint;
 
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.javax.el.CompositeELResolver;
@@ -18,10 +18,9 @@ import org.camunda.bpm.engine.impl.javax.el.ELResolver;
 import org.camunda.bpm.engine.impl.scripting.BeansResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.ResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.VariableScopeResolverFactory;
-import org.camunda.bpm.extension.osgi.blueprint.BlueprintELResolver;
-import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactoryWithELResolver.BlueprintExpressionManager;
 import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -57,13 +56,14 @@ public class ProcessEngineFactoryWithELResolverTest {
 
 	private void checkScriptingEngine(OsgiScriptingEngines scriptingEngine) {
 		assertThat(scriptingEngine, isA(OsgiScriptingEngines.class));
-		assertThat(scriptingEngine.getScriptBindingsFactory()
-				.getResolverFactories().size(), is(2));
-		assertThat(
-				scriptingEngine.getScriptBindingsFactory()
-						.getResolverFactories(),
-				allOf(hasItem(isA(VariableScopeResolverFactory.class)),
-						hasItem(isA(BeansResolverFactory.class))));
+		List<ResolverFactory> resolverFactories = scriptingEngine
+				.getScriptBindingsFactory().getResolverFactories();
+		assertThat(resolverFactories.size(), is(2));
+		Matcher<Iterable<? super VariableScopeResolverFactory>> hasItem = hasItem(isA(VariableScopeResolverFactory.class));
+		assertThat(resolverFactories,
+				hasItem);
+		Matcher<Iterable<? super BeansResolverFactory>> hasItem2 = hasItem(isA(BeansResolverFactory.class));
+		assertThat(resolverFactories, hasItem2);
 	}
 
 	private void checkExpressionManager(BlueprintExpressionManager exprManager) {
