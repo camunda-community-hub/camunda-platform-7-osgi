@@ -1,6 +1,7 @@
 package org.camunda.bpm.extension.osgi.el;
 
 import java.beans.FeatureDescriptor;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -168,6 +169,20 @@ public class OSGiELResolver extends ELResolver {
 
 	protected BundleContext getBundleContext() {
 		return FrameworkUtil.getBundle(getClass()).getBundleContext();
+	}
+
+	@Override
+	public Object invoke(ELContext context, Object base, Object method,
+			Class<?>[] paramTypes, Object[] params) {
+		try {
+			Method reflecMethod = base.getClass().getMethod((String) method,
+					paramTypes);
+			Object invoke = reflecMethod.invoke(base, params);
+			context.setPropertyResolved(true);
+			return invoke;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
