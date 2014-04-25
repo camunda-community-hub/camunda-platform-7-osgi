@@ -1,0 +1,92 @@
+package org.camunda.bpm.extension.osgi.el;
+
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import org.camunda.bpm.extension.osgi.OSGiTestCase;
+import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactory;
+import org.h2.jdbcx.JdbcDataSource;
+import org.junit.After;
+import org.junit.Before;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
+
+public abstract class AbstractOSGiELResolverIntegrationTest extends
+		OSGiTestCase {
+
+	protected ProcessEngine processEngine;
+
+	public AbstractOSGiELResolverIntegrationTest() {
+		super();
+	}
+
+	@Override
+	@Configuration
+	public Option[] createConfiguration() {
+		return super.createConfiguration();
+	}
+
+	@Before
+	public void setUpAbstractDeploymentListenerTest() {
+		createProcessEngine();
+		deployProcessDefinition();
+	}
+
+	@After
+	public void tearDownAbstractDeploymentListenerTest() {
+		processEngine.close();
+	}
+
+	private void createProcessEngine() {
+		StandaloneProcessEngineConfiguration configuration = new StandaloneProcessEngineConfiguration();
+		configuration.setDatabaseSchemaUpdate("create-drop")
+				.setDataSource(createDatasource())
+				.setJobExecutorActivate(false);
+		configuration.setExpressionManager(new OSGiExpressionManager());
+		ProcessEngineFactory processEngineFactory = new ProcessEngineFactory();
+		processEngineFactory.setProcessEngineConfiguration(configuration);
+		processEngineFactory
+				.setBundle(getBundle("org.camunda.bpm.extension.osgi"));
+		try {
+			processEngineFactory.init();
+			processEngine = processEngineFactory.getObject();
+			ctx.registerService(ProcessEngine.class.getName(), processEngine,
+					new Properties());
+		} catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+	private DataSource createDatasource() {
+		JdbcDataSource dataSource = new JdbcDataSource();
+		dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+		dataSource.setUser("sa");
+		dataSource.setPassword("");
+		return dataSource;
+	}
+
+	private void deployProcessDefinition() {
+		File processDef = getProcessDefinition();
+		DeploymentBuilder builder = processEngine.getRepositoryService()
+				.createDeployment();
+		builder.name(getClass().getName());
+		try {
+			builder.addInputStream(processDef.getName(),
+					new FileInputStream(processDef)).deploy();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected abstract File getProcessDefinition();
+
+}
