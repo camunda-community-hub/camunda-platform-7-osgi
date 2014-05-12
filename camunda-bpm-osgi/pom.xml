@@ -173,6 +173,11 @@
 			<scope>test</scope>
 			<version>${mockito.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.1</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

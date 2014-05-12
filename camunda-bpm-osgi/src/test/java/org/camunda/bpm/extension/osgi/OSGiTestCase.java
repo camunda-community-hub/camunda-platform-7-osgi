@@ -38,11 +38,10 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("org.camunda.bpm")
 						.artifactId("camunda-engine").version("7.1.0-Final"),
 				mavenBundle().groupId("org.camunda.bpm.model")
-				 .artifactId("camunda-xml-model")
-				 .version("7.1.0-Final"),
+						.artifactId("camunda-xml-model").version("7.1.0-Final"),
 				mavenBundle().groupId("org.camunda.bpm.model")
-				 .artifactId("camunda-bpmn-model")
-				 .version("7.1.0-Final"),
+						.artifactId("camunda-bpmn-model")
+						.version("7.1.0-Final"),
 				mavenBundle().groupId("joda-time").artifactId("joda-time")
 						.version("2.1"),
 				mavenBundle().groupId("com.h2database").artifactId("h2")
@@ -55,6 +54,10 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-core").version("2.0-beta9")
 						.noStart(),
+				mavenBundle().groupId("commons-beanutils")
+						.artifactId("commons-beanutils").version("1.9.1"),
+				mavenBundle().groupId("commons-collections")
+						.artifactId("commons-collections").version("3.2.1"),
 				// make sure compiled classes from src/main are included
 				bundle("reference:file:target/classes"));
 		return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles());

@@ -28,12 +28,15 @@ public class OSGiELResolverTest {
 	private TestOSGiELResolver resolver;
 
 	private ELContext elContext;
+	
+	private ArgumentCaptor<Boolean> booleanCaptor;
 
 	@Before
 	public void setUp() {
 		resolver = new TestOSGiELResolver();
 		resolver.ctx = mock(BundleContext.class);
 		elContext = mock(ELContext.class);
+		booleanCaptor = ArgumentCaptor.forClass(Boolean.class);
 	}
 
 	@Test
@@ -62,9 +65,7 @@ public class OSGiELResolverTest {
 		registerServiceRefsAtContext(null, ldapFilter, reference);
 		Object value = resolver.getValue(elContext, null, lookupName);
 		assertThat(value, is(sameInstance(serviceObject)));
-		ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-		verify(elContext).setPropertyResolved(captor.capture());
-		assertThat(captor.getValue(), is(true));
+		wasPropertyResolved();
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -85,9 +86,7 @@ public class OSGiELResolverTest {
 		registerServiceRefsAtContext(JavaDelegate.class, null, reference);
 		Object value = resolver.getValue(elContext, null, lookupName);
 		assertThat(value, is(sameInstance(serviceObject)));
-		ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-		verify(elContext).setPropertyResolved(captor.capture());
-		assertThat(captor.getValue(), is(true));
+		wasPropertyResolved();
 	}
 
 	@Test
@@ -100,9 +99,7 @@ public class OSGiELResolverTest {
 				reference2);
 		Object value = resolver.getValue(elContext, null, lookupName);
 		assertThat(value, is(sameInstance(serviceObject)));
-		ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-		verify(elContext).setPropertyResolved(captor.capture());
-		assertThat(captor.getValue(), is(true));
+		wasPropertyResolved();
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -125,9 +122,7 @@ public class OSGiELResolverTest {
 		registerServiceRefsAtContext(ActivityBehavior.class, null, reference);
 		Object value = resolver.getValue(elContext, null, lookupName);
 		assertThat(value, is(sameInstance(serviceObject)));
-		ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-		verify(elContext).setPropertyResolved(captor.capture());
-		assertThat(captor.getValue(), is(true));
+		wasPropertyResolved();
 	}
 
 	@Test
@@ -140,9 +135,7 @@ public class OSGiELResolverTest {
 				reference2);
 		Object value = resolver.getValue(elContext, null, lookupName);
 		assertThat(value, is(sameInstance(serviceObject)));
-		ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-		verify(elContext).setPropertyResolved(captor.capture());
-		assertThat(captor.getValue(), is(true));
+		wasPropertyResolved();
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -175,6 +168,11 @@ public class OSGiELResolverTest {
 		return ref;
 	}
 
+	private void wasPropertyResolved(){
+		verify(elContext).setPropertyResolved(booleanCaptor.capture());
+		assertThat(booleanCaptor.getValue(), is(true));
+	}
+	
 	private class TestOSGiELResolver extends OSGiELResolver {
 
 		private BundleContext ctx;
@@ -205,5 +203,63 @@ public class OSGiELResolverTest {
 	@Test
 	public void getType() {
 		assertThat(resolver.getType(null, null, null), isA(Object.class));
+	}
+	
+	@Test
+	public void getValueForGetterProperty(){
+		TestJavaBean bean = new TestJavaBean();
+		Object value = new Object();
+		bean.setValue(value);
+		Object object = resolver.getValue(elContext, bean, "value");
+		assertThat(object, is(sameInstance(value)));
+		wasPropertyResolved();
+	}
+	
+	@Test
+	public void getValueForIsProperty(){
+		TestJavaBean bean = new TestJavaBean();
+		bean.setCalled(true);
+		Boolean object = (Boolean) resolver.getValue(elContext, bean, "called");
+		assertThat(object, is(true));
+		wasPropertyResolved();
+	}
+	
+	@Test
+	public void getValueForAbsentProperty(){
+		TestJavaBean bean = new TestJavaBean();
+		resolver.getValue(elContext, bean, "foo");
+		verifyZeroInteractions(elContext);
+	}
+
+	@Test
+	public void setValue(){
+		TestJavaBean bean = new TestJavaBean();
+		Object value = new Object();
+		resolver.setValue(elContext, bean, "value", value);
+		assertThat(bean.getValue(), is(sameInstance(value)));
+		wasPropertyResolved();
+	}
+	
+	@Test
+	public void setValueForAbsentProperty(){
+		TestJavaBean bean = new TestJavaBean();
+		resolver.setValue(elContext, bean, "bar", new Object());
+		verifyZeroInteractions(elContext);
+	}
+	
+	@Test
+	public void invoke(){
+		TestJavaBean bean = new TestJavaBean();
+		Object value = new Object();
+		bean.setValue(value);
+		Object invoke = resolver.invoke(elContext, bean, "getValue", new Class[0], null);
+		assertThat(invoke, is(sameInstance(value)));
+	}
+	
+	@Test
+	public void invokeAbsentMethod(){
+		TestJavaBean bean = new TestJavaBean();
+		resolver.invoke(elContext, bean, "method", new Class[0], null);
+		verifyZeroInteractions(elContext);
 	}
 }

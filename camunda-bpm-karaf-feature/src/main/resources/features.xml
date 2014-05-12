@@ -30,6 +30,8 @@
     <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.drools/5.5.0.Final_2</bundle>
     <bundle>mvn:com.google.protobuf/protobuf-java/2.5.0</bundle>
     <bundle>mvn:org.jvnet.staxex/stax-ex/1.7.5</bundle>
+    <bundle>mvn:commons-collections/commons-collections/3.2.1</bundle>
+    <bundle>mvn:commons-beanutils/commons-beanutils/1.9.1</bundle>
     <bundle>mvn:org.camunda.bpm.model/camunda-xml-model/${camunda-bpm.version}</bundle>
     <bundle>mvn:org.camunda.bpm.model/camunda-bpmn-model/${camunda-bpm.version}</bundle>
     <bundle>mvn:org.camunda.bpm/camunda-engine/${camunda-bpm.version}</bundle>

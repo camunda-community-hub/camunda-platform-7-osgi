@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
 import org.camunda.bpm.engine.impl.javax.el.ELResolver;
@@ -38,31 +40,42 @@ public class OSGiELResolver extends ELResolver {
 
 	@Override
 	public Object getValue(ELContext context, Object base, Object property) {
-		Object service = null;
+		Object returnValue = null;
 		if (base == null) {
 			String key = (String) property;
 			try {
 				String ldapFilter = "(" + LDAP_FILTER_KEY + "=" + key + ")";
 				// start with LDAP filter
-				service = checkRegisteredServicesByLdapFilter(ldapFilter);
-				if (service == null) {
+				returnValue = checkRegisteredServicesByLdapFilter(ldapFilter);
+				if (returnValue == null) {
 					// go on with JavaDelegates
-					service = checkRegisteredOsgiServices(
+					returnValue = checkRegisteredOsgiServices(
 							JavaDelegate.class.getName(), key);
 				}
-				if (service == null) {
+				if (returnValue == null) {
 					// finally ActivitiBehaviors
-					service = checkRegisteredOsgiServices(
+					returnValue = checkRegisteredOsgiServices(
 							ActivityBehavior.class.getName(), key);
 				}
 			} catch (InvalidSyntaxException e) {
 				throw new RuntimeException(e);
 			}
+		} else {
+			try {
+				boolean readable = PropertyUtils.isReadable(base,
+						property.toString());
+				if (readable) {
+					returnValue = PropertyUtils.getProperty(base,
+							property.toString());
+				}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
-		if (service != null) {
+		if (returnValue != null) {
 			context.setPropertyResolved(true);
 		}
-		return service;
+		return returnValue;
 	}
 
 	/**
@@ -165,6 +178,16 @@ public class OSGiELResolver extends ELResolver {
 	@Override
 	public void setValue(ELContext context, Object base, Object property,
 			Object value) {
+		try {
+			boolean writeable = PropertyUtils.isWriteable(base,
+					property.toString());
+			if (writeable) {
+				PropertyUtils.setProperty(base, property.toString(), value);
+				context.setPropertyResolved(true);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected BundleContext getBundleContext() {
@@ -175,9 +198,13 @@ public class OSGiELResolver extends ELResolver {
 	public Object invoke(ELContext context, Object base, Object method,
 			Class<?>[] paramTypes, Object[] params) {
 		try {
-			Method reflecMethod = base.getClass().getMethod((String) method,
-					paramTypes);
-			Object invoke = reflecMethod.invoke(base, params);
+			Method accessibleMethod = MethodUtils.getAccessibleMethod(
+					base.getClass(), method.toString(), paramTypes);
+			if (accessibleMethod == null) {
+				return null;
+			}
+			Object invoke = MethodUtils.invokeMethod(base, method.toString(),
+					params, paramTypes);
 			context.setPropertyResolved(true);
 			return invoke;
 		} catch (Exception e) {

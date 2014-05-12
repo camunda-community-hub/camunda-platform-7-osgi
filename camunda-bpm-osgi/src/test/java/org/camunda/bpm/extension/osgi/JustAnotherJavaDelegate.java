@@ -15,5 +15,5 @@ public class JustAnotherJavaDelegate implements JavaDelegate {
 	public void toggleCalled(){
 		called = true;
 	}
-
+	
 }
