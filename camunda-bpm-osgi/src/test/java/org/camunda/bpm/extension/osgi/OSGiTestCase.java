@@ -36,7 +36,7 @@ public class OSGiTestCase implements ConfigurationFactory {
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.1.0-Final"),
+						.artifactId("camunda-engine").version("7.2.0-SNAPSHOT"),
 				mavenBundle().groupId("org.camunda.bpm.model")
 				 .artifactId("camunda-xml-model")
 				 .version("7.1.0-Final"),
