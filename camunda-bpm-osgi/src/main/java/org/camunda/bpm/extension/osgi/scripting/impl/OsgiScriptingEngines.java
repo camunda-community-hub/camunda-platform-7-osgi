@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.delegate.VariableScope;
@@ -45,7 +46,7 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 
 	public Object evaluate(String script, String language,
 			VariableScope variableScope) {
-		Bindings bindings = createBindings(variableScope);
+		Bindings bindings = createBindings(variableScope, new SimpleBindings());
 		ScriptEngine scriptEngine = null;
 		try {
 			scriptEngine = resolveScriptEngine(language);

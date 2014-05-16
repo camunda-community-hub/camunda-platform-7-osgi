@@ -72,13 +72,13 @@ public class BlueprintIntegrationTest {
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.1.0-Final"),				 
+						.artifactId("camunda-engine").version("7.2.0-SNAPSHOT"),				 
 				mavenBundle().groupId("org.camunda.bpm.model")
 						 .artifactId("camunda-xml-model")
-						 .version("7.1.0-Final"),
+						 .version("7.2.0-SNAPSHOT"),
 				mavenBundle().groupId("org.camunda.bpm.model")
 						 .artifactId("camunda-bpmn-model")
-						 .version("7.1.0-Final"),
+						 .version("7.2.0-SNAPSHOT"),
 				mavenBundle().groupId("org.camunda.bpm.extension.osgi")
 						.artifactId("camunda-bpm-osgi")
 						.version("1.0.0-SNAPSHOT"),
@@ -88,7 +88,7 @@ public class BlueprintIntegrationTest {
 						.version("1.2.143"),
 				// FIXME this Mybatis version doesn't match camunda's
 				mavenBundle().groupId("org.mybatis").artifactId("mybatis")
-						.version("3.2.3"),
+						.version("3.2.7"),
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-api").version("2.0-beta9"),
 				mavenBundle().groupId("org.apache.logging.log4j")
