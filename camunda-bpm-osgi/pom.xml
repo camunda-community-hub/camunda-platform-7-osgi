@@ -24,7 +24,7 @@
 			org.camunda.bpm.extension.osgi
 		</camunda.artifact>
 		<camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-		<camunda.osgi.export.pkg>${camunda.artifact}*</camunda.osgi.export.pkg>
+		<camunda.osgi.export.pkg>${camunda.artifact}*,${camunda.artifact}.application.impl</camunda.osgi.export.pkg>
 	</properties>
 	<build>
 		<resources>
