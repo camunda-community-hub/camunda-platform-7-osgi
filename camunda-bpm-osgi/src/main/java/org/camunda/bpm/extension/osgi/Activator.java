@@ -21,16 +21,21 @@ import java.util.logging.Logger;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
+import org.camunda.bpm.application.ProcessApplicationInterface;
+import org.camunda.bpm.container.RuntimeContainerDelegate;
+import org.camunda.bpm.extension.osgi.application.ProcessApplicationDeployer;
+import org.camunda.bpm.extension.osgi.container.OSGiRuntimeContainerDelegate;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.url.URLStreamHandlerService;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * OSGi Activator
- * 
+ *
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  */
 public class Activator implements BundleActivator {
@@ -41,6 +46,9 @@ public class Activator implements BundleActivator {
 	private List<Runnable> callbacks = new ArrayList<Runnable>();
 
 	public void start(BundleContext context) throws Exception {
+
+	  RuntimeContainerDelegate.INSTANCE.set(new OSGiRuntimeContainerDelegate(context));
+
 		callbacks.add(new Service(context, URLStreamHandlerService.class
 				.getName(), new BpmnURLHandler(), props("url.handler.protocol",
 				"bpmn")));
@@ -58,6 +66,10 @@ public class Activator implements BundleActivator {
 					e);
 		}
 		callbacks.add(new Tracker(new Extender(context)));
+
+		ServiceTracker paDeployer = new ServiceTracker(context, ProcessApplicationInterface.class.getName(), new ProcessApplicationDeployer());
+		callbacks.add(new CloseTrackerCallback(paDeployer, true));
+
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -105,6 +117,21 @@ public class Activator implements BundleActivator {
 		public void run() {
 			extender.close();
 		}
+	}
+
+	private static class CloseTrackerCallback implements Runnable {
+
+	  protected ServiceTracker tracker;
+
+    public CloseTrackerCallback(ServiceTracker tracker, boolean isTrackAllServices) {
+	    this.tracker = tracker;
+      tracker.open(isTrackAllServices);
+	  }
+
+    public void run() {
+      tracker.close();
+    }
+
 	}
 
 }

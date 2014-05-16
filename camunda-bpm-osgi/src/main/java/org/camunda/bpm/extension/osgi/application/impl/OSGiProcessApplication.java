@@ -3,14 +3,15 @@ package org.camunda.bpm.extension.osgi.application.impl;
 import org.camunda.bpm.application.AbstractProcessApplication;
 import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.engine.impl.javax.el.ELResolver;
-import org.camunda.bpm.extension.osgi.blueprint.BlueprintELResolver;
 import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 public class OSGiProcessApplication extends AbstractProcessApplication {
 
   private static final ELResolver EL_RESOLVER = new BlueprintBundleLocalELResolver();
-  private BundleDelegatingClassLoader bundleDelegatingCL = new BundleDelegatingClassLoader(FrameworkUtil.getBundle(getClass()));
+  private Bundle bundle = FrameworkUtil.getBundle(getClass());
+  private BundleDelegatingClassLoader bundleDelegatingCL = new BundleDelegatingClassLoader(bundle);
   private ProcessApplicationReference reference;
 
   @Override
@@ -35,5 +36,9 @@ public class OSGiProcessApplication extends AbstractProcessApplication {
   @Override
   protected ELResolver initProcessApplicationElResolver() {
     return EL_RESOLVER;
+  }
+
+  public Bundle getBundle() {
+    return bundle;
   }
 }

@@ -23,9 +23,9 @@ import org.osgi.framework.BundleException;
  * <code>
  * src/test/resources/META-INF/services/org.ops4j.pax.exam.ConfigurationFactory
  * </code>
- * 
+ *
  * @author Ronny Bräunlich
- * 
+ *
  */
 public class OSGiTestCase implements ConfigurationFactory {
 
@@ -50,6 +50,8 @@ public class OSGiTestCase implements ConfigurationFactory {
 				// FIXME this Mybatis version doesn't match camunda's
 				mavenBundle().groupId("org.mybatis").artifactId("mybatis")
 						.version("3.2.3"),
+		    mavenBundle().groupId("com.fasterxml.uuid").artifactId("java-uuid-generator")
+            .version("3.1.2"),
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-api").version("2.0-beta9"),
 				mavenBundle().groupId("org.apache.logging.log4j")
