@@ -12,7 +12,7 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
 import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
-import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactory;
+import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

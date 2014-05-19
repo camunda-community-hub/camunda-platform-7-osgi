@@ -18,7 +18,7 @@ import org.camunda.bpm.engine.impl.javax.el.ELResolver;
 import org.camunda.bpm.engine.impl.scripting.BeansResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.ResolverFactory;
 import org.camunda.bpm.engine.impl.scripting.VariableScopeResolverFactory;
-import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactoryWithELResolver.BlueprintExpressionManager;
+import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class ProcessEngineFactoryWithELResolverTest {
 		StandaloneProcessEngineConfiguration config = mock(StandaloneProcessEngineConfiguration.class);
 		when(config.getResolverFactories()).thenReturn(null);
 		factory.setProcessEngineConfiguration(config);
-		factory.setBlueprintELResolver(new BlueprintELResolver());
+		factory.setExpressionManager(new BlueprintExpressionManager());
 		factory.init();
 		// captures
 		ArgumentCaptor<BlueprintExpressionManager> elManagerCaptor = ArgumentCaptor
@@ -67,6 +67,7 @@ public class ProcessEngineFactoryWithELResolverTest {
 	}
 
 	private void checkExpressionManager(BlueprintExpressionManager exprManager) {
+	  exprManager.setBlueprintELResolver(new BlueprintELResolver());
 		ELResolver elResolver = exprManager.createElResolver(null);
 		assertThat(elResolver, is(instanceOf(CompositeELResolver.class)));
 		// FIXME gotta find a way to get hold of Resolvers inside

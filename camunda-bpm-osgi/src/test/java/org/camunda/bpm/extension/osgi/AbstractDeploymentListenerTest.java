@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactory;
+import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
