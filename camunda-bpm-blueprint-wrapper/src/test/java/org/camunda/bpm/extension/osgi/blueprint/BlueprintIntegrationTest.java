@@ -103,10 +103,6 @@ public class BlueprintIntegrationTest {
 						.artifactId("org.apache.aries.proxy").version("1.0.0"),
 				mavenBundle().groupId("org.apache.aries")
 						.artifactId("org.apache.aries.util").version("1.0.0"),
-				mavenBundle().groupId("commons-beanutils")
-						.artifactId("commons-beanutils").version("1.9.1"),
-				mavenBundle().groupId("commons-collections")
-						.artifactId("commons-collections").version("3.2.1"),
 				// make sure compiled classes from src/main are included
 				bundle("reference:file:target/classes"));
 		return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles(),

@@ -72,6 +72,7 @@
 			<artifactId>org.osgi.core</artifactId>
 			<version>${osgi.version}</version>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -177,6 +178,7 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.1</version>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 

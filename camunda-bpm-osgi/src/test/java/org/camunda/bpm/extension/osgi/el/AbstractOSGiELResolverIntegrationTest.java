@@ -1,6 +1,8 @@
 package org.camunda.bpm.extension.osgi.el;
 
 import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +21,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.OptionUtils;
 
 public abstract class AbstractOSGiELResolverIntegrationTest extends
 		OSGiTestCase {
@@ -32,7 +35,12 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
 	@Override
 	@Configuration
 	public Option[] createConfiguration() {
-		return super.createConfiguration();
+	  Option[] beanUtils = options(
+    mavenBundle().groupId("commons-beanutils")
+        .artifactId("commons-beanutils").version("1.9.1"),
+    mavenBundle().groupId("commons-collections")
+        .artifactId("commons-collections").version("3.2.1"));
+		return OptionUtils.combine(beanUtils, super.createConfiguration());
 	}
 
 	@Before

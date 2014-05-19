@@ -54,10 +54,6 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-core").version("2.0-beta9")
 						.noStart(),
-				mavenBundle().groupId("commons-beanutils")
-						.artifactId("commons-beanutils").version("1.9.1"),
-				mavenBundle().groupId("commons-collections")
-						.artifactId("commons-collections").version("3.2.1"),
 				// make sure compiled classes from src/main are included
 				bundle("reference:file:target/classes"));
 		return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles());
