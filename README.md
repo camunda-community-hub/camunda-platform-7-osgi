@@ -36,6 +36,8 @@ Please be aware that the order is mandatory or else getObject() will return null
 
 Please note also, that the process engine won't be exported automatically. If you want to share it, you can do that by yourself.
 
+If you want to use a special ELResolver (see part 4) you'll have to use the `ProcessEngineFactoryWithELResolver`.
+
 #### Using the camunda BPM Blueprint wrapper (deprecated)
 
 There is already a project with a pre-filled Blueprint context.xml. Basically you'll only have to edit the Datasource properties or you use the pre-defined in memory H2 database.
@@ -69,10 +71,27 @@ If your OSGi runtime supports Apache Felix Fileinstall you can drop a single pro
 
 ### Part 4 referencing inside processes
 
-Right now the `BlueprintELResolver` is the only cares for `JavaDelegates`. You'll have to use the `BlueprintELResolver` as ELResolver and register it to listen for `JavaDelegates`.
-If you use the camunda BPM Blueprint wrapper this will be done for you automatically.
+#### With the BlueprintELResolver
 
-The only other ways is to use the setBeans() method on the `ProcessEngineConfiguration`.
+The `BlueprintELResolver` can be used with `JavaDelegates`. You'll have to use the `BlueprintELResolver` as ELResolver and register it to listen for `JavaDelegates`.
+If you use the camunda BPM Blueprint wrapper this will be done for you automatically.
+The `BlueprintELResolver` then tries to match the expression with the Blueprint component name (the id in the context.xml).
+
+#### With the OSGiELResolver
+
+The `OSGiELResolver` uses a three step resolution to match expressions with classes
+
+##### Step 1
+
+The first step uses the LDAP filter property. You have to export a service with the filter property "processExpression=". The OSGiELResolver then matches the expression with the filter.
+
+##### Step 2
+
+If the LDAP search doesn't suceed the ELResolver will search the Service Registry for JavaDelegates. Then the class name will be compared to the expression. The comparison is similiar to the default CDI bean names. That means the expression has to match the class name starting with a lowercase character, e.g. org.foo.bar.MyClass would match "${myClass}".
+
+##### Step 3
+
+The third steps works likes the second one, only that it searches for exported ActivityBehaviours. 
 
 ## Resources
 
