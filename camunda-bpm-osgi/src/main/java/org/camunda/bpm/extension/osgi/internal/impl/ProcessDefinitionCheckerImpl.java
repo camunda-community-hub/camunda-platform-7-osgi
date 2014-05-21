@@ -32,7 +32,7 @@ public class ProcessDefinitionCheckerImpl implements ProcessDefintionChecker {
 	public void checkBundle(Bundle bundle) {
 		List<URL> pathList = ProcessDefinitionParser.scanForProcesses(bundle);
 		if (!pathList.isEmpty()) {
-			deployer.deployProcessDefinitions(bundle, pathList);
+			deployer.deployProcessDefinitions(bundle.getSymbolicName(), pathList);
 		} else {
 			LOGGER.log(Level.FINE, "No process found in bundle {}",
 					bundle.getSymbolicName());

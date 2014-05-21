@@ -44,10 +44,11 @@ public class ProcessDefinitionCheckerImplTest {
 		URL url = new URL("file://foo.bpmn");
 		when(bundle.findEntries(anyString(), anyString(), anyBoolean())).thenReturn(Collections.enumeration(Collections.singletonList(url)));
 		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getSymbolicName()).thenReturn("org.bundle");
 		checker.checkBundle(bundle);
 		@SuppressWarnings("rawtypes")
 		ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-		verify(deployer).deployProcessDefinitions(eq(bundle), captor.capture());
+		verify(deployer).deployProcessDefinitions(eq("org.bundle"), captor.capture());
 		assertThat((URL) captor.getValue().get(0), is(url));
 	}
 }

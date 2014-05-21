@@ -11,7 +11,6 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
-import org.osgi.framework.Bundle;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -34,10 +33,10 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 	}
 
 	@Override
-	public void deployProcessDefinitions(Bundle bundle, List<URL> pathList) {
+	public void deployProcessDefinitions(String bundleSymbolicName, List<URL> pathList) {
 		try {
 			LOGGER.log(Level.FINE,
-					"Found process in bundle " + bundle.getSymbolicName()
+					"Found process in bundle " + bundleSymbolicName
 							+ " with paths: " + pathList);
 
 			ProcessEngine engine = (ProcessEngine) engineServiceTracker
@@ -49,7 +48,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 
 			RepositoryService service = engine.getRepositoryService();
 			DeploymentBuilder builder = service.createDeployment();
-			builder.name(bundle.getSymbolicName());
+			builder.name(bundleSymbolicName);
 			for (URL url : pathList) {
 				InputStream is = url.openStream();
 				if (is == null) {

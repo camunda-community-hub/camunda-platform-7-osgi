@@ -18,9 +18,7 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
-import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionDeployerImpl;
 import org.junit.Test;
-import org.osgi.framework.Bundle;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ProcessDefinitionDeployerImplTest {
@@ -30,24 +28,20 @@ public class ProcessDefinitionDeployerImplTest {
 	@Test
 	public void deployEmptyPathList() {
 		ServiceTracker serviceTracker = createProcessEngineServiceTrackerMock();
-		Bundle bundle = mock(Bundle.class);
-		when(bundle.getSymbolicName()).thenReturn("test bundle");
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
 				serviceTracker);
-		deployer.deployProcessDefinitions(bundle, Collections.<URL> emptyList());
+		deployer.deployProcessDefinitions("test bundle", Collections.<URL> emptyList());
 		verify(deploymentBuilder).deploy();
 	}
 
 	@Test
 	public void deploySingleProcess() throws MalformedURLException {
 		ServiceTracker serviceTracker = createProcessEngineServiceTrackerMock();
-		Bundle bundle = mock(Bundle.class);
-		when(bundle.getSymbolicName()).thenReturn("test bundle");
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
 				serviceTracker);
 		URL url = new File("src/test/resources/testprocess.bpmn").toURI()
 				.toURL();
-		deployer.deployProcessDefinitions(bundle,
+		deployer.deployProcessDefinitions("test bundle",
 				Collections.singletonList(url));
 		verify(deploymentBuilder).deploy();
 		verify(deploymentBuilder).addInputStream(eq(url.toString()),
@@ -75,8 +69,6 @@ public class ProcessDefinitionDeployerImplTest {
 	@Test
 	public void throwsExceptionWhenProcessEngineNotFound() {
 		ServiceTracker serviceTracker = mock(ServiceTracker.class);
-		Bundle bundle = mock(Bundle.class);
-		when(bundle.getSymbolicName()).thenReturn("test bundle");
 		try {
 			when(serviceTracker.waitForService(anyLong())).thenReturn(null);
 		} catch (InterruptedException e) {
@@ -84,7 +76,7 @@ public class ProcessDefinitionDeployerImplTest {
 		}
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
 				serviceTracker);
-		deployer.deployProcessDefinitions(bundle, null);
+		deployer.deployProcessDefinitions("test bundle", null);
 		// nothing should happen because the exception get's caught
 	}
 
