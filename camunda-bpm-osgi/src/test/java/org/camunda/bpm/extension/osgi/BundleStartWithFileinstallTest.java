@@ -1,14 +1,12 @@
 package org.camunda.bpm.extension.osgi;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 
 import org.apache.felix.fileinstall.ArtifactListener;
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -35,44 +33,39 @@ import org.osgi.framework.ServiceReference;
 @ExamReactorStrategy(PerMethod.class)
 public class BundleStartWithFileinstallTest extends OSGiTestCase {
 
-	@Override
-	@Configuration
-	public Option[] createConfiguration() {
-		MavenArtifactProvisionOption felixFileinstall = mavenBundle()
-				.groupId("org.apache.felix.")
-				.artifactId("org.apache.felix.fileinstall").version("3.0.2");
-		return OptionUtils.combine(super.createConfiguration(),
-				felixFileinstall);
-	}
+  @Override
+  @Configuration
+  public Option[] createConfiguration() {
+    MavenArtifactProvisionOption felixFileinstall = mavenBundle().groupId("org.apache.felix.").artifactId("org.apache.felix.fileinstall").version("3.0.2");
+    return OptionUtils.combine(super.createConfiguration(), felixFileinstall);
+  }
 
-	@Test
-	public void checkServices() {
-		try {
-			startBundle("org.camunda.bpm.extension.osgi");
-			ServiceReference[] services = ctx.getServiceReferences(
-					ArtifactUrlTransformer.class.getName(), null);
-			checkNumber(services);
-			checkInstance(services);
-			ServiceReference[] services2 = ctx.getServiceReferences(
-					ArtifactListener.class.getName(), null);
-			assertThat(services2.length, is(1));
-			checkNumber(services2);
-			checkInstance(services2);
-		} catch (BundleException e) {
-			fail(e.toString());
-		} catch (InvalidSyntaxException e) {
-			fail(e.toString());
-		}
-	}
+  @Test
+  public void checkServices() {
+    try {
+      startBundle("org.camunda.bpm.extension.osgi");
+      ServiceReference[] services = ctx.getServiceReferences(ArtifactUrlTransformer.class.getName(), null);
+      checkNumber(services);
+      checkInstance(services);
+      ServiceReference[] services2 = ctx.getServiceReferences(ArtifactListener.class.getName(), null);
+      assertThat(services2.length, is(1));
+      checkNumber(services2);
+      checkInstance(services2);
+    } catch (BundleException e) {
+      fail(e.toString());
+    } catch (InvalidSyntaxException e) {
+      fail(e.toString());
+    }
+  }
 
-	private void checkInstance(ServiceReference[] services) {
-		for (ServiceReference ref : services) {
-			Object service = ctx.getService(ref);
-			assertThat(service, is((instanceOf(BpmnDeploymentListener.class))));
-		}
-	}
+  private void checkInstance(ServiceReference[] services) {
+    for (ServiceReference ref : services) {
+      Object service = ctx.getService(ref);
+      assertThat(service.getClass().getName(), is("org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener"));
+    }
+  }
 
-	private void checkNumber(ServiceReference[] services) {
-		assertThat(services.length, is(1));
-	}
+  private void checkNumber(ServiceReference[] services) {
+    assertThat(services.length, is(1));
+  }
 }

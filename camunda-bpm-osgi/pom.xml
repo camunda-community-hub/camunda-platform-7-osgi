@@ -24,7 +24,15 @@
 			org.camunda.bpm.extension.osgi
 		</camunda.artifact>
 		<camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-		<camunda.osgi.export.pkg>${camunda.artifact}*</camunda.osgi.export.pkg>
+		<camunda.osgi.export.pkg>
+			${camunda.artifact}.blueprint,
+			${camunda.artifact}.el,
+			${camunda.artifact}.engine,
+			${camunda.artifact}.util
+		</camunda.osgi.export.pkg>
+		<camunda.osgi.import.pkg>
+			!${camunda.artifact},*
+		</camunda.osgi.import.pkg>
 	</properties>
 	<build>
 		<resources>
@@ -55,6 +63,7 @@
 						<Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
 						<Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
 						<Export-Package>${camunda.osgi.export.pkg}</Export-Package>
+						<Import-Package>${camunda.osgi.import.pkg}</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

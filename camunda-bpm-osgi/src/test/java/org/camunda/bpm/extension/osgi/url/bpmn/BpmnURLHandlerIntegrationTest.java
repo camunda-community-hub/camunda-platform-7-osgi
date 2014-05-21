@@ -6,41 +6,48 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.inject.Inject;
+
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.ops4j.pax.exam.util.Filter;
+import org.osgi.framework.BundleException;
+import org.osgi.service.url.URLStreamHandlerService;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class BpmnURLHandlerTest extends OSGiTestCase {
+public class BpmnURLHandlerIntegrationTest extends OSGiTestCase {
 
-	private BpmnURLHandler handler;
+  @Inject
+  @Filter("(url.handler.protocol=bpmn)")
+	private URLStreamHandlerService handler;
 
 	@Before
-	public void setUp() {
-		handler = new BpmnURLHandler();
+	public void setUp() throws BundleException {
+    startBundle("org.camunda.bpm.extension.osgi");
 	}
 
-	@Test
-	public void getInitialBpmnXmlURL() {
-		assertThat(handler.getBpmnXmlURL(), is(nullValue()));
+	@Test(expected=NullPointerException.class)
+	public void getInitialBpmnXmlURL() throws IOException {
+		assertThat(handler.openConnection(null).getURL(), is(nullValue()));
 	}
 
 	@Test
 	public void getSetBpmnXmlURL() throws Exception {
-		handler.openConnection(new URL("bpmn:file:."));
-		assertThat(handler.getBpmnXmlURL(), is(notNullValue()));
-		assertThat(handler.getBpmnXmlURL().toString(), is(equalTo("file:.")));
+		URLConnection connection = handler.openConnection(new URL("bpmn:file:."));
+		assertThat(connection.getURL(), is(notNullValue()));
+		assertThat(connection.getURL().toString(), is(equalTo("bpmn:file:.")));
 	}
 
 	@Test(expected = MalformedURLException.class)
