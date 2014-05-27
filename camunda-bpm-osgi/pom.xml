@@ -18,7 +18,9 @@
 			org.camunda.bpm.extension.osgi.Activator
 		</camunda.osgi.activator>
 		<camunda.osgi.import.pkg>
-			org.apache.felix.fileinstall*;resolution:=optional,*
+			org.camunda.bpm.engine.*;${camunda.osgi.import.camunda.engine.version},
+			org.apache.felix.fileinstall*;resolution:=optional,
+			*
 		</camunda.osgi.import.pkg>
 		<camunda.artifact>
 			org.camunda.bpm.extension.osgi
@@ -30,9 +32,7 @@
 			${camunda.artifact}.engine,
 			${camunda.artifact}.util
 		</camunda.osgi.export.pkg>
-		<camunda.osgi.import.pkg>
-			!${camunda.artifact},*
-		</camunda.osgi.import.pkg>
+		<camunda.osgi.dynamic.import/>
 	</properties>
 	<build>
 		<resources>
@@ -48,24 +48,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
-				<executions>
-					<!--  This execution makes sure that the manifest is available when the 
-						tests are executed -->
-					<execution>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<instructions>
-						<Bundle-Name>${project.name}</Bundle-Name>
-						<Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-						<Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
-						<Export-Package>${camunda.osgi.export.pkg}</Export-Package>
-						<Import-Package>${camunda.osgi.import.pkg}</Import-Package>
-					</instructions>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

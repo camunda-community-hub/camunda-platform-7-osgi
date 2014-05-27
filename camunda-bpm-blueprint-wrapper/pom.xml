@@ -13,7 +13,10 @@
         <camunda.artifact>
             org.camunda.bpm.extension.osgi.blueprint
         </camunda.artifact>
-        <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
+        <camunda.osgi.import.pkg>
+			org.camunda.bpm.engine.*;${camunda.osgi.import.camunda.engine.version},
+			*
+        </camunda.osgi.import.pkg>
     </properties>
 	<dependencies>
 		<dependency>
@@ -128,21 +131,6 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <extensions>true</extensions>
-        <executions>
-        <!-- This execution makes sure that the manifest is available 
-             when the tests are executed -->
-        	<execution>
-            	<goals>
-                	<goal>manifest</goal>
-                </goals>
-            </execution>
-         </executions>
-         <configuration>
-	         <instructions>
-	         	<Bundle-Name>${project.name}</Bundle-Name>
-             	<Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-	         </instructions>
-         </configuration>
       </plugin>
 	</plugins>
   </build>
