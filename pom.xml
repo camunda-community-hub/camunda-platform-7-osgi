@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- Required for OSS maven repository deployment -->
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
+  <parent>
+    <groupId>org.camunda</groupId>
+    <artifactId>camunda-release-parent</artifactId>
+    <version>2.1</version>
+    <relativePath />
+  </parent>
 
 	<groupId>org.camunda.bpm.extension.osgi</groupId>
 	<artifactId>camunda-bpm-osgi-root</artifactId>
@@ -170,78 +170,6 @@
 		</repository>
 	</repositories>
 
-	<profiles>
-	   <profile>
-      <id>sonatype-oss-release</id>
-      <modules>
-		<module>camunda-bpm-osgi</module>
-		<module>camunda-bpm-karaf-feature</module>
-		<module>camunda-bpm-blueprint-wrapper</module>
-		<module>camunda-bpm-karaf-commands</module>
-      </modules>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>attach-test-sources</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>test-jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.7</version>
-            <configuration>
-              <quiet>true</quiet>
-            </configuration>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.1</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.4.4</version>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -281,6 +209,7 @@
     <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
+
   <issueManagement>
   	<system>GitHub</system>
   	<url>https://github.com/camunda/camunda-bpm-platform-osgi/issues</url>
