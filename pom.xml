@@ -210,6 +210,17 @@
     <tag>HEAD</tag>
   </scm>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>camunda-nexus</id>
+      <url>https://app.camunda.com/nexus/content/repositories/camunda-bpm-community-extensions-snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>camunda-nexus</id>
+      <url>https://app.camunda.com/nexus/content/repositories/camunda-bpm-community-extensions</url>
+    </repository>
+  </distributionManagement>
+
   <issueManagement>
   	<system>GitHub</system>
   	<url>https://github.com/camunda/camunda-bpm-platform-osgi/issues</url>
