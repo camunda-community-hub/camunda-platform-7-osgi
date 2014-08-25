@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.application.impl;
+package org.camunda.bpm.extension.osgi.application;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -86,6 +86,20 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
+  /**
+   * MyProcessApplication registers the engine for test purposes.
+   * @throws InterruptedException 
+   */
+  @Test
+  public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
+    //give the process application some time to start
+    Thread.sleep(10000L);
+    ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
+    ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
+    assertThat(engine, is(notNullValue()));
+    assertThat(engine.getName(), is("default"));
+  }
+  
   @Test
   public void shouldBeAbleToResolveBean() throws InterruptedException{
     //give the process application some time to start

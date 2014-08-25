@@ -46,6 +46,7 @@ public class ProcessApplicationDeployer implements ServiceTrackerCustomizer {
         ));
 
         ProcessApplicationInterface app = (ProcessApplicationInterface) bundleContext.getService(reference);
+        
         app.deploy();
         return app;
 

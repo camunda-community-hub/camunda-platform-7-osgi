@@ -37,6 +37,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * OSGi Activator
  *
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
+ * @author Ronny Bräunlich
+ * @author Daniel Meyer
+ * @author Roman Smirnov
  */
 public class Activator implements BundleActivator {
 

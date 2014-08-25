@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.application.impl;
+package org.camunda.bpm.extension.osgi.application;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -31,7 +31,6 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
-import org.camunda.bpm.extension.osgi.application.MyProcessApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -54,7 +53,7 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase {
+public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   @Inject
   protected BundleContext bundleContext;
@@ -86,15 +85,23 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
+  /**
+   * MyProcessApplication registers the engine for test purposes.
+   * @throws InterruptedException 
+   */
   @Test
-  public void shouldBeAbleToResolveBean() throws InterruptedException{
+  public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
     //give the process application some time to start
     Thread.sleep(10000L);
     ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
     ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
-    ProcessInstance processInstance = engine.getRuntimeService()
-      .startProcessInstanceByKey("foo");
-    assertThat(processInstance.isEnded(), is(true));
+    assertThat(engine, is(notNullValue()));
+    assertThat(engine.getName(), is("default"));
+  }
+  
+  @Test
+  public void shouldBeAbleToDeploy() throws InterruptedException{
+    fail();
   }
 
 }

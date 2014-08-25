@@ -20,12 +20,12 @@ import java.util.List;
 
 import org.camunda.bpm.application.AbstractProcessApplication;
 import org.camunda.bpm.container.impl.deployment.ParseProcessesXmlStep;
-import org.camunda.bpm.extension.osgi.application.impl.OSGiProcessApplication;
+import org.camunda.bpm.extension.osgi.application.OSGiProcessApplication;
 
 /**
  * @author Daniel Meyer
  * @author Roman Smirnov
- * @author Sebastian Menski
+ * @author Ronny Bräunlich
  *
  */
 public class OSGiParseProcessesXmlStep extends ParseProcessesXmlStep {

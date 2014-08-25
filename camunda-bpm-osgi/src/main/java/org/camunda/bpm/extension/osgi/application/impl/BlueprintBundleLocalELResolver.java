@@ -33,6 +33,7 @@ public class BlueprintBundleLocalELResolver extends ELResolver {
     if(base == null){
       Set<String> componentIds = getBlueprintContainer().getComponentIds();
       if(componentIds.contains(property.toString())){
+        context.setPropertyResolved(true);
         return getBlueprintContainer().getComponentInstance(property.toString());
       }
     }
