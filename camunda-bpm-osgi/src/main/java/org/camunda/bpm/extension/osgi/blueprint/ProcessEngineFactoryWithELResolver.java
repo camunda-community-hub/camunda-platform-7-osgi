@@ -12,10 +12,10 @@ import org.camunda.bpm.engine.impl.javax.el.CompositeELResolver;
 import org.camunda.bpm.engine.impl.javax.el.ELResolver;
 import org.camunda.bpm.engine.impl.javax.el.ListELResolver;
 import org.camunda.bpm.engine.impl.javax.el.MapELResolver;
-import org.camunda.bpm.engine.impl.scripting.BeansResolverFactory;
-import org.camunda.bpm.engine.impl.scripting.ResolverFactory;
-import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
-import org.camunda.bpm.engine.impl.scripting.VariableScopeResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.BeansResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
 
 
@@ -41,7 +41,7 @@ public class ProcessEngineFactoryWithELResolver extends ProcessEngineFactory {
 
     public class BlueprintExpressionManager extends ExpressionManager {
       @Override
-      protected ELResolver createElResolver(VariableScope variableScope) {
+      protected ELResolver createElResolver(VariableScope<?> variableScope) {
         CompositeELResolver compositeElResolver = new CompositeELResolver();
         compositeElResolver.add(new VariableScopeElResolver(variableScope));
         compositeElResolver.add(blueprintELResolver);
