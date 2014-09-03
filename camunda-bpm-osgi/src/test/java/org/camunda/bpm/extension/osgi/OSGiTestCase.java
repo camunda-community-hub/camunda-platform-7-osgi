@@ -43,6 +43,27 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("org.camunda.bpm.model")
 				 .artifactId("camunda-bpmn-model")
 				 .version("7.2.0-SNAPSHOT"),
+	        mavenBundle().groupId("org.camunda.bpm.model")
+	         .artifactId("camunda-cmmn-model")
+	         .version("7.2.0-SNAPSHOT"),
+	          mavenBundle().groupId("org.camunda.spin")
+	           .artifactId("camunda-spin-all")
+	           .version("1.0.0-SNAPSHOT"),
+         mavenBundle().groupId("org.camunda.commons")
+         .artifactId("camunda-commons-logging")
+         .version("1.0.1"),
+         mavenBundle().groupId("org.camunda.commons")
+         .artifactId("camunda-commons-utils")
+         .version("1.0.3"),
+	        mavenBundle().groupId("org.camunda.connect")
+	         .artifactId("camunda-connect-all")
+	         .version("1.0.0-SNAPSHOT"),
+	      mavenBundle().groupId("net.minidev").artifactId("json-smart")
+	      .version("1.3"),
+	      mavenBundle().groupId("org.codehaus.jackson").artifactId("jackson-core-asl")
+	      .version("1.9.13"),
+        mavenBundle().groupId("org.codehaus.jackson").artifactId("jackson-mapper-asl")
+        .version("1.9.13"),
 				mavenBundle().groupId("joda-time").artifactId("joda-time")
 						.version("2.1"),
 				mavenBundle().groupId("com.h2database").artifactId("h2")
@@ -52,6 +73,12 @@ public class OSGiTestCase implements ConfigurationFactory {
 						.version("3.2.3"),
 		    mavenBundle().groupId("com.fasterxml.uuid").artifactId("java-uuid-generator")
             .version("3.1.2"),
+        mavenBundle().groupId("org.slf4j").artifactId("slf4j-api")
+            .version("1.7.7"),
+        mavenBundle().groupId("ch.qos.logback")
+            .artifactId("logback-core").version("1.1.2"),
+        mavenBundle().groupId("ch.qos.logback")
+            .artifactId("logback-classic").version("1.1.2"),
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-api").version("2.0-beta9"),
 				mavenBundle().groupId("org.apache.logging.log4j")

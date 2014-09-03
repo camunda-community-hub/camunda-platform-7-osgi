@@ -17,6 +17,7 @@ import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
 import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactory;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -31,12 +32,13 @@ public class ProcessApplicationDeployer implements ServiceTrackerCustomizer {
 
   public Object addingService(ServiceReference reference) {
 
-    BundleContext bundleContext = reference.getBundle().getBundleContext();
+    Bundle bundle = reference.getBundle();
+    BundleContext bundleContext = bundle.getBundleContext();
 
     ClassLoader previous = Thread.currentThread().getContextClassLoader();
 
     try {
-        ClassLoader cl = new BundleDelegatingClassLoader(bundleContext.getBundle());
+        ClassLoader cl = new BundleDelegatingClassLoader(bundle);
 
         Thread.currentThread().setContextClassLoader(new ClassLoaderWrapper(
                 cl,

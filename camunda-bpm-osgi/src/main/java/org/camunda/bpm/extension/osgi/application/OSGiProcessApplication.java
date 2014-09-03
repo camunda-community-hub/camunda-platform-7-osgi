@@ -7,21 +7,21 @@ import org.camunda.bpm.extension.osgi.application.impl.BlueprintBundleLocalELRes
 import org.camunda.bpm.extension.osgi.application.impl.OSGiProcessApplicationReference;
 import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 public class OSGiProcessApplication extends AbstractProcessApplication {
 
-  private static final BlueprintBundleLocalELResolver EL_RESOLVER = new BlueprintBundleLocalELResolver();
-  private Bundle bundle = FrameworkUtil.getBundle(getClass());
-  private BundleDelegatingClassLoader bundleDelegatingCL = new BundleDelegatingClassLoader(bundle);
+  private Bundle bundle;
+  private BundleDelegatingClassLoader bundleDelegatingCL;
   private ProcessApplicationReference reference;
+  private BlueprintContainer blueprintContainer;
 
-  public OSGiProcessApplication(Bundle bundle, BlueprintContainer blueprintContainer){
+  public OSGiProcessApplication(Bundle bundle, BlueprintContainer blueprintContainer) {
     this.bundle = bundle;
-    EL_RESOLVER.setBlueprintContainer(blueprintContainer);
+    this.blueprintContainer = blueprintContainer;
+    bundleDelegatingCL = new BundleDelegatingClassLoader(bundle);
   }
-  
+
   @Override
   public ProcessApplicationReference getReference() {
     if (reference == null) {
@@ -32,7 +32,6 @@ public class OSGiProcessApplication extends AbstractProcessApplication {
 
   @Override
   protected String autodetectProcessApplicationName() {
-    //FIXME always subclass or injection of BundleContext?
     return getBundle().getSymbolicName();
   }
 
@@ -43,7 +42,9 @@ public class OSGiProcessApplication extends AbstractProcessApplication {
 
   @Override
   protected ELResolver initProcessApplicationElResolver() {
-    return EL_RESOLVER;
+    BlueprintBundleLocalELResolver elResolver = new BlueprintBundleLocalELResolver();
+    elResolver.setBlueprintContainer(blueprintContainer);
+    return elResolver;
   }
 
   public Bundle getBundle() {

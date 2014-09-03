@@ -12,6 +12,7 @@
  */
 package org.camunda.bpm.extension.osgi.application;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -24,11 +25,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.camunda.bpm.BpmPlatform;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
 import org.junit.Test;
@@ -84,11 +86,13 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
       return null;
     }
   }
-
-  /**
-   * MyProcessApplication registers the engine for test purposes.
-   * @throws InterruptedException 
-   */
+  
+  @Test
+  public void shouldBeAbleToDeploy() throws InterruptedException{
+    Set<String> processApplicationNames = BpmPlatform.getProcessApplicationService().getProcessApplicationNames();
+    assertThat(processApplicationNames, hasItem("yo!"));
+  }
+  
   @Test
   public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
     //give the process application some time to start
@@ -98,10 +102,6 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("default"));
   }
-  
-  @Test
-  public void shouldBeAbleToDeploy() throws InterruptedException{
-    fail();
-  }
+ 
 
 }

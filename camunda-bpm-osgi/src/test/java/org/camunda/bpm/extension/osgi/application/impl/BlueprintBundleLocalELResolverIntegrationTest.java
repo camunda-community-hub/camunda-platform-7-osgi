@@ -13,7 +13,6 @@
 package org.camunda.bpm.extension.osgi.application.impl;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
@@ -47,6 +46,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
+ * Test to see if the {@link BlueprintBundleLocalELResolver} can resolve an
+ * EL-expression by finding a bean from the context.xml.
+ * 
  * @author Daniel Meyer
  * @author Roman Smirnov
  * @author Ronny Bräunlich
@@ -77,9 +79,8 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     try {
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
           .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class).add(MyProcessApplication.class)
-          .set(Constants.DYNAMICIMPORT_PACKAGE, "*")
-          .set(Constants.EXPORT_PACKAGE, "*").build();
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
@@ -87,13 +88,12 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
   }
 
   @Test
-  public void shouldBeAbleToResolveBean() throws InterruptedException{
-    //give the process application some time to start
+  public void shouldBeAbleToResolveBean() throws InterruptedException {
+    // give the process application some time to start
     Thread.sleep(10000L);
     ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
     ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
-    ProcessInstance processInstance = engine.getRuntimeService()
-      .startProcessInstanceByKey("foo");
+    ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("foo");
     assertThat(processInstance.isEnded(), is(true));
   }
 

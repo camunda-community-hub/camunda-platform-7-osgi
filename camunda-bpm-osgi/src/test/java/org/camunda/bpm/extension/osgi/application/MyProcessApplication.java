@@ -13,16 +13,13 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
 @ProcessApplication("yo!")
 public class MyProcessApplication extends OSGiProcessApplication {
 
-  private BundleContext ctx;
 
   public MyProcessApplication(BundleContext ctx, BlueprintContainer blueprintContainer) {
     super(ctx.getBundle(), blueprintContainer);
-    this.ctx = ctx;
   }
 
   @PostDeploy
   public void sayHello(ProcessEngine processEngine) {
-    ctx.registerService(ProcessEngine.class.getName(), processEngine, null);
   }
 
   public void createDeployment(String processArchiveName, DeploymentBuilder deploymentBuilder) {
