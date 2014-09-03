@@ -38,6 +38,7 @@ public class OSGiStartProcessEngineStep extends StartProcessEngineStep {
     return new BundleClassloaderAwareProcessEngineController(configuration, context);
   }
 
+  @SuppressWarnings("unchecked")
   protected <T> Class<? extends T> loadClass(String className, ClassLoader customClassloader, Class<T> clazz) {
 
     Class<? extends T> configurationClass = null;

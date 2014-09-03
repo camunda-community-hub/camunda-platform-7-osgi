@@ -31,12 +31,12 @@ import org.camunda.bpm.extension.osgi.application.OSGiProcessApplication;
 public class OSGiParseProcessesXmlStep extends ParseProcessesXmlStep {
 
   protected List<URL> getProcessesXmlUrls(String[] deploymentDescriptors, AbstractProcessApplication processApplication) {
-    OSGiProcessApplication osGiProcessApplication = (OSGiProcessApplication) processApplication;
+    OSGiProcessApplication osgiProcessApplication = (OSGiProcessApplication) processApplication;
     List<URL> urls = new ArrayList<URL>();
     for (String descriptorName : deploymentDescriptors) {
       Enumeration foundDescriptors;
       try {
-        foundDescriptors = osGiProcessApplication.getBundle().getResources(descriptorName);
+        foundDescriptors = osgiProcessApplication.getBundle().getResources(descriptorName);
         while (foundDescriptors.hasMoreElements()) {
           urls.add((URL) foundDescriptors.nextElement());
         }

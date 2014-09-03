@@ -52,7 +52,7 @@ public class OSGiRuntimeContainerDelegate extends RuntimeContainerDelegateImpl {
 
     final String operationName = "Deployment of Process Application "+processApplication.getName();
 
-    serviceContainer.createDeploymentOperation(operationName)
+    getServiceContainer().createDeploymentOperation(operationName)
       .addAttachment(Attachments.PROCESS_APPLICATION, processApplication)
       .addStep(new OSGiParseProcessesXmlStep())
       .addStep(new OSGiProcessesXmlStartProcessEnginesStep(context))

@@ -51,10 +51,10 @@ public class OSGiTestCase implements ConfigurationFactory {
 	           .version("1.0.0-SNAPSHOT"),
          mavenBundle().groupId("org.camunda.commons")
          .artifactId("camunda-commons-logging")
-         .version("1.0.1"),
+         .version("1.0.5-SNAPSHOT"),
          mavenBundle().groupId("org.camunda.commons")
          .artifactId("camunda-commons-utils")
-         .version("1.0.3"),
+         .version("1.0.5-SNAPSHOT"),
 	        mavenBundle().groupId("org.camunda.connect")
 	         .artifactId("camunda-connect-all")
 	         .version("1.0.0-SNAPSHOT"),
