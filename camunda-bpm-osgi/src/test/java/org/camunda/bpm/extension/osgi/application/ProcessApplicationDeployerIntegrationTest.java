@@ -40,7 +40,7 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.spi.reactors.PerMethod;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -54,7 +54,7 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
  * 
  */
 @RunWith(PaxExam.class)
-@ExamReactorStrategy(PerClass.class)
+@ExamReactorStrategy(PerMethod.class)
 public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   @Inject
@@ -89,6 +89,8 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
   
   @Test
   public void shouldBeAbleToDeploy() throws InterruptedException{
+    //give the process application some time to start
+    Thread.sleep(5000L);
     Set<String> processApplicationNames = BpmPlatform.getProcessApplicationService().getProcessApplicationNames();
     assertThat(processApplicationNames, hasItem("yo!"));
   }
@@ -96,7 +98,7 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
   @Test
   public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
     //give the process application some time to start
-    Thread.sleep(10000L);
+    Thread.sleep(5000L);
     ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
     ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
     assertThat(engine, is(notNullValue()));

@@ -90,7 +90,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
   @Test
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     // give the process application some time to start
-    Thread.sleep(10000L);
+    Thread.sleep(5000L);
     ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
     ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
     ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("foo");
