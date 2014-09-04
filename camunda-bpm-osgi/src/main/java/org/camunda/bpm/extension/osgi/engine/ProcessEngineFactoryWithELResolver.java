@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.scripting.BeansResolverFactory;
-import org.camunda.bpm.engine.impl.scripting.ResolverFactory;
-import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
-import org.camunda.bpm.engine.impl.scripting.VariableScopeResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.BeansResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.camunda.bpm.extension.osgi.scripting.impl.OsgiScriptingEngines;
 
 

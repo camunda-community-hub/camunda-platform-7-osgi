@@ -32,6 +32,7 @@
 			${camunda.artifact}.engine,
 			${camunda.artifact}.util,
 			${camunda.artifact}.application,
+			${camunda.artifact}.application.impl,
 			${camunda.artifact}.container
 		</camunda.osgi.export.pkg>
 		<camunda.osgi.dynamic.import />
