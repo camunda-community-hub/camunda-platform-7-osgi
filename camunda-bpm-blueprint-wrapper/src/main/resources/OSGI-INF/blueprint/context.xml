@@ -9,7 +9,8 @@
 		<property name="password" value="" />
 	</bean>
 
-	<bean id="configurationFactory" class="org.camunda.bpm.extension.osgi.blueprint.ConfigurationFactory">
+	<bean id="configurationFactory"
+		class="org.camunda.bpm.extension.osgi.blueprint.ConfigurationFactory">
 		<property name="dataSource" ref="dataSource" />
 		<property name="databaseSchemaUpdate" value="true" />
 	</bean>
@@ -17,16 +18,21 @@
 	<bean id="configuration" factory-ref="configurationFactory"
 		factory-method="getConfiguration">
 	</bean>
-	
+
 	<bean id="blueprintELResolver"
 		class="org.camunda.bpm.extension.osgi.blueprint.BlueprintELResolver" />
 
+	<bean id="blueprintExpressionManager"
+		class="org.camunda.bpm.extension.osgi.blueprint.BlueprintExpressionManager">
+		<property name="blueprintELResolver" ref="blueprintELResolver" />
+	</bean>
+
 	<bean id="processEngineFactory"
-		class="org.camunda.bpm.extension.osgi.blueprint.ProcessEngineFactoryWithELResolver"
+		class="org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver"
 		init-method="init" destroy-method="destroy">
 		<property name="processEngineConfiguration" ref="configuration" />
 		<property name="bundle" ref="blueprintBundle" />
-		<property name="blueprintELResolver" ref="blueprintELResolver" />
+		<property name="expressionManager" ref="blueprintExpressionManager" />
 	</bean>
 
 	<bean id="processEngine" factory-ref="processEngineFactory"

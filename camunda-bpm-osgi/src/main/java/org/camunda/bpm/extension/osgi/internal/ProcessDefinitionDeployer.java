@@ -3,8 +3,6 @@ package org.camunda.bpm.extension.osgi.internal;
 import java.net.URL;
 import java.util.List;
 
-import org.osgi.framework.Bundle;
-
 /**
  * A {@link ProcessDefinitionDeployer} deploys process definitions into the
  * repository.
@@ -21,7 +19,7 @@ public interface ProcessDefinitionDeployer {
 	 * @param bundle
 	 * @param pathList
 	 */
-	public abstract void deployProcessDefinitions(Bundle bundle,
+	public abstract void deployProcessDefinitions(String bundleSymbolicName,
 			List<URL> pathList);
 
 }

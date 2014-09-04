@@ -1,50 +1,52 @@
-package org.camunda.bpm.extension.osgi;
+package org.camunda.bpm.extension.osgi.el;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
 
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
-import org.osgi.framework.BundleException;
 
-/**
- * Abstract superclass for the DeploymentListener-tests. This class creates the
- * in-memory {@link DataSource} and initializes the {@link ProcessEngine} for
- * the tests.
- * 
- * @author Ronny Bräunlich
- * 
- */
-public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
+public abstract class AbstractOSGiELResolverIntegrationTest extends
+		OSGiTestCase {
+
 	protected ProcessEngine processEngine;
+
+	public AbstractOSGiELResolverIntegrationTest() {
+		super();
+	}
 
 	@Override
 	@Configuration
 	public Option[] createConfiguration() {
-		Option[] basicConfiguration = super.createConfiguration();
-		Option testBundle = provision(createTestBundleWithProcessDefinition());
-		return OptionUtils.combine(basicConfiguration, testBundle);
+	  Option[] beanUtils = options(
+    mavenBundle().groupId("commons-beanutils")
+        .artifactId("commons-beanutils").version("1.9.1"),
+    mavenBundle().groupId("commons-collections")
+        .artifactId("commons-collections").version("3.2.1"));
+		return OptionUtils.combine(beanUtils, super.createConfiguration());
 	}
 
 	@Before
 	public void setUpAbstractDeploymentListenerTest() {
 		createProcessEngine();
+		deployProcessDefinition();
 	}
 
 	@After
@@ -52,27 +54,12 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 		processEngine.close();
 	}
 
-	protected abstract InputStream createTestBundleWithProcessDefinition();
-
-	@Test
-	public void processDefinitionFound() throws InterruptedException {
-		try {
-			startBundle("org.camunda.bpm.osgi.example");
-			// wait, so the engine can process the bpmn-file
-			Thread.sleep(3000L);
-			assertThat(
-					processEngine.getRepositoryService()
-							.createProcessDefinitionQuery()
-							.processDefinitionKey("Process_1").singleResult(),
-					is(notNullValue()));
-		} catch (BundleException e) {
-			fail(e.toString());
-		}
-	}
-
 	private void createProcessEngine() {
 		StandaloneProcessEngineConfiguration configuration = new StandaloneProcessEngineConfiguration();
-		configuration.setDatabaseSchemaUpdate("create-drop").setDataSource(createDatasource()).setJobExecutorActivate(false);
+		configuration.setDatabaseSchemaUpdate("create-drop")
+				.setDataSource(createDatasource())
+				.setJobExecutorActivate(false);
+		configuration.setExpressionManager(new OSGiExpressionManager());
 		ProcessEngineFactory processEngineFactory = new ProcessEngineFactory();
 		processEngineFactory.setProcessEngineConfiguration(configuration);
 		processEngineFactory
@@ -93,6 +80,21 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 		dataSource.setUser("sa");
 		dataSource.setPassword("");
 		return dataSource;
-
 	}
+
+	private void deployProcessDefinition() {
+		File processDef = getProcessDefinition();
+		DeploymentBuilder builder = processEngine.getRepositoryService()
+				.createDeployment();
+		builder.name(getClass().getName());
+		try {
+			builder.addInputStream(processDef.getName(),
+					new FileInputStream(processDef)).deploy();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected abstract File getProcessDefinition();
+
 }

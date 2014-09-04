@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.camunda.bpm.extension.osgi</groupId>
 		<artifactId>camunda-bpm-osgi-root</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -18,13 +18,23 @@
 			org.camunda.bpm.extension.osgi.Activator
 		</camunda.osgi.activator>
 		<camunda.osgi.import.pkg>
-			org.apache.felix.fileinstall*;resolution:=optional,*
+			org.camunda.bpm.engine.*;${camunda.osgi.import.camunda.engine.version},
+			org.apache.felix.fileinstall*;resolution:=optional,
+			*
 		</camunda.osgi.import.pkg>
 		<camunda.artifact>
 			org.camunda.bpm.extension.osgi
 		</camunda.artifact>
 		<camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-		<camunda.osgi.export.pkg>${camunda.artifact}*,${camunda.artifact}.application.impl</camunda.osgi.export.pkg>
+		<camunda.osgi.export.pkg>
+			${camunda.artifact}.blueprint,
+			${camunda.artifact}.el,
+			${camunda.artifact}.engine,
+			${camunda.artifact}.util,
+			${camunda.artifact}.application,
+			${camunda.artifact}.container
+		</camunda.osgi.export.pkg>
+		<camunda.osgi.dynamic.import />
 	</properties>
 	<build>
 		<resources>
@@ -40,23 +50,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
-				<executions>
-					<!--  This execution makes sure that the manifest is available when the 
-						tests are executed -->
-					<execution>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<instructions>
-						<Bundle-Name>${project.name}</Bundle-Name>
-						<Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-						<Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
-						<Export-Package>${camunda.osgi.export.pkg}</Export-Package>
-					</instructions>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -78,6 +71,7 @@
 			<artifactId>org.osgi.compendium</artifactId>
 			<version>${osgi.version}</version>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -172,6 +166,12 @@
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 			<version>${mockito.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.1</version>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
