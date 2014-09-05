@@ -23,7 +23,37 @@
     <bundle>mvn:commons-beanutils/commons-beanutils/1.9.1</bundle>
   </feature>
   
-  <feature name="camunda" version="${camunda-bpm.version}">
+  <feature name="camunda-commons" version="${project.version}">
+    <bundle>mvn:org.camunda.commons/camunda-commons-logging/1.0.5-SNAPSHOT</bundle>
+    <bundle>mvn:org.camunda.commons/camunda-commons-utils/1.0.5-SNAPSHOT</bundle>
+  </feature>
+  
+  <feature name="camunda-models" version="${camunda-bpm.version}">
+    <bundle>mvn:org.camunda.bpm.model/camunda-xml-model/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.model/camunda-bpmn-model/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.model/camunda-cmmn-model/${camunda-bpm.version}</bundle>
+  </feature>
+  
+  <feature name="camunda-spin" version="${project.version}">
+    <bundle>mvn:net.minidev/json-smart/1.3</bundle>
+    <bundle>mvn:org.codehaus.jackson/jackson-core-asl/1.9.13</bundle>
+    <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.13</bundle>
+<!--     <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.4.2</bundle> -->
+<!--     <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.4.2</bundle> -->
+<!--     <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.4.2</bundle> -->
+<!--     <bundle>mvn:com.jayway.jsonpath/json-path/0.9.1</bundle> -->
+    <bundle>mvn:org.camunda.spin/camunda-spin-all/1.0.0-SNAPSHOT</bundle>
+  </feature>
+  
+  <feature name="camunda-connect" version="${project.version}">
+    <bundle>mvn:org.apache.httpcomponents/httpcore-osgi/4.3.2</bundle>
+    <bundle>mvn:org.apache.httpcomponents/httpclient-osgi/4.3.5</bundle>
+    <bundle>mvn:org.camunda.connect/camunda-connect-core/1.0.0-SNAPSHOT</bundle>
+    <bundle>mvn:org.camunda.connect/camunda-connect-rest-httpclient/1.0.0-SNAPSHOT</bundle>
+    <bundle>mvn:org.camunda.connect/camunda-connect-soap-httpclient/1.0.0-SNAPSHOT</bundle>
+  </feature>
+  
+  <feature name="camunda-core" version="${camunda-bpm.version}">
     <bundle>mvn:javax.activation/com.springsource.javax.activation/1.1.1</bundle>
     <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/1.1.1</bundle>
     <bundle>mvn:joda-time/joda-time/2.1</bundle>
@@ -32,30 +62,26 @@
     <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.drools/5.5.0.Final_2</bundle>
     <bundle>mvn:com.google.protobuf/protobuf-java/2.5.0</bundle>
     <bundle>mvn:org.jvnet.staxex/stax-ex/1.7.5</bundle>
-    <bundle>mvn:org.camunda.bpm.model/camunda-xml-model/${camunda-bpm.version}</bundle>
-    <bundle>mvn:org.camunda.bpm.model/camunda-bpmn-model/${camunda-bpm.version}</bundle>
-    <bundle>mvn:org.camunda.bpm.model/camunda-cmmn-model/${camunda-bpm.version}</bundle>
-    <bundle>mvn:org.camunda.spin/camunda-spin-all/1.0.0-SNAPSHOT</bundle>
-    <bundle>mvn:org.camunda.commons/camunda-commons-logging/1.0.5-SNAPSHOT</bundle>
-    <bundle>mvn:org.camunda.commons/camunda-commons-utils/1.0.5-SNAPSHOT</bundle>
-    <bundle>mvn:org.camunda.connect/camunda-connect-all/1.0.0-SNAPSHOT</bundle>
-    <bundle>mvn:ch.qos.logback/logback-core/1.1.2</bundle>
-    <bundle>mvn:ch.qos.logback/logback-classic/1.1.2</bundle>
-    <bundle>mvn:net.minidev/json-smart/1.3</bundle>
-    <bundle>mvn:org.codehaus.jackson/jackson-core-asl/1.9.13</bundle>
-    <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.13</bundle>
     <bundle>mvn:org.camunda.bpm/camunda-engine/${camunda-bpm.version}</bundle>
     <bundle>mvn:org.camunda.bpm.extension.osgi/camunda-bpm-osgi/${project.version}</bundle>
     <bundle>mvn:com.fasterxml.uuid/java-uuid-generator/3.1.3</bundle>
   </feature>
   
   <feature name="camunda-bpm-karaf-feature-minimal" version="${project.version}">
-    <feature version="${camunda-bpm.version}">camunda</feature>
+    <feature version="${project.version}">camunda-commons</feature>
+    <feature version="${camunda-bpm.version}">camunda-models</feature>
+    <feature version="${project.version}">camunda-spin</feature>
+    <feature version="${project.version}">camunda-connect</feature>
+    <feature version="${camunda-bpm.version}">camunda-core</feature>
   </feature>
   
   <feature name="camunda-bpm-karaf-feature-full" version="${project.version}">
   	<feature version="${spring.version}">spring</feature>
     <feature version="${camunda-bpm.version}">camunda-optionals</feature>
-    <feature version="${camunda-bpm.version}">camunda</feature>
+    <feature version="${project.version}">camunda-commons</feature>
+    <feature version="${camunda-bpm.version}">camunda-models</feature>
+    <feature version="${project.version}">camunda-spin</feature>
+    <feature version="${project.version}">camunda-connect</feature>
+    <feature version="${camunda-bpm.version}">camunda-core</feature>
   </feature>
 </features>
