@@ -51,6 +51,12 @@ If your Blueprint implementation supports non-void setters you can replace the `
 If you wanna stay old school and use core OSGi you can do that, too.
 Import the package `org.camunda.bpm.engine` and `org.camunda.bpm.engine.impl.cfg` and instantiate your own `StandaloneProcessEngineConfiguration`.
 
+#### Using the ProcessApplication API
+
+You can also use the [ProcessApplication API](http://docs.camunda.org/latest/guides/user-guide/#process-applications) in camunda BPM OSGi. This only requires you to use Blueprint.
+Simple create a subclass of `OSGiProcessApplication`, pass the bundle and the BlueprintContext in the constructor and export it as OSGi service (`interface=ProcessApplicationInterface`).
+You can configure your `OSGiProcessApplication` just like a normal ProcessApplication via processes.xml. The engine will be automatically exported as a service for others to use it.
+
 ### Part 3 Deploying process definitions
 
 After you created a `ProcessEngine` you can start to deploy process definitions.
@@ -68,6 +74,10 @@ If you reference any `JavaDelegate`s or `ActivityBehavior`s from within your pro
 #### BPMN-XML file
 
 If your OSGi runtime supports Apache Felix Fileinstall you can drop a single process definition in the directory watched by Fileinstall. It will be parsed and automatically transformed into an OSGi bundle.
+
+#### ProcessApplication API
+
+Like mentioned in the [User Guide](http://docs.camunda.org/latest/guides/user-guide/#process-applications) you can deploy the processes using the processes.xml. Alternatively you can do it manually inside your OSGiProcessApplication class in the createDeployment() method.
 
 ### Part 4 referencing inside processes
 
@@ -92,6 +102,10 @@ If the LDAP search doesn't suceed the ELResolver will search the Service Registr
 ##### Step 3
 
 The third steps works likes the second one, only that it searches for exported ActivityBehaviours. 
+
+#### ProcessApplication API
+
+If you used a ProcessApplication to start you engine and deploy your processes the EL resolution is limited to beans in your context.xml (that's why you need Blueprint). Every bean will be matched by its id in the context.xml. The `BlueprintBundleLocalELResolver` won't find any classes/services outside of it. 
 
 ## Resources
 
