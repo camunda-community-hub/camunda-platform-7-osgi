@@ -30,6 +30,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.camunda.bpm.BpmPlatform;
+import org.camunda.bpm.ProcessApplicationService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
@@ -40,11 +41,10 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerMethod;
+import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
@@ -54,7 +54,7 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
  * 
  */
 @RunWith(PaxExam.class)
-@ExamReactorStrategy(PerMethod.class)
+@ExamReactorStrategy(PerClass.class)
 public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   @Inject
@@ -62,6 +62,9 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   @Inject
   protected BlueprintContainer blueprintContainer;
+
+  @Inject
+  protected ProcessEngine engine;
 
   @Configuration
   @Override
@@ -78,32 +81,31 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
     try {
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
           .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class).add(MyProcessApplication.class)
-          .set(Constants.DYNAMICIMPORT_PACKAGE, "*")
-          .set(Constants.EXPORT_PACKAGE, "*").build();
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
     }
   }
-  
-  @Test
-  public void shouldBeAbleToDeploy() throws InterruptedException{
-    //give the process application some time to start
-    Thread.sleep(5000L);
-    Set<String> processApplicationNames = BpmPlatform.getProcessApplicationService().getProcessApplicationNames();
-    assertThat(processApplicationNames, hasItem("yo!"));
+
+  @Test(timeout = 10000L)
+  public void shouldBeAbleToDeploy() throws InterruptedException {
+    String processApplicationName = "yo!";
+    // It could take a second to register the process application
+    Set<String> processApplicationNames = null;
+    ProcessApplicationService processApplicationService = BpmPlatform.getProcessApplicationService();
+    do {
+      Thread.sleep(500L);
+      processApplicationNames = processApplicationService.getProcessApplicationNames();
+    } while (processApplicationNames.isEmpty());
+    assertThat(processApplicationNames, hasItem(processApplicationName));
   }
-  
+
   @Test
   public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
-    //give the process application some time to start
-    Thread.sleep(5000L);
-    ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
-    ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("default"));
   }
- 
 
 }

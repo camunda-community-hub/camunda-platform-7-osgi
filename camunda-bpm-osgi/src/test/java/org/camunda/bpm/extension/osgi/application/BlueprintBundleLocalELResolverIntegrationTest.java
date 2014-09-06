@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.application.impl;
+package org.camunda.bpm.extension.osgi.application;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -27,10 +27,13 @@ import java.io.InputStream;
 import javax.inject.Inject;
 
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
-import org.camunda.bpm.extension.osgi.application.MyProcessApplication;
+import org.camunda.bpm.extension.osgi.application.impl.BlueprintBundleLocalELResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -42,7 +45,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
@@ -63,6 +65,9 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
 
   @Inject
   protected BlueprintContainer blueprintContainer;
+
+  @Inject
+  protected ProcessEngine engine;
 
   @Configuration
   @Override
@@ -87,12 +92,16 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
-  @Test
+  @Test(timeout = 10000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
-    // give the process application some time to start
-    Thread.sleep(5000L);
-    ServiceReference ref = bundleContext.getServiceReference(ProcessEngine.class.getName());
-    ProcessEngine engine = (ProcessEngine) bundleContext.getService(ref);
+    RepositoryService repositoryService = engine.getRepositoryService();
+    ProcessDefinition processDefinition = null;
+    //it can take a while to deploy the process -> it's the step after registering the engine
+    do {
+      Thread.sleep(500L);
+      ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
+      processDefinition = query.processDefinitionKey("foo").singleResult();
+    } while (processDefinition == null);
     ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("foo");
     assertThat(processInstance.isEnded(), is(true));
   }
