@@ -16,7 +16,7 @@ import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
 import org.camunda.bpm.extension.osgi.Extender;
 import org.camunda.bpm.extension.osgi.TestScriptEngineFactory;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
@@ -42,7 +42,7 @@ public class OsgiScriptingEnginesTest {
 				.thenReturn(null);
 		new Extender(context);
 		ScriptBindingsFactory bindingsFactory = mock(ScriptBindingsFactory.class);
-		VariableScope variableScope = mock(VariableScope.class);
+		VariableScope<?> variableScope = mock(VariableScope.class);
 		TestOsgiScriptingEngines scriptingEngines = new TestOsgiScriptingEngines(
 				bindingsFactory);
 		scriptingEngines.ctx = context;

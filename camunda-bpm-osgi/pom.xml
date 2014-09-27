@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -29,7 +30,10 @@
 			${camunda.artifact}.blueprint,
 			${camunda.artifact}.el,
 			${camunda.artifact}.engine,
-			${camunda.artifact}.util
+			${camunda.artifact}.util,
+			${camunda.artifact}.application,
+			${camunda.artifact}.application.impl,
+			${camunda.artifact}.container
 		</camunda.osgi.export.pkg>
 		<camunda.osgi.dynamic.import />
 	</properties>
@@ -62,13 +66,13 @@
 			<artifactId>org.osgi.core</artifactId>
 			<version>${osgi.version}</version>
 			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 			<version>${osgi.version}</version>
 			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>

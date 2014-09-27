@@ -20,8 +20,8 @@ import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.scripting.ScriptBindingsFactory;
-import org.camunda.bpm.engine.impl.scripting.ScriptingEngines;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -44,8 +44,7 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 	}
 
 	public Object evaluate(String script, String language,
-			VariableScope variableScope) {
-		Bindings bindings = createBindings(variableScope);
+			VariableScope<?> variableScope) {
 		ScriptEngine scriptEngine = null;
 		try {
 			scriptEngine = resolveScriptEngine(language);
@@ -58,7 +57,7 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 			throw new ProcessEngineException(
 					"Can't find scripting engine for '" + language + "'");
 		}
-
+    Bindings bindings = createBindings(scriptEngine,variableScope);
 		try {
 			return scriptEngine.eval(script, bindings);
 		} catch (ScriptException e) {

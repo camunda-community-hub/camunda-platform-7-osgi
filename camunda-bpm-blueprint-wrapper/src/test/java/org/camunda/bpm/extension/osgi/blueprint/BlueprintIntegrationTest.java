@@ -71,29 +71,56 @@ public class BlueprintIntegrationTest {
 	@Configuration
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
-				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.1.0-Final"),				 
-				mavenBundle().groupId("org.camunda.bpm.model")
-						 .artifactId("camunda-xml-model")
-						 .version("7.1.0-Final"),
-				mavenBundle().groupId("org.camunda.bpm.model")
-						 .artifactId("camunda-bpmn-model")
-						 .version("7.1.0-Final"),
+        mavenBundle().groupId("org.camunda.bpm")
+        .artifactId("camunda-engine").version("7.2.0-SNAPSHOT"),
+    mavenBundle().groupId("org.camunda.bpm.model")
+     .artifactId("camunda-xml-model")
+     .version("7.2.0-SNAPSHOT"),
+    mavenBundle().groupId("org.camunda.bpm.model")
+     .artifactId("camunda-bpmn-model")
+     .version("7.2.0-SNAPSHOT"),
+      mavenBundle().groupId("org.camunda.bpm.model")
+       .artifactId("camunda-cmmn-model")
+       .version("7.2.0-SNAPSHOT"),
+        mavenBundle().groupId("org.camunda.spin")
+         .artifactId("camunda-spin-all")
+         .version("1.0.0-SNAPSHOT"),
+     mavenBundle().groupId("org.camunda.commons")
+     .artifactId("camunda-commons-logging")
+     .version("1.0.5-SNAPSHOT"),
+     mavenBundle().groupId("org.camunda.commons")
+     .artifactId("camunda-commons-utils")
+     .version("1.0.5-SNAPSHOT"),
+      mavenBundle().groupId("org.camunda.connect")
+       .artifactId("camunda-connect-all")
+       .version("1.0.0-SNAPSHOT"),
+    mavenBundle().groupId("net.minidev").artifactId("json-smart")
+    .version("1.3"),
+    mavenBundle().groupId("org.codehaus.jackson").artifactId("jackson-core-asl")
+    .version("1.9.13"),
+    mavenBundle().groupId("org.codehaus.jackson").artifactId("jackson-mapper-asl")
+    .version("1.9.13"),
 				mavenBundle().groupId("org.camunda.bpm.extension.osgi")
 						.artifactId("camunda-bpm-osgi")
-						.version("1.0.0-SNAPSHOT"),
+						.version("1.1.0-SNAPSHOT"),
 				mavenBundle().groupId("joda-time").artifactId("joda-time")
 						.version("2.1"),
 				mavenBundle().groupId("com.h2database").artifactId("h2")
 						.version("1.2.143"),
 				// FIXME this Mybatis version doesn't match camunda's
 				mavenBundle().groupId("org.mybatis").artifactId("mybatis")
-						.version("3.2.3"),
+						.version("3.2.7"),
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-api").version("2.0-beta9"),
 				mavenBundle().groupId("org.apache.logging.log4j")
 						.artifactId("log4j-core").version("2.0-beta9")
 						.noStart(),
+        mavenBundle().groupId("org.slf4j").artifactId("slf4j-api")
+            .version("1.7.7"),
+        mavenBundle().groupId("ch.qos.logback")
+            .artifactId("logback-core").version("1.1.2"),
+        mavenBundle().groupId("ch.qos.logback")
+            .artifactId("logback-classic").version("1.1.2"),
 				mavenBundle().groupId("org.assertj")
 						.artifactId("assertj-core").version("1.5.0"),
 				mavenBundle().groupId("org.apache.aries.blueprint")
