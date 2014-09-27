@@ -21,6 +21,7 @@
   	<bundle>mvn:org.apache.ant/com.springsource.org.apache.tools.ant/1.7.1</bundle>
     <bundle>mvn:commons-collections/commons-collections/3.2.1</bundle>
     <bundle>mvn:commons-beanutils/commons-beanutils/1.9.1</bundle>
+    <feature version="${project.version}">camunda-spin</feature>
   </feature>
   
   <feature name="camunda-commons" version="${project.version}">
@@ -70,7 +71,6 @@
   <feature name="camunda-bpm-karaf-feature-minimal" version="${project.version}">
     <feature version="${project.version}">camunda-commons</feature>
     <feature version="${camunda-bpm.version}">camunda-models</feature>
-    <feature version="${project.version}">camunda-spin</feature>
     <feature version="${project.version}">camunda-connect</feature>
     <feature version="${camunda-bpm.version}">camunda-core</feature>
   </feature>
@@ -80,7 +80,6 @@
     <feature version="${camunda-bpm.version}">camunda-optionals</feature>
     <feature version="${project.version}">camunda-commons</feature>
     <feature version="${camunda-bpm.version}">camunda-models</feature>
-    <feature version="${project.version}">camunda-spin</feature>
     <feature version="${project.version}">camunda-connect</feature>
     <feature version="${camunda-bpm.version}">camunda-core</feature>
   </feature>
