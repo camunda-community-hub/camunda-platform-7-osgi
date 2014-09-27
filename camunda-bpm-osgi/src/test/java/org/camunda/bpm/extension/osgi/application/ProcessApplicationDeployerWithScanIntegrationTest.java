@@ -33,6 +33,8 @@ import org.camunda.bpm.BpmPlatform;
 import org.camunda.bpm.ProcessApplicationService;
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
 import org.junit.Test;
@@ -49,15 +51,15 @@ import org.osgi.framework.Constants;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
- * Test to check if a {@link ProcessApplicationInterface} will be found an registered
- * @author Daniel Meyer
- * @author Roman Smirnov
+ * Test to check if a {@link ProcessApplicationInterface} will be found an
+ * registered and if the scanner for process definitions works.
+ * 
  * @author Ronny Bräunlich
  * 
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
+public class ProcessApplicationDeployerWithScanIntegrationTest extends OSGiTestCase {
 
   @Inject
   protected BundleContext bundleContext;
@@ -81,10 +83,12 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   private InputStream createTestBundle() {
     try {
+      File bpmn = new File("src/test/resources/testprocess.bpmn");
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
-          .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
-          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
+          .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example").set(Constants.BUNDLE_CLASSPATH, ".")
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesseswithscan.xml"))).add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*")
+          .add("org/camunda/process.bpmn", new FileInputStream(bpmn)).build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
@@ -108,6 +112,16 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
   public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("default"));
+  }
+
+  @Test(timeout = 10000L)
+  public void shouldDeployProcessAutomatically() {
+    RepositoryService repositoryService = engine.getRepositoryService();
+    ProcessDefinition result;
+    do {
+      result = repositoryService.createProcessDefinitionQuery().processDefinitionKey("Process_1").singleResult();
+    } while (result == null);
+    assertThat(result, is(notNullValue()));
   }
 
 }

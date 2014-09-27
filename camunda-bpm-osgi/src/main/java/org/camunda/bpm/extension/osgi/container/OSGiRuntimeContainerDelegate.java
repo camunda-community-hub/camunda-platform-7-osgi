@@ -17,10 +17,10 @@ import java.util.logging.Logger;
 import org.camunda.bpm.application.AbstractProcessApplication;
 import org.camunda.bpm.container.impl.RuntimeContainerDelegateImpl;
 import org.camunda.bpm.container.impl.deployment.Attachments;
-import org.camunda.bpm.container.impl.deployment.DeployProcessArchivesStep;
 import org.camunda.bpm.container.impl.deployment.PostDeployInvocationStep;
 import org.camunda.bpm.container.impl.deployment.StartProcessApplicationServiceStep;
 import org.camunda.bpm.engine.ProcessEngineException;
+import org.camunda.bpm.extension.osgi.container.deployment.OSGiDeployProcessArchivesStep;
 import org.camunda.bpm.extension.osgi.container.deployment.OSGiParseProcessesXmlStep;
 import org.camunda.bpm.extension.osgi.container.deployment.OSGiProcessesXmlStartProcessEnginesStep;
 import org.osgi.framework.BundleContext;
@@ -56,7 +56,7 @@ public class OSGiRuntimeContainerDelegate extends RuntimeContainerDelegateImpl {
       .addAttachment(Attachments.PROCESS_APPLICATION, processApplication)
       .addStep(new OSGiParseProcessesXmlStep())
       .addStep(new OSGiProcessesXmlStartProcessEnginesStep(context))
-      .addStep(new DeployProcessArchivesStep())
+      .addStep(new OSGiDeployProcessArchivesStep())
       .addStep(new StartProcessApplicationServiceStep())
       .addStep(new PostDeployInvocationStep())
       .execute();

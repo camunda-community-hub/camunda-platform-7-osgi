@@ -31,10 +31,13 @@ import javax.inject.Inject;
 
 import org.camunda.bpm.BpmPlatform;
 import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.extension.osgi.JarFileBuilder;
 import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -49,15 +52,17 @@ import org.osgi.framework.Constants;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
- * Test to check if a {@link ProcessApplicationInterface} will be found an registered
- * @author Daniel Meyer
- * @author Roman Smirnov
+ * Test to check if the BPMN file inside an embedded Jar will be found and only
+ * the embedded BPMN file because of the pa-local resourceRootPath inside the
+ * processes.xml configuration.
+ * 
  * @author Ronny Bräunlich
  * 
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
+@Ignore("PA-local paths do not work in OSGi 4.2 because we have no way to scan embedded jars; move to higher OSGi version")
+public class ProcessApplicationDeployerWithScanEmbeddedJarIntegrationTest extends OSGiTestCase {
 
   @Inject
   protected BundleContext bundleContext;
@@ -81,14 +86,23 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
 
   private InputStream createTestBundle() {
     try {
+      File embeddedJar = createEmbeddedJar();
+      File bpmn = new File("src/test/resources/testprocess.bpmn");
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
-          .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
-          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
+          .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example").set(Constants.BUNDLE_CLASSPATH, "., bar.jar").add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*")
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml")))
+          .add("org/camunda/process.bpmn", new FileInputStream(bpmn)).add("bar.jar", new FileInputStream(embeddedJar)).build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
     }
+  }
+
+  private File createEmbeddedJar() {
+    return new JarFileBuilder("bar.jar").addDirEntry("META-INF")
+        .addFileEntry("META-INF/processes.xml", new File("src/test/resources/testprocesseswithscanpalocal.xml")).addDirEntry("opps")
+        .addFileEntry("opps/process.bpmn", new File("src/test/resources/testprocess.bpmn")).createJarFile();
   }
 
   @Test(timeout = 10000L)
@@ -108,6 +122,18 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
   public void shouldRegisterDefaultProcessEngine() throws InterruptedException {
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("default"));
+  }
+
+  @Test(timeout = 10000L)
+  public void shouldDeployProcessAutomatically() {
+    RepositoryService repositoryService = engine.getRepositoryService();
+    ProcessDefinition result;
+    do {
+      // using twice the same bpmn file ain't no problem because singleResul()
+      // would crash if both got deployed
+      result = repositoryService.createProcessDefinitionQuery().processDefinitionKey("Process_1").singleResult();
+    } while (result == null);
+    assertThat(result, is(notNullValue()));
   }
 
 }
