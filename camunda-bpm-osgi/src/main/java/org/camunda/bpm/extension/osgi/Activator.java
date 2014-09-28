@@ -24,18 +24,22 @@ import org.apache.felix.fileinstall.ArtifactUrlTransformer;
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.container.RuntimeContainerDelegate;
 import org.camunda.bpm.extension.osgi.application.ProcessApplicationDeployer;
+import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
+import org.camunda.bpm.extension.osgi.configadmin.impl.ManagedProcessEngineFactoryImpl;
 import org.camunda.bpm.extension.osgi.container.OSGiRuntimeContainerDelegate;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
 import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * OSGi Activator
- *
+ * 
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  * @author Ronny Bräunlich
  * @author Daniel Meyer
@@ -43,98 +47,101 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator {
 
-	private static final Logger LOGGER = Logger.getLogger(Activator.class
-			.getName());
+  private static final Logger LOGGER = Logger.getLogger(Activator.class.getName());
 
-	private List<Runnable> callbacks = new ArrayList<Runnable>();
+  private List<Runnable> callbacks = new ArrayList<Runnable>();
 
-	public void start(BundleContext context) throws Exception {
+  public void start(BundleContext context) throws Exception {
 
-	  RuntimeContainerDelegate.INSTANCE.set(new OSGiRuntimeContainerDelegate(context));
+    RuntimeContainerDelegate.INSTANCE.set(new OSGiRuntimeContainerDelegate(context));
 
-		callbacks.add(new Service(context, URLStreamHandlerService.class
-				.getName(), new BpmnURLHandler(), props("url.handler.protocol",
-				"bpmn")));
-		try {
-			callbacks.add(new Service(context, new String[] {
-					ArtifactUrlTransformer.class.getName(),
-					ArtifactListener.class.getName() },
-					new BpmnDeploymentListener(), null));
-		} catch (NoClassDefFoundError e) {
-			LOGGER.log(Level.WARNING,
-					"FileInstall package is not available, disabling fileinstall support");
-			LOGGER.log(
-					Level.FINE,
-					"FileInstall package is not available, disabling fileinstall support",
-					e);
-		}
-		callbacks.add(new Tracker(new Extender(context)));
+    callbacks.add(new Service(context, URLStreamHandlerService.class.getName(), new BpmnURLHandler(), props("url.handler.protocol", "bpmn")));
+    registerBpmnDeploymentListener(context);
+    registerManagedProcessEngineFactory(context);
+    callbacks.add(new Tracker(new Extender(context)));
 
-		ServiceTracker paDeployer = new ServiceTracker(context, ProcessApplicationInterface.class.getName(), new ProcessApplicationDeployer());
-		callbacks.add(new CloseTrackerCallback(paDeployer, true));
+    ServiceTracker paDeployer = new ServiceTracker(context, ProcessApplicationInterface.class.getName(), new ProcessApplicationDeployer());
+    callbacks.add(new CloseTrackerCallback(paDeployer, true));
 
-	}
+  }
 
-	public void stop(BundleContext context) throws Exception {
-		for (Runnable r : callbacks) {
-			r.run();
-		}
-	}
+  public void stop(BundleContext context) throws Exception {
+    for (Runnable r : callbacks) {
+      r.run();
+    }
+  }
 
-	private static Dictionary<String, String> props(String... args) {
-		Dictionary<String, String> props = new Hashtable<String, String>();
-		for (int i = 0; i < args.length / 2; i++) {
-			props.put(args[2 * i], args[2 * i + 1]);
-		}
-		return props;
-	}
+  private static Dictionary<String, String> props(String... args) {
+    Dictionary<String, String> props = new Hashtable<String, String>();
+    for (int i = 0; i < args.length / 2; i++) {
+      props.put(args[2 * i], args[2 * i + 1]);
+    }
+    return props;
+  }
 
-	private static class Service implements Runnable {
+  private void registerManagedProcessEngineFactory(BundleContext context) {
+    try {
+      Dictionary<String, String> props = new Hashtable<String, String>(1);
+      props.put(Constants.SERVICE_PID, ManagedProcessEngineFactory.SERVICE_PID);
+      callbacks.add(new Service(context, ManagedServiceFactory.class.getName(), new ManagedProcessEngineFactoryImpl(context), props));
+    } catch (NoClassDefFoundError e) {
+      LOGGER.log(Level.WARNING, "ConfigurationAdminService is not available, ManagedProcessEngineFactory won't be created");
+    }
+  }
 
-		private final ServiceRegistration registration;
+  private void registerBpmnDeploymentListener(BundleContext context) {
+    try {
+      callbacks.add(new Service(context, new String[] { ArtifactUrlTransformer.class.getName(), ArtifactListener.class.getName() },
+          new BpmnDeploymentListener(), null));
+    } catch (NoClassDefFoundError e) {
+      LOGGER.log(Level.WARNING, "FileInstall package is not available, disabling fileinstall support");
+    }
+  }
 
-		public Service(BundleContext context, String clazz, Object service,
-				Dictionary<String, String> props) {
-			this.registration = context.registerService(clazz, service, props);
-		}
+  private static class Service implements Runnable {
 
-		public Service(BundleContext context, String[] clazz, Object service,
-				Dictionary<String, String> props) {
-			this.registration = context.registerService(clazz, service, props);
-		}
+    private final ServiceRegistration registration;
 
-		public void run() {
-			registration.unregister();
-		}
-	}
+    public Service(BundleContext context, String clazz, Object service, Dictionary<String, String> props) {
+      this.registration = context.registerService(clazz, service, props);
+    }
 
-	private static class Tracker implements Runnable {
+    public Service(BundleContext context, String[] clazz, Object service, Dictionary<String, String> props) {
+      this.registration = context.registerService(clazz, service, props);
+    }
 
-		private final Extender extender;
+    public void run() {
+      registration.unregister();
+    }
+  }
 
-		private Tracker(Extender extender) {
-			this.extender = extender;
-			this.extender.open();
-		}
+  private static class Tracker implements Runnable {
 
-		public void run() {
-			extender.close();
-		}
-	}
+    private final Extender extender;
 
-	private static class CloseTrackerCallback implements Runnable {
+    private Tracker(Extender extender) {
+      this.extender = extender;
+      this.extender.open();
+    }
 
-	  protected ServiceTracker tracker;
+    public void run() {
+      extender.close();
+    }
+  }
+
+  private static class CloseTrackerCallback implements Runnable {
+
+    protected ServiceTracker tracker;
 
     public CloseTrackerCallback(ServiceTracker tracker, boolean isTrackAllServices) {
-	    this.tracker = tracker;
+      this.tracker = tracker;
       tracker.open(isTrackAllServices);
-	  }
+    }
 
     public void run() {
       tracker.close();
     }
 
-	}
+  }
 
 }
