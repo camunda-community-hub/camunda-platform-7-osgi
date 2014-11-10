@@ -42,7 +42,7 @@ public class OsgiScriptingEnginesTest {
 				.thenReturn(null);
 		new Extender(context);
 		ScriptBindingsFactory bindingsFactory = mock(ScriptBindingsFactory.class);
-		VariableScope<?> variableScope = mock(VariableScope.class);
+		VariableScope variableScope = mock(VariableScope.class);
 		TestOsgiScriptingEngines scriptingEngines = new TestOsgiScriptingEngines(
 				bindingsFactory);
 		scriptingEngines.ctx = context;

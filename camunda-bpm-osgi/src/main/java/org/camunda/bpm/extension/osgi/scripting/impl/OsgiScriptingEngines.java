@@ -44,7 +44,7 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 	}
 
 	public Object evaluate(String script, String language,
-			VariableScope<?> variableScope) {
+			VariableScope variableScope) {
 		ScriptEngine scriptEngine = null;
 		try {
 			scriptEngine = resolveScriptEngine(language);

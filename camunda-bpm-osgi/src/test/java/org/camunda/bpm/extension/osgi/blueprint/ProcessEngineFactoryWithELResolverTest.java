@@ -68,7 +68,7 @@ public class ProcessEngineFactoryWithELResolverTest {
 
 	private void checkExpressionManager(BlueprintExpressionManager exprManager) {
 	  exprManager.setBlueprintELResolver(new BlueprintELResolver());
-		ELResolver elResolver = exprManager.createElResolver(null);
+		ELResolver elResolver = exprManager.createElResolver();
 		assertThat(elResolver, is(instanceOf(CompositeELResolver.class)));
 		// FIXME gotta find a way to get hold of Resolvers inside
 		// compositeResolver to check that the expected ones are set
@@ -84,7 +84,7 @@ public class ProcessEngineFactoryWithELResolverTest {
 		ArgumentCaptor<BlueprintExpressionManager> elManagerCaptor = ArgumentCaptor
 				.forClass(BlueprintExpressionManager.class);
 		verify(config).setExpressionManager(elManagerCaptor.capture());
-		elManagerCaptor.getValue().createElResolver(null);
+		elManagerCaptor.getValue().createElResolver();
 	}
 
 	@Test

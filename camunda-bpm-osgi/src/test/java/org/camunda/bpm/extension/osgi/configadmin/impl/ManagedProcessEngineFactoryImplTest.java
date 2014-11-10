@@ -65,9 +65,8 @@ public class ManagedProcessEngineFactoryImplTest extends OSGiTestCase {
     props.put("jdbcUrl", "jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1");
     props.put("jobExecutorActivate", true);
     props.put("processEngineName", "TestEngine");
-    org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactoryImpl.SERVICE_PID, null);
+    org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
     config.update(props);
-    // give the factory a second
     ServiceReference reference = null;
     do {
       reference = ctx.getServiceReference(ProcessEngine.class.getName());

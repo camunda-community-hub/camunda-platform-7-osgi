@@ -1,6 +1,5 @@
 package org.camunda.bpm.extension.osgi.blueprint;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.el.ExpressionManager;
 import org.camunda.bpm.engine.impl.el.VariableScopeElResolver;
 import org.camunda.bpm.engine.impl.javax.el.ArrayELResolver;
@@ -14,9 +13,9 @@ public class BlueprintExpressionManager extends ExpressionManager {
   private BlueprintELResolver elResolver;
 
   @Override
-  protected ELResolver createElResolver(VariableScope variableScope) {
+  protected ELResolver createElResolver() {
     CompositeELResolver compositeElResolver = new CompositeELResolver();
-    compositeElResolver.add(new VariableScopeElResolver(variableScope));
+    compositeElResolver.add(new VariableScopeElResolver());
     compositeElResolver.add(elResolver);
     compositeElResolver.add(new ArrayELResolver());
     compositeElResolver.add(new ListELResolver());
