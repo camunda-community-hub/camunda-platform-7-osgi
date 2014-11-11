@@ -1,15 +1,12 @@
 package org.camunda.bpm.extension.osgi.configadmin.impl;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.beanutils.MethodUtils;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
 import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
@@ -62,22 +59,24 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
     existingRegisteredEngines.put(pid, serviceRegistration);
   }
 
+  @SuppressWarnings("unchecked")
   private ProcessEngineConfiguration createProcessEngineConfiguration(Dictionary properties) throws ConfigurationException {
-    ProcessEngineConfiguration processEngineConfiguration = new StandaloneProcessEngineConfiguration();
-    for (Object key : Collections.list(properties.keys())) {
-      char[] keyStringArray = String.valueOf(key).toCharArray();
-      keyStringArray[0] = Character.toUpperCase(keyStringArray[0]);
-      String keyString = String.valueOf(keyStringArray);
-      if (String.valueOf(key).equals("service.pid") || String.valueOf(key).equals("service.factoryPid")) {
-        continue;
-      }
-      try {
-        // because there are non-void setters we cannot use PropertyUtils
-        MethodUtils.invokeMethod(processEngineConfiguration, "set" + keyString, properties.get(key));
-      } catch (Exception e) {
-        throw new ConfigurationException(String.valueOf(key), "Property does not exist", e);
-      }
-    }
+    ProcessEngineConfigurationFromProperties processEngineConfiguration = new ProcessEngineConfigurationFromProperties();
+    processEngineConfiguration.configure(properties);
+//    for (Object key : Collections.list(properties.keys())) {
+//      char[] keyStringArray = String.valueOf(key).toCharArray();
+//      keyStringArray[0] = Character.toUpperCase(keyStringArray[0]);
+//      String keyString = String.valueOf(keyStringArray);
+//      if (String.valueOf(key).equals("service.pid") || String.valueOf(key).equals("service.factoryPid")) {
+//        continue;
+//      }
+//      try {
+//        // because there are non-void setters we cannot use PropertyUtils
+//        MethodUtils.invokeMethod(processEngineConfiguration, "set" + keyString, properties.get(key));
+//      } catch (Exception e) {
+//        throw new ConfigurationException(String.valueOf(key), "Property does not exist", e);
+//      }
+//    }
     return processEngineConfiguration;
   }
 

@@ -63,7 +63,7 @@ public class ManagedProcessEngineFactoryImplTest extends OSGiTestCase {
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
     props.put("jdbcUrl", "jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1");
-    props.put("jobExecutorActivate", true);
+    props.put("jobExecutorActivate", "true");
     props.put("processEngineName", "TestEngine");
     org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
     config.update(props);
