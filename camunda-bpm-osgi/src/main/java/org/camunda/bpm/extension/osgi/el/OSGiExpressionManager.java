@@ -13,10 +13,10 @@ public class OSGiExpressionManager extends ExpressionManager {
 	protected ELResolver createElResolver() {
 		CompositeELResolver compositeElResolver = new CompositeELResolver();
 		compositeElResolver.add(new VariableScopeElResolver());
-		compositeElResolver.add(new OSGiELResolver());
 		compositeElResolver.add(new ArrayELResolver());
 		compositeElResolver.add(new ListELResolver());
 		compositeElResolver.add(new MapELResolver());
+    compositeElResolver.add(new OSGiELResolver());
 		return compositeElResolver;
 	}
 }

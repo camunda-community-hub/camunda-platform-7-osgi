@@ -1,42 +1,22 @@
 package org.camunda.bpm.extension.osgi.el;
 
-import java.beans.FeatureDescriptor;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.impl.javax.el.BeanELResolver;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
-import org.camunda.bpm.engine.impl.javax.el.ELResolver;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-public class OSGiELResolver extends ELResolver {
+public class OSGiELResolver extends BeanELResolver {
 
 	private static final String LDAP_FILTER_KEY = "processExpression";
-
-	@Override
-	public Class<?> getCommonPropertyType(ELContext context, Object base) {
-		return Object.class;
-	}
-
-	@Override
-	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
-			Object base) {
-		return null;
-	}
-
-	@Override
-	public Class<?> getType(ELContext context, Object base, Object property) {
-		return Object.class;
-	}
 
 	@Override
 	public Object getValue(ELContext context, Object base, Object property) {
@@ -175,41 +155,8 @@ public class OSGiELResolver extends ELResolver {
 		return true;
 	}
 
-	@Override
-	public void setValue(ELContext context, Object base, Object property,
-			Object value) {
-		try {
-			boolean writeable = PropertyUtils.isWriteable(base,
-					property.toString());
-			if (writeable) {
-				PropertyUtils.setProperty(base, property.toString(), value);
-				context.setPropertyResolved(true);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	protected BundleContext getBundleContext() {
 		return FrameworkUtil.getBundle(getClass()).getBundleContext();
-	}
-
-	@Override
-	public Object invoke(ELContext context, Object base, Object method,
-			Class<?>[] paramTypes, Object[] params) {
-		try {
-			Method accessibleMethod = MethodUtils.getAccessibleMethod(
-					base.getClass(), method.toString(), paramTypes);
-			if (accessibleMethod == null) {
-				return null;
-			}
-			Object invoke = MethodUtils.invokeMethod(base, method.toString(),
-					params, paramTypes);
-			context.setPropertyResolved(true);
-			return invoke;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

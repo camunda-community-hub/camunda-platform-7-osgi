@@ -14,6 +14,8 @@ import static org.mockito.Mockito.when;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
+import org.camunda.bpm.engine.impl.javax.el.MethodNotFoundException;
+import org.camunda.bpm.engine.impl.javax.el.PropertyNotFoundException;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.extension.osgi.TestActivityBehaviour;
 import org.junit.Before;
@@ -191,18 +193,13 @@ public class OSGiELResolverTest {
 
 	@Test
 	public void getCommonPropertyType() {
-		assertThat(resolver.getCommonPropertyType(null, null),
+		assertThat(resolver.getCommonPropertyType(null, new Object()),
 				isA(Object.class));
 	}
 
 	@Test
 	public void getFeatureDescriptors() {
 		assertThat(resolver.getFeatureDescriptors(null, null), is(nullValue()));
-	}
-
-	@Test
-	public void getType() {
-		assertThat(resolver.getType(null, null, null), isA(Object.class));
 	}
 	
 	@Test
@@ -240,7 +237,7 @@ public class OSGiELResolverTest {
 		wasPropertyResolved();
 	}
 	
-	@Test
+	@Test(expected=PropertyNotFoundException.class)
 	public void setValueForAbsentProperty(){
 		TestJavaBean bean = new TestJavaBean();
 		resolver.setValue(elContext, bean, "bar", new Object());
@@ -256,7 +253,7 @@ public class OSGiELResolverTest {
 		assertThat(invoke, is(sameInstance(value)));
 	}
 	
-	@Test
+	@Test(expected=MethodNotFoundException.class)
 	public void invokeAbsentMethod(){
 		TestJavaBean bean = new TestJavaBean();
 		resolver.invoke(elContext, bean, "method", new Class[0], null);
