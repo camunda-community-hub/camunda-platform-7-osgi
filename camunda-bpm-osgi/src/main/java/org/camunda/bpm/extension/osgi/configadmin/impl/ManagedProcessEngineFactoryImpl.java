@@ -1,6 +1,8 @@
 package org.camunda.bpm.extension.osgi.configadmin.impl;
 
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,6 +41,9 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
       existingEngines.get(pid).close();
       existingRegisteredEngines.get(pid).unregister();
     }
+    if(!hasPropertiesConfiguration(properties)){
+      return;
+    }
     ClassLoader previous = Thread.currentThread().getContextClassLoader();
     Bundle bundle = FrameworkUtil.getBundle(ProcessEngine.class);
     ProcessEngine engine;
@@ -59,24 +64,27 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
     existingRegisteredEngines.put(pid, serviceRegistration);
   }
 
+  /**
+   * It happends that the factory get called with properties that only contain
+   * service.pid and service.factoryPid. If that happens we don't want to create an engine.
+   * @param properties
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  private boolean hasPropertiesConfiguration(Dictionary properties) {
+    HashMap<Object, Object> mapProperties = new HashMap<Object, Object>(properties.size());
+    for(Object key :Collections.list(properties.keys())){
+      mapProperties.put(key, properties.get(key));
+    }
+    mapProperties.remove("service.pid");
+    mapProperties.remove("service.factoryPid");
+    return !mapProperties.isEmpty();
+  }
+
   @SuppressWarnings("unchecked")
   private ProcessEngineConfiguration createProcessEngineConfiguration(Dictionary properties) throws ConfigurationException {
     ProcessEngineConfigurationFromProperties processEngineConfiguration = new ProcessEngineConfigurationFromProperties();
     processEngineConfiguration.configure(properties);
-//    for (Object key : Collections.list(properties.keys())) {
-//      char[] keyStringArray = String.valueOf(key).toCharArray();
-//      keyStringArray[0] = Character.toUpperCase(keyStringArray[0]);
-//      String keyString = String.valueOf(keyStringArray);
-//      if (String.valueOf(key).equals("service.pid") || String.valueOf(key).equals("service.factoryPid")) {
-//        continue;
-//      }
-//      try {
-//        // because there are non-void setters we cannot use PropertyUtils
-//        MethodUtils.invokeMethod(processEngineConfiguration, "set" + keyString, properties.get(key));
-//      } catch (Exception e) {
-//        throw new ConfigurationException(String.valueOf(key), "Property does not exist", e);
-//      }
-//    }
     return processEngineConfiguration;
   }
 
