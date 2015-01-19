@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  <artifactId>camunda-bpm-karaf-assembly</artifactId>
+  <packaging>karaf-assembly</packaging>
+	<parent>
+		<groupId>org.camunda.bpm.extension.osgi</groupId>
+		<artifactId>camunda-bpm-osgi-root</artifactId>
+		<version>1.1.0-SNAPSHOT</version>
+	</parent>
+	<properties>
+		<karaf.version>3.0.2</karaf.version>
+	</properties>
+	<dependencies>
+		<dependency>
+        <!-- scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not installed -->
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>framework</artifactId>
+            <version>${karaf.version}</version>
+            <type>kar</type>
+        </dependency>
+        <dependency>
+        <!-- scope is runtime so the feature repo is listed in the features service config file, and features may be installed using the karaf-maven-plugin configuration -->
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>standard</artifactId>
+            <version>${karaf.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>runtime</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.camunda.bpm.extension.osgi</groupId>
+			<artifactId>camunda-bpm-karaf-feature</artifactId>
+			<version>1.1.0-SNAPSHOT</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>runtime</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+				<version>${karaf.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<bootFeatures>
+                        <feature>standard</feature>
+                        <feature>management</feature>
+						<feature>camunda-bpm-karaf-feature-minimal</feature>
+                    </bootFeatures>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
