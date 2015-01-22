@@ -33,7 +33,7 @@ import org.osgi.service.cm.ManagedServiceFactory;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class ManagedProcessEngineFactoryImplTest extends OSGiTestCase {
+public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase {
   @Inject
   @Filter("(service.pid=" + ManagedProcessEngineFactory.SERVICE_PID + ")")
   private ManagedServiceFactory serviceFactory;
@@ -74,5 +74,24 @@ public class ManagedProcessEngineFactoryImplTest extends OSGiTestCase {
     ProcessEngine engine = (ProcessEngine) ctx.getService(reference);
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("TestEngine"));
+  }
+  
+  @Test(timeout = 15000L)
+  public void shutdownProcessEngine() throws IOException, InterruptedException {
+    Hashtable<String, Object> props = new Hashtable<String, Object>();
+    props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
+    props.put("jdbcUrl", "jdbc:h2:mem:camunda;DB_CLOSE_DELAY=-1");
+    props.put("jobExecutorActivate", "true");
+    props.put("processEngineName", "TestEngine");
+    org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
+    config.update(props);
+    //give the engine some time to be created
+    Thread.sleep(5000L);
+    config.delete();
+    Thread.sleep(3000L);
+    ServiceReference reference = null;
+    do {
+      reference = ctx.getServiceReference(ProcessEngine.class.getName());
+    } while (reference != null);
   }
 }

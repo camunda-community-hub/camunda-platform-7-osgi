@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -39,9 +41,11 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
   public void updated(String pid, Dictionary properties) throws ConfigurationException {
     if (existingEngines.containsKey(pid)) {
       existingEngines.get(pid).close();
+      existingEngines.remove(pid);
       existingRegisteredEngines.get(pid).unregister();
+      existingRegisteredEngines.remove(pid);
     }
-    if(!hasPropertiesConfiguration(properties)){
+    if (!hasPropertiesConfiguration(properties)) {
       return;
     }
     ClassLoader previous = Thread.currentThread().getContextClassLoader();
@@ -66,14 +70,16 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
 
   /**
    * It happends that the factory get called with properties that only contain
-   * service.pid and service.factoryPid. If that happens we don't want to create an engine.
+   * service.pid and service.factoryPid. If that happens we don't want to create
+   * an engine.
+   * 
    * @param properties
    * @return
    */
   @SuppressWarnings("unchecked")
   private boolean hasPropertiesConfiguration(Dictionary properties) {
     HashMap<Object, Object> mapProperties = new HashMap<Object, Object>(properties.size());
-    for(Object key :Collections.list(properties.keys())){
+    for (Object key : Collections.list(properties.keys())) {
       mapProperties.put(key, properties.get(key));
     }
     mapProperties.remove("service.pid");
@@ -90,10 +96,15 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
 
   @Override
   public void deleted(String pid) {
-    ProcessEngine engine = existingEngines.get(pid);
-    engine.close();
-    existingEngines.remove(pid);
-    existingRegisteredEngines.get(pid).unregister();
+    try {
+      ProcessEngine engine = existingEngines.get(pid);
+      engine.close();
+      existingEngines.remove(pid);
+      existingRegisteredEngines.get(pid).unregister();
+      existingRegisteredEngines.remove(pid);
+    } catch (Exception e) {
+      Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception when trying to delete service with pid " + pid, e);
+    }
   }
 
 }
