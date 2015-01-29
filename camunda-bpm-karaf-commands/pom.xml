@@ -17,7 +17,7 @@
         <camunda.osgi.import.pkg>
 			org.apache.felix.service.command,
 			org.apache.felix.gogo.commands,
-			org.apache.karaf.shell.console,
+			org.apache.karaf.shell.console;version="[2.2.11,4)",
 			*
         </camunda.osgi.import.pkg>
         <camunda.osgi.dynamic.import>*</camunda.osgi.dynamic.import>
