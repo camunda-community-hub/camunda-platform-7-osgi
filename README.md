@@ -82,6 +82,8 @@ public class Activator implements BundleActivator {
         configuration.update(properties);
     }
 ```
+Currently, the factory supports all primitive values that you can set on the `ProcessEngineConfiguration`.
+The key is the name of the according set method with the "set" and starting with a lowercase letter.
 
 A good starting point is the example from the Apache Felix project. See [here](http://felix.apache.org/documentation/subprojects/apache-felix-config-admin.html).
 
