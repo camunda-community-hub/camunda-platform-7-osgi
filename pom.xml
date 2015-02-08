@@ -23,7 +23,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <camunda-bpm.version>7.2.0-SNAPSHOT</camunda-bpm.version>
+        <camunda-bpm.version>7.2.0</camunda-bpm.version>
     	<junit.version>4.11</junit.version>
     	<paxexam.version>3.5.0</paxexam.version>
 		<logback.version>0.9.20</logback.version>
