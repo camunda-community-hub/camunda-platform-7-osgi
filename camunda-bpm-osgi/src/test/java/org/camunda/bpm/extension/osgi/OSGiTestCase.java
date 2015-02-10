@@ -29,35 +29,36 @@ import org.osgi.framework.BundleException;
  */
 public class OSGiTestCase implements ConfigurationFactory {
 
-	@Inject
+  public static final String CAMUNDA_VERSION = "7.2.0";
+  @Inject
 	protected BundleContext ctx;
 
 	@Override
 	public Option[] createConfiguration() {
 		Option[] camundaBundles = options(
 				mavenBundle().groupId("org.camunda.bpm")
-						.artifactId("camunda-engine").version("7.2.0-SNAPSHOT"),
+						.artifactId("camunda-engine").version(CAMUNDA_VERSION),
 				mavenBundle().groupId("org.camunda.bpm.model")
 				 .artifactId("camunda-xml-model")
-				 .version("7.2.0-SNAPSHOT"),
+				 .version(CAMUNDA_VERSION),
 				mavenBundle().groupId("org.camunda.bpm.model")
 				 .artifactId("camunda-bpmn-model")
-				 .version("7.2.0-SNAPSHOT"),
+				 .version(CAMUNDA_VERSION),
 	        mavenBundle().groupId("org.camunda.bpm.model")
 	         .artifactId("camunda-cmmn-model")
-	         .version("7.2.0-SNAPSHOT"),
+	         .version(CAMUNDA_VERSION),
 	          mavenBundle().groupId("org.camunda.spin")
-	           .artifactId("camunda-spin-all")
-	           .version("1.0.0-SNAPSHOT"),
+	           .artifactId("camunda-spin-dataformat-all")
+	           .version("1.0.0"),
          mavenBundle().groupId("org.camunda.commons")
          .artifactId("camunda-commons-logging")
-         .version("1.0.5-SNAPSHOT"),
+         .version("1.0.6"),
          mavenBundle().groupId("org.camunda.commons")
          .artifactId("camunda-commons-utils")
-         .version("1.0.5-SNAPSHOT"),
+         .version("1.0.6"),
 	        mavenBundle().groupId("org.camunda.connect")
-	         .artifactId("camunda-connect-all")
-	         .version("1.0.0-SNAPSHOT"),
+	         .artifactId("camunda-connect-connectors-all")
+	         .version("1.0.0"),
 	      mavenBundle().groupId("net.minidev").artifactId("json-smart")
 	      .version("1.3"),
 	      mavenBundle().groupId("org.codehaus.jackson").artifactId("jackson-core-asl")
@@ -67,10 +68,9 @@ public class OSGiTestCase implements ConfigurationFactory {
 				mavenBundle().groupId("joda-time").artifactId("joda-time")
 						.version("2.1"),
 				mavenBundle().groupId("com.h2database").artifactId("h2")
-						.version("1.2.143"),
-				// FIXME this Mybatis version doesn't match camunda's
+						.version("1.3.168"),
 				mavenBundle().groupId("org.mybatis").artifactId("mybatis")
-						.version("3.2.3"),
+						.version("3.2.8"),
 		    mavenBundle().groupId("com.fasterxml.uuid").artifactId("java-uuid-generator")
             .version("3.1.2"),
         mavenBundle().groupId("org.slf4j").artifactId("slf4j-api")
