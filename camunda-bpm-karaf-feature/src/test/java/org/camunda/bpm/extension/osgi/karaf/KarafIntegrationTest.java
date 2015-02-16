@@ -37,10 +37,10 @@ public class KarafIntegrationTest {
 	public Option[] config() {
 		MavenArtifactUrlReference karafUrl = maven()
 				.groupId("org.apache.karaf").artifactId("apache-karaf")
-				.version("3.0.2").type("zip");
+				.version("3.0.3").type("zip");
 		MavenUrlReference karafStandardRepo = maven()
 				.groupId("org.apache.karaf.features").artifactId("standard")
-				.classifier("features").type("xml").version("3.0.2");
+				.classifier("features").type("xml").version("3.0.3");
 		return new Option[] {
 				// logLevel(LogLevel.TRACE),
 				// debugConfiguration("5005", true),

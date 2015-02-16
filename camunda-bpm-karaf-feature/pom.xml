@@ -142,5 +142,20 @@
 			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.karaf.features</groupId>
+			<artifactId>standard</artifactId>
+			<version>3.0.3</version>
+			<scope>test</scope>
+			<classifier>features</classifier>
+			<type>xml</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.karaf</groupId>
+			<artifactId>apache-karaf</artifactId>
+			<version>3.0.3</version>
+			<scope>test</scope>
+			<type>zip</type>
+		</dependency>
 	</dependencies>
 </project>
