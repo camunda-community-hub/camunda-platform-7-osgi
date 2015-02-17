@@ -13,6 +13,7 @@ import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -37,20 +38,28 @@ public class BlueprintIntegrationTest {
 		@Inject
 		private BundleContext ctx;
 		@Inject
+		@Filter(timeout = 20000L)
 		private ProcessEngine engine;
 		@Inject
+		@Filter(timeout = 20000L)
 		private RepositoryService repoService;
 		@Inject
+		@Filter(timeout = 20000L)
 		private RuntimeService runService;
 		@Inject
+		@Filter(timeout = 20000L)
 		private TaskService taskService;
 		@Inject
+		@Filter(timeout = 20000L)
 		private IdentityService identSerivce;
 		@Inject
+		@Filter(timeout = 20000L)
 		private FormService formService;
 		@Inject
+		@Filter(timeout = 20000L)
 		private HistoryService histService;
 		@Inject
+		@Filter(timeout = 20000L)
 		private ManagementService manaSerivce;
 		/**
 		 * to make sure the {@link BlueprintELResolver} found the JavaDelegate
@@ -150,7 +159,7 @@ public class BlueprintIntegrationTest {
 				ctx.registerService(JavaDelegate.class.getName(), new TestDelegate(),
 								properties);
 				//wait a little bit
-				Thread.sleep(2000L);
+				Thread.sleep(3000L);
 				ProcessInstance processInstance = runService.startProcessInstanceByKey("Process_1");
 				assertThat(processInstance.isEnded(), is(true));
 				assertThat(delegateVisited, is(true));

@@ -58,7 +58,7 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     assertThat(serviceFactory, is(notNullValue()));
   }
 
-  @Test(timeout = 10000L)
+  @Test(timeout = 20000L)
   public void createProcessEngine() throws IOException, InterruptedException {
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
@@ -76,7 +76,7 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     assertThat(engine.getName(), is("TestEngine"));
   }
   
-  @Test(timeout = 15000L)
+  @Test(timeout = 20000L)
   public void shutdownProcessEngine() throws IOException, InterruptedException {
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
@@ -86,9 +86,9 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
     config.update(props);
     //give the engine some time to be created
-    Thread.sleep(5000L);
+    Thread.sleep(11000L);
     config.delete();
-    Thread.sleep(3000L);
+    Thread.sleep(5000L);
     ServiceReference reference = null;
     do {
       reference = ctx.getServiceReference(ProcessEngine.class.getName());
