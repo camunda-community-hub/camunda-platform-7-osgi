@@ -86,8 +86,10 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     try {
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
           .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
-          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml")))
+          .add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*")
+          .build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;

@@ -17,18 +17,25 @@
 
   <modules>
     <module>camunda-bpm-osgi</module>
-    <module>camunda-bpm-karaf-feature</module>
     <module>camunda-bpm-blueprint-wrapper</module>
     <module>camunda-bpm-karaf-commands</module>
+    <module>camunda-bpm-karaf-feature</module>
+    <module>camunda-bpm-karaf-assembly</module>
   </modules>
 
   <properties>
     <camunda-bpm.version>7.2.0</camunda-bpm.version>
+    <camunda-spin.version>1.0.0</camunda-spin.version>
+    <camunda-connect.version>1.0.0</camunda-connect.version>
+    <camunda-commons.version>1.0.6</camunda-commons.version>
+
+    <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
+
     <osgi.version>4.2.0</osgi.version>
     <karaf.version>3.0.3</karaf.version>
 
     <junit.version>4.11</junit.version>
-    <paxexam.version>3.5.0</paxexam.version>
+    <paxexam.version>3.6.0</paxexam.version>
     <logback.version>0.9.20</logback.version>
     <mockito.version>1.9.5</mockito.version>
     <!-- bundle properties -->
