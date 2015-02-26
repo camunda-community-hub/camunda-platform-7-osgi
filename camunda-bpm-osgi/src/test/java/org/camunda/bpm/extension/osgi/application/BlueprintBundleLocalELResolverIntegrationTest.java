@@ -68,7 +68,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
   protected BlueprintContainer blueprintContainer;
 
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   protected ProcessEngine engine;
 
   @Configuration
@@ -94,7 +94,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
-  @Test(timeout = 30000L)
+  @Test(timeout = 35000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition processDefinition = null;
