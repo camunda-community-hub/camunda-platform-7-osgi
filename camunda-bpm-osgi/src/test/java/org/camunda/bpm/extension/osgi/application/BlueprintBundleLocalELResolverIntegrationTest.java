@@ -42,6 +42,7 @@ import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -67,6 +68,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
   protected BlueprintContainer blueprintContainer;
 
   @Inject
+  @Filter(timeout = 20000L)
   protected ProcessEngine engine;
 
   @Configuration
@@ -92,7 +94,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
-  @Test(timeout = 15000L)
+  @Test(timeout = 20000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition processDefinition = null;
