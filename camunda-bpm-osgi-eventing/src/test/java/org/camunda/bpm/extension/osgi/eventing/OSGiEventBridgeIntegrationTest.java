@@ -1,14 +1,13 @@
 package org.camunda.bpm.extension.osgi.eventing;
 
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseListener;
 import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.extension.osgi.el.OSGiExpressionManager;
-import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
-import org.camunda.bpm.extension.osgi.eventing.impl.OSGiEventDistributor;
-import org.hamcrest.core.Is;
+import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -16,9 +15,10 @@ import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.tinybundles.core.TinyBundles;
+import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
+import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -27,18 +27,21 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.*;
 
 /**
  * @author Ronny Bräunlich
  */
 @RunWith(PaxExam.class)
+@ExamReactorStrategy(PerClass.class)
 public class OSGiEventBridgeIntegrationTest {
 
 		@Inject
@@ -46,6 +49,10 @@ public class OSGiEventBridgeIntegrationTest {
 
 		@Inject
 		private EventAdmin eventAdmin;
+
+		@Inject
+		@Filter(timeout = 30000L)
+		private OSGiEventBridgeActivator eventBridgeActivator;
 
 		@Configuration
 		public Option[] createConfiguration() {
@@ -69,6 +76,9 @@ public class OSGiEventBridgeIntegrationTest {
 												.version("1.0.5-SNAPSHOT"),
 								mavenBundle().groupId("org.camunda.bpm.extension.osgi")
 												.artifactId("camunda-bpm-osgi")
+												.version("1.1.0-SNAPSHOT"),
+								mavenBundle().groupId("org.camunda.bpm.extension.osgi")
+												.artifactId("camunda-bpm-osgi-eventing-api")
 												.version("1.1.0-SNAPSHOT"),
 								mavenBundle().groupId("joda-time").artifactId("joda-time")
 												.version("2.1"),
@@ -100,6 +110,10 @@ public class OSGiEventBridgeIntegrationTest {
 				return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles());
 		}
 
+		@Test
+		public void shouldRegisterService() {
+				assertThat(eventBridgeActivator, is(notNullValue()));
+		}
 
 		@Test
 		public void testEventBrigde() throws FileNotFoundException {
@@ -110,11 +124,12 @@ public class OSGiEventBridgeIntegrationTest {
 				deploymentBuilder.name("testProcess").addInputStream("testProcess.bpmn", new FileInputStream(new File(
 								"src/test/resources/testProcess.bpmn"))).deploy();
 				processEngine.getRuntimeService().startProcessInstanceByKey("Process_1");
-				assertThat(eventHandler.isCalled(), Is.is(true));
+				assertThat(eventHandler.isCalled(), is(true));
 		}
 
 		private ProcessEngine createProcessEngine() {
 				StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
+				configuration.setCustomPreBPMNParseListeners(Collections.<BpmnParseListener>singletonList(eventBridgeActivator));
 				ProcessEngineFactoryWithELResolver engineFactory = new ProcessEngineFactoryWithELResolver();
 				engineFactory.setProcessEngineConfiguration(configuration);
 				engineFactory.setBundle(bundleContext.getBundle());

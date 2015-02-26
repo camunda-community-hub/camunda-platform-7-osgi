@@ -1,7 +1,8 @@
-package org.camunda.bpm.extension.osgi.eventing;
+package org.camunda.bpm.extension.osgi.eventing.impl;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.extension.osgi.eventing.api.BusinessProcessEventProperties;
 
 import java.util.Date;
 import java.util.Dictionary;
@@ -9,12 +10,12 @@ import java.util.Dictionary;
 /**
  * @author Ronny Bräunlich
  */
-public enum BusinessProcessEventProperties {
+public enum BusinessProcessEventPropertiesFiller {
 		/**
 		 * the id of the process definition in which the event is happening / has
 		 * happened or null the event was not related to a process definition
 		 */
-		PROCESS_DEFINITION("processDefinitionId") {
+		PROCESS_DEFINITION(BusinessProcessEventProperties.PROCESS_DEFINITION) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						dictionary.put(this.getPropertyKey(), execution.getProcessDefinitionId());
@@ -29,7 +30,7 @@ public enum BusinessProcessEventProperties {
 		 * the id of the activity the process is currently in / was in at the
 		 * moment the event was fired.
 		 */
-		ACTIVITY_ID("activityId") {
+		ACTIVITY_ID(BusinessProcessEventProperties.ACTIVITY_ID) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						dictionary.put(getPropertyKey(), execution.getCurrentActivityId());
@@ -43,7 +44,7 @@ public enum BusinessProcessEventProperties {
 		/**
 		 * the id of the transition being taken / that was taken
 		 */
-		TRANSITION_ID("transitionId") {
+		TRANSITION_ID(BusinessProcessEventProperties.TRANSITION_ID) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						if (execution.getCurrentTransitionId() != null) {
@@ -53,13 +54,15 @@ public enum BusinessProcessEventProperties {
 
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
-						dictionary.put(getPropertyKey(), task.getExecution().getCurrentTransitionId());
+						if (task.getExecution().getCurrentTransitionId() != null) {
+								dictionary.put(getPropertyKey(), task.getExecution().getCurrentTransitionId());
+						}
 				}
 		},
 		/**
 		 * the id of the {@link org.camunda.bpm.engine.runtime.ProcessInstance} this event corresponds to
 		 */
-		PROCESS_INSTANCE_ID("processInstanceId") {
+		PROCESS_INSTANCE_ID(BusinessProcessEventProperties.PROCESS_INSTANCE_ID) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						dictionary.put(getPropertyKey(), execution.getProcessInstanceId());
@@ -73,7 +76,7 @@ public enum BusinessProcessEventProperties {
 		/**
 		 * the id of the {@link org.camunda.bpm.engine.runtime.Execution} this event corresponds to
 		 */
-		EXECUTION_ID("executionId") {
+		EXECUTION_ID(BusinessProcessEventProperties.EXECUTION_ID) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						dictionary.put(getPropertyKey(), execution.getId());
@@ -87,7 +90,7 @@ public enum BusinessProcessEventProperties {
 		/**
 		 * the type of the event, one of the constants in {@link org.camunda.bpm.engine.delegate.TaskListener} or {@link org.camunda.bpm.engine.delegate.ExecutionListener}
 		 */
-		TYPE("type") {
+		TYPE(BusinessProcessEventProperties.TYPE) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 
@@ -102,7 +105,7 @@ public enum BusinessProcessEventProperties {
 		 * the timestamp indicating the local time at which the event was
 		 * fired.
 		 */
-		TIMESTAMP("timestamp") {
+		TIMESTAMP(BusinessProcessEventProperties.TIMESTAMP) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 						dictionary.put(getPropertyKey(), new Date().toString());
@@ -116,7 +119,7 @@ public enum BusinessProcessEventProperties {
 		/**
 		 * the task id of the current task or null if this is not a task event.
 		 */
-		TASK_ID("taskId") {
+		TASK_ID(BusinessProcessEventProperties.TASK_ID) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
 						dictionary.put(getPropertyKey(), task.getId());
@@ -125,7 +128,7 @@ public enum BusinessProcessEventProperties {
 		/**
 		 * the id of the task in the process definition (BPMN XML) or null if this is not a task event.
 		 */
-		TASK_DEFINITION_KEY("taskDefinitionKey") {
+		TASK_DEFINITION_KEY(BusinessProcessEventProperties.TASK_DEFINITION_KEY) {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
 						dictionary.put(getPropertyKey(), task.getTaskDefinitionKey());
@@ -135,7 +138,7 @@ public enum BusinessProcessEventProperties {
 		private final String propertyKey;
 
 
-		BusinessProcessEventProperties(String propertyKey) {
+		BusinessProcessEventPropertiesFiller(String propertyKey) {
 				this.propertyKey = propertyKey;
 		}
 
@@ -152,13 +155,13 @@ public enum BusinessProcessEventProperties {
 		}
 
 		public static void fillDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
-				for (BusinessProcessEventProperties prop : values()) {
+				for (BusinessProcessEventPropertiesFiller prop : values()) {
 						prop.setValueIntoDictionary(dictionary, execution);
 				}
 		}
 
 		public static void fillDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
-				for (BusinessProcessEventProperties prop : values()) {
+				for (BusinessProcessEventPropertiesFiller prop : values()) {
 						prop.setValueIntoDictionary(dictionary, task);
 				}
 		}

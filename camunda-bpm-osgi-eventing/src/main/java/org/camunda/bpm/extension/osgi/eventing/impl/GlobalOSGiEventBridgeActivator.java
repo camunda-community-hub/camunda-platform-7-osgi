@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.eventing;
+package org.camunda.bpm.extension.osgi.eventing.impl;
 
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
@@ -11,7 +11,9 @@ import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
 import org.camunda.bpm.engine.impl.task.TaskDefinition;
 import org.camunda.bpm.engine.impl.util.xml.Element;
 import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
+import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.camunda.bpm.extension.osgi.eventing.impl.OSGiEventDistributor;
+import org.osgi.service.event.EventAdmin;
 
 import java.util.List;
 
@@ -19,32 +21,38 @@ import java.util.List;
  * @author Ronny Bräunlich
  * FIXME add interface
  */
-public class OSGiEventBridgeActivator extends AbstractBpmnParseListener{
+public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener implements OSGiEventBridgeActivator{
 
-		//FIXME check if that could/should be two classes
-		public final static ExecutionListener EXECUTION_LISTENER = new OSGiEventDistributor();
-		public final static TaskListener TASK_LISTENER = new OSGiEventDistributor();
+		private volatile EventAdmin eventAdmin;
 
 		protected void addEndEventListener(ActivityImpl activity) {
-				activity.addExecutionListener(ExecutionListener.EVENTNAME_END, EXECUTION_LISTENER);
+				activity.addExecutionListener(ExecutionListener.EVENTNAME_END, createExecutionListener());
 		}
 		protected void addStartEventListener(ActivityImpl activity) {
-				activity.addExecutionListener(ExecutionListener.EVENTNAME_START, EXECUTION_LISTENER);
+				activity.addExecutionListener(ExecutionListener.EVENTNAME_START, createExecutionListener());
 		}
 		protected void addTakeEventListener(TransitionImpl transition) {
-				transition.addExecutionListener(EXECUTION_LISTENER);
+				transition.addExecutionListener(createExecutionListener());
 		}
 		protected void addTaskAssignmentListeners(TaskDefinition taskDefinition) {
-				taskDefinition.addTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, TASK_LISTENER);
+				taskDefinition.addTaskListener(TaskListener.EVENTNAME_ASSIGNMENT, createTaskListener());
 		}
 		protected void addTaskCreateListeners(TaskDefinition taskDefinition) {
-				taskDefinition.addTaskListener(TaskListener.EVENTNAME_CREATE, TASK_LISTENER);
+				taskDefinition.addTaskListener(TaskListener.EVENTNAME_CREATE, createTaskListener());
 		}
 		protected void addTaskCompleteListeners(TaskDefinition taskDefinition) {
-				taskDefinition.addTaskListener(TaskListener.EVENTNAME_COMPLETE, TASK_LISTENER);
+				taskDefinition.addTaskListener(TaskListener.EVENTNAME_COMPLETE, createTaskListener());
 		}
 		protected void addTaskDeleteListeners(TaskDefinition taskDefinition) {
-				taskDefinition.addTaskListener(TaskListener.EVENTNAME_DELETE, TASK_LISTENER);
+				taskDefinition.addTaskListener(TaskListener.EVENTNAME_DELETE, createTaskListener());
+		}
+
+		private TaskListener createTaskListener(){
+				return new OSGiEventDistributor(eventAdmin);
+		}
+
+		private ExecutionListener createExecutionListener(){
+				return new OSGiEventDistributor(eventAdmin);
 		}
 		// BpmnParseListener implementation /////////////////////////////////////////////////////////
 		@Override

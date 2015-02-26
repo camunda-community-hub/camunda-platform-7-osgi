@@ -2,11 +2,10 @@ package org.camunda.bpm.extension.osgi.eventing;
 
 import org.apache.felix.dm.DependencyActivatorBase;
 import org.apache.felix.dm.DependencyManager;
-import org.camunda.bpm.extension.osgi.eventing.impl.OSGiEventDistributor;
+import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
+import org.camunda.bpm.extension.osgi.eventing.impl.GlobalOSGiEventBridgeActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.EventAdmin;
-
-import java.util.Hashtable;
 
 /**
  * @author Ronny Bräunlich
@@ -14,13 +13,11 @@ import java.util.Hashtable;
 public class Activator extends DependencyActivatorBase {
 		@Override
 		public void init(BundleContext context, DependencyManager manager) throws Exception {
-				Hashtable properties = new Hashtable();
-				properties.put("processExpression", "osgiEventDistributor");
 				manager.add(createComponent()
-								.setImplementation(OSGiEventDistributor.class)
+								.setImplementation(GlobalOSGiEventBridgeActivator.class)
 								.add(createServiceDependency()
 																.setService(EventAdmin.class)
 																.setRequired(true)
-								).setServiceProperties(properties));
+								).setInterface(OSGiEventBridgeActivator.class.getName(), null));
 		}
 }

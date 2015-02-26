@@ -18,6 +18,8 @@
 		<module>camunda-bpm-karaf-feature</module>
 		<module>camunda-bpm-blueprint-wrapper</module>
 		<module>camunda-bpm-karaf-commands</module>
+		<module>camunda-bpm-osgi-eventing</module>
+		<module>camunda-bpm-osgi-eventing-api</module>
 	</modules>
 
     <properties>
