@@ -46,7 +46,9 @@ public enum BusinessProcessEventProperties {
 		TRANSITION_ID("transitionId") {
 				@Override
 				void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
-						dictionary.put(getPropertyKey(), execution.getCurrentTransitionId());
+						if (execution.getCurrentTransitionId() != null) {
+								dictionary.put(getPropertyKey(), execution.getCurrentTransitionId());
+						}
 				}
 
 				@Override

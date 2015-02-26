@@ -17,7 +17,6 @@ import java.util.Hashtable;
 
 /**
  * @author Ronny Bräunlich
- *         FIXME find a better name
  */
 public class OSGiEventDistributor implements TaskListener, ExecutionListener, Serializable {
 
