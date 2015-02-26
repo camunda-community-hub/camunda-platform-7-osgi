@@ -94,7 +94,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
-  @Test(timeout = 20000L)
+  @Test(timeout = 30000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition processDefinition = null;
