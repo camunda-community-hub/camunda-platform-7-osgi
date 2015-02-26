@@ -9,6 +9,7 @@ build.properties
 bin
 .metadata
 .DS_Store
+.repository
 
 # Package Files #
 *.jar
