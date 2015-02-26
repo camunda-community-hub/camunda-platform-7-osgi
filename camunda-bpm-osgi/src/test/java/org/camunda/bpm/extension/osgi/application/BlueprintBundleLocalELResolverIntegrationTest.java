@@ -50,11 +50,11 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
 /**
  * Test to see if the {@link BlueprintBundleLocalELResolver} can resolve an
  * EL-expression by finding a bean from the context.xml.
- * 
+ *
  * @author Daniel Meyer
  * @author Roman Smirnov
  * @author Ronny Bräunlich
- * 
+ *
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -92,7 +92,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     }
   }
 
-  @Test(timeout = 10000L)
+  @Test(timeout = 15000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition processDefinition = null;
