@@ -28,6 +28,11 @@
       <artifactId>camunda-engine</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.fasterxml.uuid</groupId>
+      <artifactId>java-uuid-generator</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.camunda.bpm.extension.osgi</groupId>
       <artifactId>camunda-bpm-osgi</artifactId>
       <version>${project.version}</version>
@@ -129,6 +134,11 @@
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>exam-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.apache.servicemix.tooling</groupId>
+        <artifactId>depends-maven-plugin</artifactId>
+      </plugin>
+
     </plugins>
   </build>
 
