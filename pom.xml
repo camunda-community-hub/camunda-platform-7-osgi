@@ -1,18 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.camunda</groupId>
     <artifactId>camunda-release-parent</artifactId>
     <version>2.5</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <name>Camunda BPM - OSGi - Root</name>
   <groupId>org.camunda.bpm.extension.osgi</groupId>
   <artifactId>camunda-bpm-osgi-root</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -42,13 +41,13 @@
     <camunda.osgi.import.camunda.engine.version>
       version="[$(version;==;${camunda.bpm.version.clean}),$(version;=+;${camunda.bpm.version.clean}))"
     </camunda.osgi.import.camunda.engine.version>
-    <camunda.osgi.activator/>
-    <camunda.osgi.export.pkg/>
+    <camunda.osgi.activator />
+    <camunda.osgi.export.pkg />
     <camunda.osgi.import.pkg>*</camunda.osgi.import.pkg>
-    <camunda.artifact/>
+    <camunda.artifact />
     <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-    <camunda.osgi.activator/>
-    <camunda.osgi.dynamic.import/>
+    <camunda.osgi.activator />
+    <camunda.osgi.dynamic.import />
   </properties>
 
   <dependencyManagement>
@@ -320,7 +319,7 @@
     <url>https://github.com/camunda/camunda-bpm-platform-osgi</url>
     <connection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</connection>
     <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>1.1.0</tag>
   </scm>
 
   <distributionManagement>
