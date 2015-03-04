@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OS=`uname -s`
+OS="$(tr '[:upper:]' '[:lower:]' <<< $(uname -s))"
 GITHUB_BIN="bin/${OS}/amd64/github-release"
 USER=camunda
 REPO=camunda-bpm-platform-osgi
