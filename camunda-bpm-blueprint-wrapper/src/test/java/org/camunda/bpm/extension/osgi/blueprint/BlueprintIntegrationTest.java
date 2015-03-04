@@ -1,22 +1,9 @@
 package org.camunda.bpm.extension.osgi.blueprint;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import javax.inject.Inject;
-
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +18,19 @@ import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.*;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -114,11 +114,11 @@ public class BlueprintIntegrationTest {
   private InputStream createTestBundleWithProcessDefinition() {
     try {
       return TinyBundles
-          .bundle()
-          .add(org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT + "testProcess.bpmn",
-            new FileInputStream(new File("src/test/resources/testProcess.bpmn")))
-          .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.extension.osgi.example")
-          .build();
+        .bundle()
+        .add(org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT + "testProcess.bpmn",
+          new FileInputStream(new File("src/test/resources/testProcess.bpmn")))
+        .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.extension.osgi.example")
+        .build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
@@ -137,14 +137,18 @@ public class BlueprintIntegrationTest {
     assertThat(taskService, is(notNullValue()));
   }
 
-  @Test
+  @Test(timeout = 30000L)
   public void exportJavaDelegate() throws InterruptedException {
     Properties properties = new Properties();
     properties.setProperty("osgi.service.blueprint.compname", "testDelegate");
     ctx.registerService(JavaDelegate.class.getName(), new TestDelegate(), properties);
     // wait a little bit
-    Thread.sleep(3000L);
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process_1");
+    ProcessDefinition definition = null;
+    do {
+      Thread.sleep(1000L);
+      definition = repositoryService.createProcessDefinitionQuery().processDefinitionKey("Process_1").singleResult();
+    } while (definition == null);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(definition.getKey());
     assertThat(processInstance.isEnded(), is(true));
     assertThat(delegateVisited, is(true));
   }
