@@ -39,28 +39,28 @@ public class BlueprintIntegrationTest {
   @Inject
   private BundleContext ctx;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private ProcessEngine engine;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private RepositoryService repositoryService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private RuntimeService runtimeService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private TaskService taskService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private IdentityService identityService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private FormService formService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private HistoryService historyService;
   @Inject
-  @Filter(timeout = 20000L)
+  @Filter(timeout = 30000L)
   private ManagementService managementService;
   /**
    * to make sure the {@link BlueprintELResolver} found the JavaDelegate
@@ -137,7 +137,7 @@ public class BlueprintIntegrationTest {
     assertThat(taskService, is(notNullValue()));
   }
 
-  @Test(timeout = 30000L)
+  @Test(timeout = 35000L)
   public void exportJavaDelegate() throws InterruptedException {
     Properties properties = new Properties();
     properties.setProperty("osgi.service.blueprint.compname", "testDelegate");
@@ -145,7 +145,7 @@ public class BlueprintIntegrationTest {
     // wait a little bit
     ProcessDefinition definition = null;
     do {
-      Thread.sleep(1000L);
+      Thread.sleep(500L);
       definition = repositoryService.createProcessDefinitionQuery().processDefinitionKey("Process_1").singleResult();
     } while (definition == null);
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(definition.getKey());
