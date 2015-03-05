@@ -42,6 +42,7 @@ import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -50,11 +51,11 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
 /**
  * Test to see if the {@link BlueprintBundleLocalELResolver} can resolve an
  * EL-expression by finding a bean from the context.xml.
- * 
+ *
  * @author Daniel Meyer
  * @author Roman Smirnov
  * @author Ronny Bräunlich
- * 
+ *
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -67,6 +68,7 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
   protected BlueprintContainer blueprintContainer;
 
   @Inject
+  @Filter(timeout = 30000L)
   protected ProcessEngine engine;
 
   @Configuration
@@ -84,15 +86,17 @@ public class BlueprintBundleLocalELResolverIntegrationTest extends OSGiTestCase 
     try {
       return TinyBundles.bundle().add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/testprocessapplicationcontext.xml")))
           .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.osgi.example")
-          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml"))).add(TestBean.class)
-          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*").build();
+          .add("META-INF/processes.xml", new FileInputStream(new File("src/test/resources/testprocesses.xml")))
+          .add(TestBean.class)
+          .add(MyProcessApplication.class).set(Constants.DYNAMICIMPORT_PACKAGE, "*").set(Constants.EXPORT_PACKAGE, "*")
+          .build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());
       return null;
     }
   }
 
-  @Test(timeout = 10000L)
+  @Test(timeout = 35000L)
   public void shouldBeAbleToResolveBean() throws InterruptedException {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition processDefinition = null;

@@ -43,6 +43,7 @@ import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -53,7 +54,7 @@ import org.osgi.service.blueprint.container.BlueprintContainer;
  * @author Daniel Meyer
  * @author Roman Smirnov
  * @author Ronny Bräunlich
- * 
+ *
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -66,6 +67,7 @@ public class ProcessApplicationDeployerIntegrationTest extends OSGiTestCase {
   protected BlueprintContainer blueprintContainer;
 
   @Inject
+  @Filter(timeout = 20000L)
   protected ProcessEngine engine;
 
   @Configuration

@@ -45,6 +45,7 @@ import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -68,6 +69,7 @@ public class ProcessApplicationDeployerWithScanIntegrationTest extends OSGiTestC
   protected BlueprintContainer blueprintContainer;
 
   @Inject
+  @Filter(timeout = 20000L)
   protected ProcessEngine engine;
 
   @Configuration
@@ -95,7 +97,7 @@ public class ProcessApplicationDeployerWithScanIntegrationTest extends OSGiTestC
     }
   }
 
-  @Test(timeout = 10000L)
+  @Test(timeout = 20000L)
   public void shouldBeAbleToDeploy() throws InterruptedException {
     String processApplicationName = "yo!";
     // It could take a second to register the process application
@@ -114,7 +116,7 @@ public class ProcessApplicationDeployerWithScanIntegrationTest extends OSGiTestC
     assertThat(engine.getName(), is("default"));
   }
 
-  @Test(timeout = 10000L)
+  @Test(timeout = 20000L)
   public void shouldDeployProcessAutomatically() {
     RepositoryService repositoryService = engine.getRepositoryService();
     ProcessDefinition result;

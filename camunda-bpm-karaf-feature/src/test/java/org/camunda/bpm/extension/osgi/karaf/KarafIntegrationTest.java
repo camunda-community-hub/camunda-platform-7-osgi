@@ -5,9 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
 import java.io.File;
 
@@ -30,50 +28,62 @@ import org.osgi.framework.BundleException;
 @ExamReactorStrategy(PerClass.class)
 public class KarafIntegrationTest {
 
-	@Inject
-	protected BundleContext ctx;
+  @Inject
+  protected BundleContext ctx;
 
-	@Configuration
-	public Option[] config() {
-		MavenArtifactUrlReference karafUrl = maven()
-				.groupId("org.apache.karaf").artifactId("apache-karaf")
-				.version("3.0.2").type("zip");
-		MavenUrlReference karafStandardRepo = maven()
-				.groupId("org.apache.karaf.features").artifactId("standard")
-				.classifier("features").type("xml").version("3.0.2");
-		return new Option[] {
-				// logLevel(LogLevel.TRACE),
-				// debugConfiguration("5005", true),
-				karafDistributionConfiguration().frameworkUrl(karafUrl)
-						.unpackDirectory(new File("target/exam"))
-				// .useDeployFolder(false)
-				,
-				keepRuntimeFolder(),
-				features(karafStandardRepo, "scr"),
-//				features(
-//						maven().groupId("org.camunda.bpm.osgi")
-//								.artifactId("camunda-engine-karaf-feature")
-//								.version("1.0.0-SNAPSHOT")
-//								.classifier("features").type("xml"),
-//						"camunda-engine-karaf-feature-minimal")
-				features(new File("target/classes/features.xml").toURI().toString(), "camunda-bpm-karaf-feature-minimal")
-						};
-	}
+  @Configuration
+  public Option[] config() {
+    MavenArtifactUrlReference karafUrl =
+      maven()
+        .groupId("org.apache.karaf")
+        .artifactId("apache-karaf")
+        .type("zip")
+        .versionAsInProject();
+    MavenUrlReference karafStandardRepo =
+      maven()
+        .groupId("org.apache.karaf.features")
+        .artifactId("standard")
+        .classifier("features")
+        .type("xml")
+        .versionAsInProject();
 
-	@Test
-	public void startCamundaOsgiBundle() throws BundleException {
-		assertThat(ctx, is(notNullValue()));
-		Bundle[] bundles = ctx.getBundles();
-		boolean found = false;
-		for (Bundle b : bundles) {
-			if (b.getSymbolicName().equals("org.camunda.bpm.extension.osgi")) {
-				b.start();
-				found = true;
-			}
-		}
-		if(!found){
-			fail("Couldn't find bundle");
-		}
-	}
+    return new Option[] {
+        // logLevel(LogLevel.TRACE),
+        // debugConfiguration("5005", true),
+        karafDistributionConfiguration().frameworkUrl(karafUrl)
+          .unpackDirectory(new File("target/exam"))
+        // .useDeployFolder(false)
+        ,
+        // We use this option to allow the container to use artifacts found in private / local repo.
+        editConfigurationFileExtend("etc/org.ops4j.pax.url.mvn.cfg",
+          "org.ops4j.pax.url.mvn.repositories",
+          "file:${maven.repo.local}@id=mavenlocalrepo@snapshots"),
+        editConfigurationFileExtend("etc/org.ops4j.pax.url.mvn.cfg",
+          "org.ops4j.pax.url.mvn.localRepository",
+          "${maven.repo.local}"),
+        editConfigurationFileExtend("etc/system.properties",
+          "maven.repo.local",
+          System.getProperty("maven.repo.local", "")), keepRuntimeFolder(),
+        features(karafStandardRepo, "scr"),
+        features(new File("target/classes/features.xml").toURI().toString(),
+          "camunda-bpm-karaf-feature-minimal")
+    };
+  }
+
+  @Test
+  public void startCamundaOsgiBundle() throws BundleException {
+    assertThat(ctx, is(notNullValue()));
+    Bundle[] bundles = ctx.getBundles();
+    boolean found = false;
+    for (Bundle b : bundles) {
+      if (b.getSymbolicName().equals("org.camunda.bpm.extension.osgi")) {
+        b.start();
+        found = true;
+      }
+    }
+    if (!found) {
+      fail("Couldn't find bundle");
+    }
+  }
 
 }

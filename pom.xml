@@ -1,144 +1,288 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.camunda</groupId>
     <artifactId>camunda-release-parent</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
     <relativePath />
   </parent>
 
-	<groupId>org.camunda.bpm.extension.osgi</groupId>
-	<artifactId>camunda-bpm-osgi-root</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+  <name>Camunda BPM - OSGi - Root</name>
+  <groupId>org.camunda.bpm.extension.osgi</groupId>
+  <artifactId>camunda-bpm-osgi-root</artifactId>
+  <version>2.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
 	<modules>
 		<module>camunda-bpm-osgi</module>
 		<module>camunda-bpm-karaf-feature</module>
 		<module>camunda-bpm-blueprint-wrapper</module>
 		<module>camunda-bpm-karaf-commands</module>
-		<module>camunda-bpm-osgi-eventing</module>
-		<module>camunda-bpm-osgi-eventing-api</module>
+    <module>camunda-bpm-karaf-assembly</module>
+    <module>camunda-bpm-osgi-eventing</module>
+    <module>camunda-bpm-osgi-eventing-api</module>
 	</modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <camunda-bpm.version>7.2.0-SNAPSHOT</camunda-bpm.version>
-    	<junit.version>4.11</junit.version>
-    	<paxexam.version>3.5.0</paxexam.version>
-		<logback.version>0.9.20</logback.version>
-		<osgi.version>4.2.0</osgi.version>
-		<mockito.version>1.9.5</mockito.version>
-		<!-- bundle properties -->
-		<camunda.osgi.import.camunda.engine.version>
-			version="[$(version;==;${camunda.bpm.version.clean}),$(version;=+;${camunda.bpm.version.clean}))"
-		</camunda.osgi.import.camunda.engine.version>
-		<camunda.osgi.activator />
-		<camunda.osgi.export.pkg />
-		<camunda.osgi.import.pkg>*</camunda.osgi.import.pkg>
-		<camunda.artifact />
-		<camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-		<camunda.osgi.activator />
-		<camunda.osgi.dynamic.import />
-	</properties>
+  <properties>
+    <camunda-bpm.version>7.2.0</camunda-bpm.version>
+    <camunda-spin.version>1.0.0</camunda-spin.version>
+    <camunda-connect.version>1.0.0</camunda-connect.version>
+    <camunda-commons.version>1.0.6</camunda-commons.version>
 
-	<build>
-		<defaultGoal>clean install</defaultGoal>
-		<pluginManagement>
-			<plugins>
-				<!-- test plugins -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.15</version>
-					<configuration>
-    					<argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
-  					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.15</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>integration-test</goal>
-								<goal>verify</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+    <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
 
-				<!-- code plugins -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.8</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-				</plugin>
-				<plugin>
-					<!-- it is necessary to configure the bundle plug-in here so the modules 
-						can use the "clean" versions -->
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<executions>
-						<!-- cleanVersion osgi-fies the versions the versions tag e.g. 1.0.0-SNAPSHOT 
-							to 1.0.0.SNAPSHOT -->
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>cleanVersions</goal>
-							</goals>
-						</execution>
-						<!-- This execution makes sure that the manifest is available when 
-							the tests are executed -->
-						<execution>
-							<id>bundle-manifest</id>
-							<phase>process-classes</phase>
-							<goals>
-								<goal>manifest</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<instructions>
-							<Bundle-Name>${project.name}</Bundle-Name>
-							<Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-							<Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
-							<Export-Package>${camunda.osgi.export.pkg}</Export-Package>
-							<Import-Package>${camunda.osgi.import.pkg}</Import-Package>
-							<Dynamic-Import>${camunda.osgi.dynamic.import}</Dynamic-Import>
-							<_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
-						</instructions>
-						<versions>
-							<camunda.bpm.version.clean>${camunda-bpm.version}</camunda.bpm.version.clean>
-						</versions>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    <osgi.version>4.2.0</osgi.version>
+    <karaf.version>3.0.3</karaf.version>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>maven central</id>
-			<url>http://repo1.maven.org/</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <junit.version>4.11</junit.version>
+    <paxexam.version>3.6.0</paxexam.version>
+    <logback.version>0.9.20</logback.version>
+    <mockito.version>1.9.5</mockito.version>
+    <!-- bundle properties -->
+    <camunda.osgi.import.camunda.engine.version>
+      version="[$(version;==;${camunda.bpm.version.clean}),$(version;=+;${camunda.bpm.version.clean}))"
+    </camunda.osgi.import.camunda.engine.version>
+    <camunda.osgi.activator />
+    <camunda.osgi.export.pkg />
+    <camunda.osgi.import.pkg>*</camunda.osgi.import.pkg>
+    <camunda.artifact />
+    <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
+    <camunda.osgi.activator />
+    <camunda.osgi.dynamic.import />
+  </properties>
 
-	<repositories>
-		<repository>
-			<id>camunda-bpm-nexus</id>
-			<name>camunda-bpm-nexus</name>
-			<url>https://app.camunda.com/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-bom</artifactId>
+        <version>${camunda-bpm.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.core</artifactId>
+        <version>${osgi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.compendium</artifactId>
+        <version>${osgi.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-junit4</artifactId>
+        <version>${paxexam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-link-mvn</artifactId>
+        <version>${paxexam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-container-native</artifactId>
+        <version>${paxexam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-container-karaf</artifactId>
+        <version>${paxexam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam</artifactId>
+        <version>${paxexam.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ops4j.pax.url</groupId>
+        <artifactId>pax-url-aether</artifactId>
+        <version>1.6.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.url</groupId>
+        <artifactId>pax-url-aether</artifactId>
+        <version>1.6.0</version>
+        <type>bundle</type>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.url</groupId>
+        <artifactId>pax-url-reference</artifactId>
+        <version>1.6.0</version>
+        <type>bundle</type>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.tinybundles</groupId>
+        <artifactId>tinybundles</artifactId>
+        <version>2.0.0</version>
+        <type>bundle</type>
+      </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.inject</groupId>
+        <artifactId>javax.inject</artifactId>
+        <version>1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>1.3.168</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <defaultGoal>clean install</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <!-- test plugins -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.15</version>
+          <configuration>
+            <argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.15</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.ops4j.pax.exam</groupId>
+          <artifactId>exam-maven-plugin</artifactId>
+          <version>${paxexam.version}</version>
+          <executions>
+            <execution>
+              <id>generate-link-files</id>
+              <goals>
+                <goal>generate-link-files</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.servicemix.tooling</groupId>
+          <artifactId>depends-maven-plugin</artifactId>
+          <version>1.2</version>
+          <executions>
+            <execution>
+              <id>generate-depends-file</id>
+              <goals>
+                <goal>generate-depends-file</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- code plugins -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <!-- it is necessary to configure the bundle plug-in here so the modules
+            can use the "clean" versions -->
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <executions>
+            <!-- cleanVersion osgi-fies the versions the versions tag e.g. 1.0.0-SNAPSHOT
+              to 1.0.0.SNAPSHOT -->
+            <execution>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>cleanVersions</goal>
+              </goals>
+            </execution>
+            <!-- This execution makes sure that the manifest is available when
+              the tests are executed -->
+            <execution>
+              <id>bundle-manifest</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>manifest</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <instructions>
+              <Bundle-Name>${project.name}</Bundle-Name>
+              <Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
+              <Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
+              <Export-Package>${camunda.osgi.export.pkg}</Export-Package>
+              <Import-Package>${camunda.osgi.import.pkg}</Import-Package>
+              <Dynamic-Import>${camunda.osgi.dynamic.import}</Dynamic-Import>
+              <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+            </instructions>
+            <versions>
+              <camunda.bpm.version.clean>${camunda-bpm.version}</camunda.bpm.version.clean>
+            </versions>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <preparationGoals>clean install</preparationGoals>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven central</id>
+      <url>http://repo1.maven.org/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <repositories>
+    <repository>
+      <id>camunda-bpm-nexus</id>
+      <name>camunda-bpm-nexus</name>
+      <url>https://app.camunda.com/nexus/content/groups/public</url>
+    </repository>
+  </repositories>
 
   <licenses>
     <license>
@@ -146,33 +290,33 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-  
+
   <organization>
     <name>camunda services GmbH</name>
     <url>http://www.camunda.com</url>
   </organization>
-  
+
   <url>http://www.camunda.org</url>
-  
+
   <developers>
-  	<developer>
-  		<id>rbraeunlich</id>
-  		<name>Ronny Bräunlich</name>
-  	</developer>
-  	<developer>
-  		<id>romansmirnov</id>
-  		<name>Roman Smirnov</name>
-  		<organization>camunda.org</organization>
-  		<organizationUrl>http://camunda.org</organizationUrl>
-  	</developer>
-  	<developer>
-  		<id>meyerdan</id>
-  		<name>Daniel Meyer</name>
-  		<organization>camunda.org</organization>
-  		<organizationUrl>http://camunda.org</organizationUrl>
-  	</developer>
+    <developer>
+      <id>rbraeunlich</id>
+      <name>Ronny Bräunlich</name>
+    </developer>
+    <developer>
+      <id>romansmirnov</id>
+      <name>Roman Smirnov</name>
+      <organization>camunda.org</organization>
+      <organizationUrl>http://camunda.org</organizationUrl>
+    </developer>
+    <developer>
+      <id>meyerdan</id>
+      <name>Daniel Meyer</name>
+      <organization>camunda.org</organization>
+      <organizationUrl>http://camunda.org</organizationUrl>
+    </developer>
   </developers>
-  
+
   <scm>
     <url>https://github.com/camunda/camunda-bpm-platform-osgi</url>
     <connection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</connection>
@@ -192,7 +336,7 @@
   </distributionManagement>
 
   <issueManagement>
-  	<system>GitHub</system>
-  	<url>https://github.com/camunda/camunda-bpm-platform-osgi/issues</url>
+    <system>GitHub</system>
+    <url>https://github.com/camunda/camunda-bpm-platform-osgi/issues</url>
   </issueManagement>
 </project>
