@@ -11,13 +11,15 @@ import org.osgi.service.event.EventAdmin;
  * @author Ronny Bräunlich
  */
 public class Activator extends DependencyActivatorBase {
-		@Override
-		public void init(BundleContext context, DependencyManager manager) throws Exception {
-				manager.add(createComponent()
-								.setImplementation(GlobalOSGiEventBridgeActivator.class)
-								.add(createServiceDependency()
-																.setService(EventAdmin.class)
-																.setRequired(true)
-								).setInterface(OSGiEventBridgeActivator.class.getName(), null));
-		}
+  @Override
+  public void init(BundleContext context, DependencyManager manager) throws Exception {
+    manager.add(createComponent()
+      .setImplementation(GlobalOSGiEventBridgeActivator.class)
+      .add(createServiceDependency()
+          .setService(EventAdmin.class)
+          .setRequired(true)
+      )
+      .add(createBundleDependency().setBundle(context.getBundle()).setRequired(true))
+      .setInterface(OSGiEventBridgeActivator.class.getName(), null));
+  }
 }
