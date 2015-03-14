@@ -14,9 +14,10 @@ import org.camunda.bpm.engine.impl.util.xml.Element;
 import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
 
+import java.lang.reflect.Proxy;
 import java.util.List;
 
 /**
@@ -60,12 +61,14 @@ public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener im
     SelfDestructingOSGiEventDistributor distributor = new SelfDestructingOSGiEventDistributor(eventAdmin, taskDefinition);
     bundle.getBundleContext().addBundleListener(distributor);
     return distributor;
+//    return (TaskListener) Proxy.newProxyInstance(taskDefinition.getClass().getClassLoader(), new Class[]{TaskListener.class}, new EventDistributorHandler(bundle.getBundleContext()));
   }
 
   private ExecutionListener createExecutionListener(CoreModelElement activity) {
     SelfDestructingOSGiEventDistributor distributor = new SelfDestructingOSGiEventDistributor(eventAdmin, activity);
     bundle.getBundleContext().addBundleListener(distributor);
     return distributor;
+//    return (ExecutionListener) Proxy.newProxyInstance(activity.getClass().getClassLoader(), new Class[]{ExecutionListener.class}, new EventDistributorHandler(bundle.getBundleContext()));
   }
 
   // BpmnParseListener implementation /////////////////////////////////////////////////////////

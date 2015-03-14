@@ -50,6 +50,7 @@ import static org.ops4j.pax.exam.CoreOptions.*;
 @ExamReactorStrategy(PerMethod.class)
 public class OSGiEventBridgeIntegrationTest {
 
+  public static final String BUNDLE_SYMBOLIC_NAME = "org.camunda.bpm.extension.osgi.eventing";
   @Inject
   private BundleContext bundleContext;
 
@@ -130,12 +131,7 @@ public class OSGiEventBridgeIntegrationTest {
     DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
     deploymentBuilder.name("longRunningTestProcess").addInputStream("longRunningTestProcess.bpmn", new FileInputStream(new File(
       "src/test/resources/longRunningTestProcess.bpmn"))).deploy();
-    for (Bundle bundle : bundleContext.getBundles()) {
-      if (bundle.getSymbolicName().equals("org.camunda.bpm.extension.osgi.eventing")) {
-        bundle.stop();
-        break;
-      }
-    }
+    stopEventingBundle();
     processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
     processEngine.close();
     if (logListener.getErrorMessage() != null) {
@@ -144,6 +140,45 @@ public class OSGiEventBridgeIntegrationTest {
     assertThat(eventHandler.endCalled(), is(false));
   }
 
+  private void stopEventingBundle() throws BundleException {
+    for (Bundle bundle : bundleContext.getBundles()) {
+      if (bundle.getSymbolicName().equals(BUNDLE_SYMBOLIC_NAME)) {
+        bundle.stop();
+        break;
+      }
+    }
+  }
+
+  @Test
+  public void restartBundleAfterShutdown() throws FileNotFoundException, BundleException, InterruptedException {
+    // we have to use a LogListener to find Errors in the log
+    ErrorLogListener logListener = new ErrorLogListener();
+    logReaderService.addLogListener(logListener);
+    final ProcessEngine processEngine = createProcessEngine();
+    DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+    deploymentBuilder.name("longRunningTestProcess").addInputStream("longRunningTestProcess.bpmn", new FileInputStream(new File(
+      "src/test/resources/longRunningTestProcess.bpmn"))).deploy();
+    stopEventingBundle();
+    processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
+    TestEventHandler eventHandler = new TestEventHandler();
+    registerEventHandler(eventHandler);
+    startEventingBundle();
+    processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
+    if (logListener.getErrorMessage() != null) {
+      fail(logListener.getErrorMessage());
+    }
+    processEngine.close();
+    assertThat(eventHandler.endCalled(), is(true));
+  }
+
+  private void startEventingBundle() throws BundleException {
+    for (Bundle bundle : bundleContext.getBundles()) {
+      if (bundle.getSymbolicName().equals(BUNDLE_SYMBOLIC_NAME)) {
+        bundle.start();
+        break;
+      }
+    }
+  }
 
   private ProcessEngine createProcessEngine() {
     StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
