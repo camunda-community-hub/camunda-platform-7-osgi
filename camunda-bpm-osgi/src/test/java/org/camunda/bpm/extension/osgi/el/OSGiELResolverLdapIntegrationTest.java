@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -36,10 +36,10 @@ public class OSGiELResolverLdapIntegrationTest extends
 
 	@Test
 	public void runProcess() throws Exception {
-		Properties properties = new Properties();
-		properties.setProperty("processExpression", "thisIsAReallyNeatFeature");
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		properties.put("processExpression", "thisIsAReallyNeatFeature");
 		JustAnotherJavaDelegate service = new JustAnotherJavaDelegate();
-		ctx.registerService(JavaDelegate.class.getName(), service, properties);
+		ctx.registerService(JavaDelegate.class, service, properties);
 		ProcessInstance processInstance = processEngine.getRuntimeService()
 				.startProcessInstanceByKey("ldap");
 		assertThat(service.called, is(true));

@@ -25,10 +25,10 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionDeployerImpl.class.getName());
 
-	private ServiceTracker engineServiceTracker;
+	private ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker;
 	private long timeout = 5000;
 
-	public ProcessDefinitionDeployerImpl(ServiceTracker engineServiceTracker) {
+	public ProcessDefinitionDeployerImpl(ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker) {
 		this.engineServiceTracker = engineServiceTracker;
 	}
 
@@ -39,7 +39,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 					"Found process in bundle " + bundleSymbolicName
 							+ " with paths: " + pathList);
 
-			ProcessEngine engine = (ProcessEngine) engineServiceTracker
+			ProcessEngine engine = engineServiceTracker
 					.waitForService(timeout);
 			if (engine == null) {
 				throw new IllegalStateException(
@@ -60,7 +60,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 					is.close();
 				}
 			}
-			builder.enableDuplicateFiltering();
+			builder.enableDuplicateFiltering(true);
 			builder.deploy();
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to deploy bundle", e);

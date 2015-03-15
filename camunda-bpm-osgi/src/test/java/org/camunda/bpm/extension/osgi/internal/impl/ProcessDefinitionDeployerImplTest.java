@@ -27,7 +27,7 @@ public class ProcessDefinitionDeployerImplTest {
 
 	@Test
 	public void deployEmptyPathList() {
-		ServiceTracker serviceTracker = createProcessEngineServiceTrackerMock();
+		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = createProcessEngineServiceTrackerMock();
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
 				serviceTracker);
 		deployer.deployProcessDefinitions("test bundle", Collections.<URL> emptyList());
@@ -36,7 +36,7 @@ public class ProcessDefinitionDeployerImplTest {
 
 	@Test
 	public void deploySingleProcess() throws MalformedURLException {
-		ServiceTracker serviceTracker = createProcessEngineServiceTrackerMock();
+		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = createProcessEngineServiceTrackerMock();
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
 				serviceTracker);
 		URL url = new File("src/test/resources/testprocess.bpmn").toURI()
@@ -48,8 +48,9 @@ public class ProcessDefinitionDeployerImplTest {
 				any(InputStream.class));
 	}
 
-	private ServiceTracker createProcessEngineServiceTrackerMock() {
-		ServiceTracker serviceTracker = mock(ServiceTracker.class);
+	@SuppressWarnings("unchecked")
+  private ServiceTracker<ProcessEngine, ProcessEngine> createProcessEngineServiceTrackerMock() {
+		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = mock(ServiceTracker.class);
 		ProcessEngine processEngine = mock(ProcessEngine.class);
 		RepositoryService repositoryService = mock(RepositoryService.class);
 		when(processEngine.getRepositoryService())
@@ -66,9 +67,10 @@ public class ProcessDefinitionDeployerImplTest {
 		return serviceTracker;
 	}
 
-	@Test
+	@SuppressWarnings("unchecked")
+  @Test
 	public void throwsExceptionWhenProcessEngineNotFound() {
-		ServiceTracker serviceTracker = mock(ServiceTracker.class);
+		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = mock(ServiceTracker.class);
 		try {
 			when(serviceTracker.waitForService(anyLong())).thenReturn(null);
 		} catch (InterruptedException e) {

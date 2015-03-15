@@ -32,7 +32,8 @@ import org.osgi.framework.Constants;
 public class DeploymentListenerBundleLocationTest extends
 		AbstractDeploymentListenerTest {
 
-	protected InputStream createTestBundleWithProcessDefinition() {
+	@Override
+  protected InputStream createTestBundleWithProcessDefinition() {
 		try {
 			return TinyBundles
 					.bundle()

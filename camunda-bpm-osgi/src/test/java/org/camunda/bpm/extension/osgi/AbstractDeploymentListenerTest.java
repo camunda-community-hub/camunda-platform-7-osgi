@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import javax.sql.DataSource;
 
@@ -81,7 +81,7 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestCase {
 			processEngineFactory.init();
 			processEngine = processEngineFactory.getObject();
 			ctx.registerService(ProcessEngine.class.getName(), processEngine,
-					new Properties());
+			    new Hashtable<String, String>());
 		} catch (Exception e) {
 			fail(e.toString());
 		}

@@ -44,6 +44,7 @@ public class OSGiRuntimeContainerDelegate extends RuntimeContainerDelegateImpl {
     this.context = context;
   }
 
+  @Override
   public void deployProcessApplication(AbstractProcessApplication processApplication) {
 
     if(processApplication == null) {

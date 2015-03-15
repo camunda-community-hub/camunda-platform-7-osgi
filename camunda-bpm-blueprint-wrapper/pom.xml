@@ -44,15 +44,13 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.enterprise</artifactId>
-      <version>${osgi.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.framework</artifactId>
-      <version>3.2.2</version>
-      <type>bundle</type>
+      <version>4.0.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -88,19 +86,16 @@
     <dependency>
       <groupId>org.ops4j.pax.url</groupId>
       <artifactId>pax-url-aether</artifactId>
-      <type>bundle</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.url</groupId>
       <artifactId>pax-url-reference</artifactId>
-      <type>bundle</type>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.tinybundles</groupId>
       <artifactId>tinybundles</artifactId>
-      <type>bundle</type>
       <scope>test</scope>
     </dependency>
     <dependency>

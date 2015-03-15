@@ -7,7 +7,7 @@ import static org.ops4j.pax.exam.CoreOptions.options;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import javax.sql.DataSource;
 
@@ -68,7 +68,7 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
 			processEngineFactory.init();
 			processEngine = processEngineFactory.getObject();
 			ctx.registerService(ProcessEngine.class.getName(), processEngine,
-					new Properties());
+					new Hashtable<String, String>());
 		} catch (Exception e) {
 			fail(e.toString());
 		}

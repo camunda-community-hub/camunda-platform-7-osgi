@@ -30,15 +30,16 @@ import org.camunda.bpm.extension.osgi.application.OSGiProcessApplication;
  */
 public class OSGiParseProcessesXmlStep extends ParseProcessesXmlStep {
 
+  @Override
   protected List<URL> getProcessesXmlUrls(String[] deploymentDescriptors, AbstractProcessApplication processApplication) {
     OSGiProcessApplication osgiProcessApplication = (OSGiProcessApplication) processApplication;
     List<URL> urls = new ArrayList<URL>();
     for (String descriptorName : deploymentDescriptors) {
-      Enumeration foundDescriptors;
+      Enumeration<URL> foundDescriptors;
       try {
         foundDescriptors = osgiProcessApplication.getBundle().getResources(descriptorName);
         while (foundDescriptors.hasMoreElements()) {
-          urls.add((URL) foundDescriptors.nextElement());
+          urls.add(foundDescriptors.nextElement());
         }
       } catch (IOException e) {
         e.printStackTrace();

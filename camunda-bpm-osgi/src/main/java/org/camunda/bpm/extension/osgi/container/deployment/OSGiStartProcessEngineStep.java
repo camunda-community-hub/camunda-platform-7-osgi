@@ -34,10 +34,12 @@ public class OSGiStartProcessEngineStep extends StartProcessEngineStep {
     this.context = context;
   }
 
+  @Override
   protected JmxManagedProcessEngineController createProcessEngineControllerInstance(ProcessEngineConfigurationImpl configuration) {
     return new BundleClassloaderAwareProcessEngineController(configuration, context);
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   protected <T> Class<? extends T> loadClass(String className, ClassLoader customClassloader, Class<T> clazz) {
 

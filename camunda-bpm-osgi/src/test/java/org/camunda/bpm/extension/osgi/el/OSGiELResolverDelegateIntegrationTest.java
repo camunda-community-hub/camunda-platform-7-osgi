@@ -36,7 +36,7 @@ public class OSGiELResolverDelegateIntegrationTest extends
 	@Test
 	public void runProcess() throws Exception {
 		JustAnotherJavaDelegate service = new JustAnotherJavaDelegate();
-		ctx.registerService(JavaDelegate.class.getName(), service, null);
+		ctx.registerService(JavaDelegate.class, service, null);
 		ProcessInstance processInstance = processEngine.getRuntimeService()
 				.startProcessInstanceByKey("delegate");
 		assertThat(service.called, is(true));

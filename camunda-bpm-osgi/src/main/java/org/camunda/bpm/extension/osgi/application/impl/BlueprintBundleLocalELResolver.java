@@ -27,7 +27,6 @@ public class BlueprintBundleLocalELResolver extends ELResolver {
     return Object.class;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public Object getValue(ELContext context, Object base, Object property) {
     if(base == null){

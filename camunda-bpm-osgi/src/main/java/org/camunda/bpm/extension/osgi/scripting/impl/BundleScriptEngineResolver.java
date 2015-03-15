@@ -20,7 +20,7 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 			.getLogger(BundleScriptEngineResolver.class.getName());
 
 	private final Bundle bundle;
-	private ServiceRegistration reg;
+	private ServiceRegistration<ScriptEngineResolver> reg;
 	private final URL configFile;
 
 	public BundleScriptEngineResolver(Bundle bundle, URL configFile) {
@@ -31,7 +31,7 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 	public void register() {
 		if (bundle.getBundleContext() != null) {
 			reg = bundle.getBundleContext().registerService(
-					ScriptEngineResolver.class.getName(), this, null);
+					ScriptEngineResolver.class, this, null);
 		}
 	}
 
@@ -41,7 +41,8 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 		}
 	}
 
-	public ScriptEngine resolveScriptEngine(String name) {
+	@Override
+  public ScriptEngine resolveScriptEngine(String name) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					configFile.openStream()));

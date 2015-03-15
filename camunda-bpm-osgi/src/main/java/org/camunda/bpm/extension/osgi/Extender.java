@@ -29,20 +29,20 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author <a href="gnodet@gmail.com">Guillaume Nodet</a>
  * @author Ronny Bräunlich
  */
-public class Extender implements ServiceTrackerCustomizer {
+public class Extender implements ServiceTrackerCustomizer<ProcessEngine, ProcessEngine> {
 
 	private final BundleContext context;
-	private final BundleTracker bundleTracker;
-	private final ServiceTracker engineServiceTracker;
+	private final BundleTracker<Bundle> bundleTracker;
+	private final ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker;
 	private final ProcessDefintionChecker procDefChecker;
 
 	public Extender(BundleContext context) {
 		this.context = context;
-		this.engineServiceTracker = new ServiceTracker(context,
-				ProcessEngine.class.getName(), this);
+		this.engineServiceTracker = new ServiceTracker<ProcessEngine, ProcessEngine>(context,
+				ProcessEngine.class, this);
 		procDefChecker = new ProcessDefinitionCheckerImpl(
 				new ProcessDefinitionDeployerImpl(engineServiceTracker));
-		this.bundleTracker = new BundleTracker(context, Bundle.RESOLVED
+		this.bundleTracker = new BundleTracker<Bundle>(context, Bundle.RESOLVED
 				| Bundle.STARTING | Bundle.ACTIVE,
 				new ScriptEngineBundleTrackerCustomizer(procDefChecker));
 	}
@@ -55,19 +55,23 @@ public class Extender implements ServiceTrackerCustomizer {
 		engineServiceTracker.close();
 	}
 
-	public Object addingService(ServiceReference reference) {
+	@Override
+  public ProcessEngine addingService(ServiceReference<ProcessEngine> reference) {
 		new Thread() {
-			public void run() {
+			@Override
+      public void run() {
 				bundleTracker.open();
 			}
 		}.start();
 		return context.getService(reference);
 	}
 
-	public void modifiedService(ServiceReference reference, Object service) {
+	@Override
+  public void modifiedService(ServiceReference<ProcessEngine> reference, ProcessEngine service) {
 	}
 
-	public void removedService(ServiceReference reference, Object service) {
+	@Override
+  public void removedService(ServiceReference<ProcessEngine> reference, ProcessEngine service) {
 		context.ungetService(reference);
 		if (engineServiceTracker.size() == 0) {
 			bundleTracker.close();

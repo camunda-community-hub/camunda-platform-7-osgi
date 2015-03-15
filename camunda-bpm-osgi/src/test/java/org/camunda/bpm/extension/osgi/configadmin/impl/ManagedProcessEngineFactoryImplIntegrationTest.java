@@ -42,6 +42,7 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
   @Inject
   private ConfigurationAdmin configAdmin;
 
+  @Override
   @Configuration
   public Option[] createConfiguration() {
     Option[] parentConfig = super.createConfiguration();
@@ -67,11 +68,11 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     props.put("processEngineName", "TestEngine");
     org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
     config.update(props);
-    ServiceReference reference = null;
+    ServiceReference<ProcessEngine> reference = null;
     do {
-      reference = ctx.getServiceReference(ProcessEngine.class.getName());
+      reference = ctx.getServiceReference(ProcessEngine.class);
     } while (reference == null);
-    ProcessEngine engine = (ProcessEngine) ctx.getService(reference);
+    ProcessEngine engine = ctx.getService(reference);
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("TestEngine"));
   }
@@ -89,9 +90,9 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     Thread.sleep(11000L);
     config.delete();
     Thread.sleep(5000L);
-    ServiceReference reference = null;
+    ServiceReference<ProcessEngine> reference = null;
     do {
-      reference = ctx.getServiceReference(ProcessEngine.class.getName());
+      reference = ctx.getServiceReference(ProcessEngine.class);
     } while (reference != null);
   }
 }

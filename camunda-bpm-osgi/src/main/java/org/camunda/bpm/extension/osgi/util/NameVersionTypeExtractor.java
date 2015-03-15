@@ -62,41 +62,39 @@ public class NameVersionTypeExtractor {
 			m = SIMPLE_FILENAME_MATCHER.matcher(jarName);
 			if(m.matches()) {
 				return new String[] { m.group(1), DEFAULT_VERSION, m.group(2) };
-			} else {
-				//we definitely cannot find a meaningful name
-				return new String[] { jarName, DEFAULT_VERSION };
 			}
-		} else {
-			StringBuffer v = new StringBuffer();
-			String d1 = m.group(1); //name
-			String d2 = m.group(2); //major
-			String d3 = m.group(3); //minor
-			String d4 = m.group(4); //bugfix
-			String d5 = m.group(5); //qualifier
-			String d6 = m.group(6); //file extension
-			if (d2 != null) {
-				v.append(d2);
-				if (d3 != null) {
-					v.append('.');
-					v.append(d3);
-					if (d4 != null) {
-						v.append('.');
-						v.append(d4);
-						if (d5 != null) {
-							v.append(".");
-							cleanupModifier(v, d5);
-						}
-					} else if (d5 != null) {
-						v.append(".0.");
-						cleanupModifier(v, d5);
-					}
-				} else if (d5 != null) {
-					v.append(".0.0.");
-					cleanupModifier(v, d5);
-				}
-			}
-			return new String[] { d1, v.toString(), d6 };
+      //we definitely cannot find a meaningful name
+      return new String[] { jarName, DEFAULT_VERSION };
 		}
+    StringBuffer v = new StringBuffer();
+    String d1 = m.group(1); //name
+    String d2 = m.group(2); //major
+    String d3 = m.group(3); //minor
+    String d4 = m.group(4); //bugfix
+    String d5 = m.group(5); //qualifier
+    String d6 = m.group(6); //file extension
+    if (d2 != null) {
+    	v.append(d2);
+    	if (d3 != null) {
+    		v.append('.');
+    		v.append(d3);
+    		if (d4 != null) {
+    			v.append('.');
+    			v.append(d4);
+    			if (d5 != null) {
+    				v.append(".");
+    				cleanupModifier(v, d5);
+    			}
+    		} else if (d5 != null) {
+    			v.append(".0.");
+    			cleanupModifier(v, d5);
+    		}
+    	} else if (d5 != null) {
+    		v.append(".0.0.");
+    		cleanupModifier(v, d5);
+    	}
+    }
+    return new String[] { d1, v.toString(), d6 };
 	}
 
 	private static void cleanupModifier(StringBuffer result, String modifier) {

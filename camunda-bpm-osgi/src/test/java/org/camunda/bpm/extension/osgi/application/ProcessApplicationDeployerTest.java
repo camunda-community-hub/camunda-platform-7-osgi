@@ -13,10 +13,11 @@ import org.osgi.framework.ServiceReference;
 
 public class ProcessApplicationDeployerTest {
 
+  @SuppressWarnings("unchecked")
   @Test
   public void addingService() {
     BundleContext bundleContext = mock(BundleContext.class);
-    ServiceReference ref = mock(ServiceReference.class);
+    ServiceReference<ProcessApplicationInterface> ref = mock(ServiceReference.class);
     Bundle bundle = mock(Bundle.class);
     when(ref.getBundle()).thenReturn(bundle);
     when(bundle.getBundleContext()).thenReturn(bundleContext);

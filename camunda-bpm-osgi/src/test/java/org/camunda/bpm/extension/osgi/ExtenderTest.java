@@ -13,8 +13,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Properties;
+import java.util.Hashtable;
 
+import org.camunda.bpm.engine.ProcessEngine;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
@@ -40,7 +41,7 @@ public class ExtenderTest {
 	public void emptyBundleChanged() {
 		// mock Bundle
 		Bundle bundle = mock(Bundle.class);
-		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getHeaders()).thenReturn(new Hashtable<String, String>());
 		when(bundle.getSymbolicName()).thenReturn("org.camunda.test");
 		// call the extender
 		extender.bundleChanged(createMockBundleEventFor(bundle,
@@ -53,7 +54,7 @@ public class ExtenderTest {
 			throws MalformedURLException {
 		// mock Bundle
 		Bundle bundle = mock(Bundle.class);
-		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getHeaders()).thenReturn(new Hashtable<String, String>());
 		when(bundle.getSymbolicName()).thenReturn("org.camunda.test");
 		ArrayList<URL> urls = new ArrayList<URL>();
 		urls.add(new URL("file:///"));
@@ -72,21 +73,23 @@ public class ExtenderTest {
 		return bundleEvent;
 	}
 
-	@Test
+	@SuppressWarnings("unchecked")
+  @Test
 	public void addingService() {
 		BundleContext bundleContext = mock(BundleContext.class);
-		ServiceReference serviceRef = mock(ServiceReference.class);
-		Object object = new Object();
-		when(bundleContext.getService(serviceRef)).thenReturn(object);
-		Object service = new Extender(bundleContext).addingService(serviceRef);
-		assertThat(service, is(object));
+		ServiceReference<ProcessEngine> serviceRef = mock(ServiceReference.class);
+		ProcessEngine engine = mock(ProcessEngine.class);
+		when(bundleContext.getService(serviceRef)).thenReturn(engine);
+		ProcessEngine service = new Extender(bundleContext).addingService(serviceRef);
+		assertThat(service, is(engine));
 	}
 
-	@Test
+	@SuppressWarnings("unchecked")
+  @Test
 	public void removedService() {
 		BundleContext bundleContext = mock(BundleContext.class);
-		ServiceReference serviceRef = mock(ServiceReference.class);
-		new Extender(bundleContext).removedService(serviceRef, new Object());
+		ServiceReference<ProcessEngine> serviceRef = mock(ServiceReference.class);
+		new Extender(bundleContext).removedService(serviceRef, mock(ProcessEngine.class));
 		verify(bundleContext).ungetService(eq(serviceRef));
 	}
 }

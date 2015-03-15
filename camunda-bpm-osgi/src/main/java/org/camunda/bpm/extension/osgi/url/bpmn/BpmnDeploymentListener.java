@@ -12,18 +12,19 @@
  */
 package org.camunda.bpm.extension.osgi.url.bpmn;
 
+import java.io.File;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.felix.fileinstall.ArtifactUrlTransformer;
 import org.w3c.dom.Document;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A fileinstall deployer transforming a BPMN xml definition file into
@@ -37,6 +38,7 @@ public class BpmnDeploymentListener implements ArtifactUrlTransformer {
 
     private DocumentBuilderFactory dbf;
 
+    @Override
     public boolean canHandle(File artifact) {
         try {
             String artifactName = artifact.getName();
@@ -54,6 +56,7 @@ public class BpmnDeploymentListener implements ArtifactUrlTransformer {
         return false;
     }
 
+    @Override
     public URL transform(URL artifact) {
         try {
             return new URL("bpmn", null, artifact.toString());
@@ -70,10 +73,13 @@ public class BpmnDeploymentListener implements ArtifactUrlTransformer {
         }
         DocumentBuilder db = dbf.newDocumentBuilder();
         db.setErrorHandler(new ErrorHandler() {
+            @Override
             public void warning(SAXParseException exception) throws SAXException {
             }
+            @Override
             public void error(SAXParseException exception) throws SAXException {
             }
+            @Override
             public void fatalError(SAXParseException exception) throws SAXException {
                 throw exception;
             }

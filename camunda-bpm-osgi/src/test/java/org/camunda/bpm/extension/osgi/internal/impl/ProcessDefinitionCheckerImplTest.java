@@ -12,11 +12,10 @@ import static org.mockito.Mockito.when;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 
 import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
-import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionCheckerImpl;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.osgi.framework.Bundle;
@@ -30,7 +29,7 @@ public class ProcessDefinitionCheckerImplTest {
 				deployer);
 		Bundle bundle = mock(Bundle.class);
 		when(bundle.getEntry(anyString())).thenReturn(null);
-		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getHeaders()).thenReturn(new Hashtable<String, String>());
 		checker.checkBundle(bundle);
 	}
 
@@ -43,7 +42,7 @@ public class ProcessDefinitionCheckerImplTest {
 		Bundle bundle = mock(Bundle.class);
 		URL url = new URL("file://foo.bpmn");
 		when(bundle.findEntries(anyString(), anyString(), anyBoolean())).thenReturn(Collections.enumeration(Collections.singletonList(url)));
-		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getHeaders()).thenReturn(new Hashtable<String, String>());
 		when(bundle.getSymbolicName()).thenReturn("org.bundle");
 		checker.checkBundle(bundle);
 		@SuppressWarnings("rawtypes")

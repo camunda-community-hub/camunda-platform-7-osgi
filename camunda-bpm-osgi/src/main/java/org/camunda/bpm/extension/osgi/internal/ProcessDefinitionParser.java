@@ -41,7 +41,7 @@ public final class ProcessDefinitionParser {
 	public static List<URL> scanForProcesses(Bundle bundle) {
 		LOGGER.log(Level.FINE, "Scanning bundle {} for process",
 				bundle.getSymbolicName());
-		String processDefHeader = (String) bundle.getHeaders().get(
+		String processDefHeader = bundle.getHeaders().get(
 				BUNDLE_PROCESS_DEFINITIONS_HEADER);
 		if (processDefHeader == null) {
 			processDefHeader = BUNDLE_PROCESS_DEFINTIONS_DEFAULT;
