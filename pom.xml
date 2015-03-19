@@ -30,7 +30,7 @@
 
     <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
 
-    <osgi.version>4.3.0</osgi.version>
+    <osgi.version>4.3.1</osgi.version>
     <osgi-enterprise.version>4.2.0</osgi-enterprise.version>
     <karaf.version>3.0.3</karaf.version>
 
