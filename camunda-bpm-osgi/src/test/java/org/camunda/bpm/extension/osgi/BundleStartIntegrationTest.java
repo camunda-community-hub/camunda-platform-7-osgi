@@ -2,21 +2,16 @@ package org.camunda.bpm.extension.osgi;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
-import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerMethod;
-import org.ops4j.pax.exam.util.Filter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.service.url.URLStreamHandlerService;
 
 /**
  * Integration test to check that the camunda-engine and camunda-engine-osgi
@@ -28,11 +23,8 @@ import org.osgi.service.url.URLStreamHandlerService;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class BundleStartWithoutFileinstallTest extends OSGiTestCase {
+public class BundleStartIntegrationTest extends OSGiTestCase {
 
-  @Inject
-  @Filter("(url.handler.protocol=bpmn)")
-  private URLStreamHandlerService bpmnUrlHandler;
 
   @Test
   public void bundleStarted() {
@@ -44,12 +36,6 @@ public class BundleStartWithoutFileinstallTest extends OSGiTestCase {
     } catch (BundleException be) {
       fail(be.toString());
     }
-  }
-
-  @Test
-  public void checkServices() {
-    assertThat(bpmnUrlHandler, is(notNullValue()));
-    assertThat(bpmnUrlHandler.getClass().getName(), is("org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler"));
   }
 
 }

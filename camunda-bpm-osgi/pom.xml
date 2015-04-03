@@ -17,7 +17,6 @@
     </camunda.osgi.activator>
     <camunda.osgi.import.pkg>
       org.camunda.bpm.engine.*;${camunda.osgi.import.camunda.engine.version},
-      org.apache.felix.fileinstall*;resolution:=optional,
       org.osgi.service.cm*;resolution:=optional,
       *
     </camunda.osgi.import.pkg>
@@ -55,12 +54,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.fileinstall</artifactId>
-      <version>3.0.2</version>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>

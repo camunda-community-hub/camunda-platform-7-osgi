@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.url.bpmn;
+package org.camunda.bpm.extension.osgi.fileinstall.impl;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
+import org.camunda.bpm.extension.osgi.fileinstall.impl.BpmnDeploymentListener;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;

@@ -101,10 +101,6 @@ For the process definition to be found, you'll have to do one of the following t
 
 If you reference any `JavaDelegate`s or `ActivityBehavior`s from within your process defniition please take a look at Part 4
 
-#### BPMN-XML file
-
-If your OSGi runtime supports Apache Felix Fileinstall you can drop a single process definition in the directory watched by Fileinstall. It will be parsed and automatically transformed into an OSGi bundle.
-
 #### ProcessApplication API
 
 Like mentioned in the [User Guide](http://docs.camunda.org/latest/guides/user-guide/#process-applications) you can deploy the processes using the processes.xml. Alternatively you can do it manually inside your OSGiProcessApplication class in the createDeployment() method.

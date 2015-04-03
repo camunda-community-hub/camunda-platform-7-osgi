@@ -19,22 +19,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.felix.fileinstall.ArtifactListener;
-import org.apache.felix.fileinstall.ArtifactUrlTransformer;
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.container.RuntimeContainerDelegate;
 import org.camunda.bpm.extension.osgi.application.ProcessApplicationDeployer;
 import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.configadmin.impl.ManagedProcessEngineFactoryImpl;
 import org.camunda.bpm.extension.osgi.container.OSGiRuntimeContainerDelegate;
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnDeploymentListener;
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnURLHandler;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedServiceFactory;
-import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -56,8 +51,6 @@ public class Activator implements BundleActivator {
 
     RuntimeContainerDelegate.INSTANCE.set(new OSGiRuntimeContainerDelegate(context));
 
-    callbacks.add(new Service(context, URLStreamHandlerService.class, new BpmnURLHandler(), props("url.handler.protocol", "bpmn")));
-    registerBpmnDeploymentListener(context);
     registerManagedProcessEngineFactory(context);
     callbacks.add(new Tracker(new Extender(context)));
 
@@ -73,14 +66,6 @@ public class Activator implements BundleActivator {
     }
   }
 
-  private static Dictionary<String, String> props(String... args) {
-    Dictionary<String, String> props = new Hashtable<String, String>();
-    for (int i = 0; i < args.length / 2; i++) {
-      props.put(args[2 * i], args[2 * i + 1]);
-    }
-    return props;
-  }
-
   private void registerManagedProcessEngineFactory(BundleContext context) {
     try {
       Dictionary<String, String> props = new Hashtable<String, String>(1);
@@ -91,24 +76,11 @@ public class Activator implements BundleActivator {
     }
   }
 
-  private void registerBpmnDeploymentListener(BundleContext context) {
-    try {
-      callbacks.add(new Service(context, new String[] { ArtifactUrlTransformer.class.getName(), ArtifactListener.class.getName() },
-          new BpmnDeploymentListener(), null));
-    } catch (NoClassDefFoundError e) {
-      LOGGER.log(Level.WARNING, "FileInstall package is not available, disabling fileinstall support");
-    }
-  }
-
   private static class Service implements Runnable {
 
     private final ServiceRegistration<?> registration;
 
     public <T> Service(BundleContext context, Class<T> clazz, T service, Dictionary<String, String> props) {
-      this.registration = context.registerService(clazz, service, props);
-    }
-
-    public Service(BundleContext context, String[] clazz, Object service, Dictionary<String, String> props) {
       this.registration = context.registerService(clazz, service, props);
     }
 

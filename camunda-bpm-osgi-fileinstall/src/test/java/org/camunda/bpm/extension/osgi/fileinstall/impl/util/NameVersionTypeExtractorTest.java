@@ -1,10 +1,9 @@
-package org.camunda.bpm.extension.osgi.util;
+package org.camunda.bpm.extension.osgi.fileinstall.impl.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsArrayContainingInOrder.arrayContaining;
 import static org.junit.Assert.assertThat;
 
-import org.camunda.bpm.extension.osgi.util.NameVersionTypeExtractor;
 import org.junit.Test;
 
 /**

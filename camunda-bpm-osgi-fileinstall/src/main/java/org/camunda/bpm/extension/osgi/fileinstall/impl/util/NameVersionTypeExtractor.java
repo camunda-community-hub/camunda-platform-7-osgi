@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.util;
+package org.camunda.bpm.extension.osgi.fileinstall.impl.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.url.bpmn;
+package org.camunda.bpm.extension.osgi.fileinstall.impl;
 
 import org.osgi.service.url.AbstractURLStreamHandlerService;
 

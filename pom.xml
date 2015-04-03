@@ -20,6 +20,7 @@
     <module>camunda-bpm-karaf-commands</module>
     <module>camunda-bpm-karaf-feature</module>
     <module>camunda-bpm-karaf-assembly</module>
+    <module>camunda-bpm-osgi-fileinstall</module>
   </modules>
 
   <properties>
@@ -38,6 +39,7 @@
     <paxexam.version>3.6.0</paxexam.version>
     <logback.version>0.9.20</logback.version>
     <mockito.version>1.9.5</mockito.version>
+    <dependency-manager.version>3.2.0</dependency-manager.version>
     <!-- bundle properties -->
     <camunda.osgi.import.camunda.engine.version>
       version="[$(version;==;${camunda.bpm.version.clean}),$(version;=+;${camunda.bpm.version.clean}))"
@@ -150,6 +152,12 @@
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>
         <version>1.3.168</version>
+      </dependency>
+      
+      <dependency>
+      	<groupId>org.apache.felix</groupId>
+      	<artifactId>org.apache.felix.dependencymanager</artifactId>
+      	<version>${dependency-manager.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.url.bpmn;
+package org.camunda.bpm.extension.osgi.fileinstall.impl;
 
 import static org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINITIONS_HEADER;
 import static org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT;
@@ -34,7 +34,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.camunda.bpm.extension.osgi.util.NameVersionTypeExtractor;
+import org.camunda.bpm.extension.osgi.fileinstall.impl.util.NameVersionTypeExtractor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

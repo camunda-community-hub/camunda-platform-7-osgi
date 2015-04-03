@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.url.bpmn;
+package org.camunda.bpm.extension.osgi.fileinstall.impl;
 
 import static org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINITIONS_HEADER;
 import static org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT;
@@ -13,7 +13,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
-import org.camunda.bpm.extension.osgi.url.bpmn.BpmnTransformer;
+import org.camunda.bpm.extension.osgi.fileinstall.impl.BpmnTransformer;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.Constants;
