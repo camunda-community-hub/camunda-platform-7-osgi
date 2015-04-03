@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +27,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 			.getLogger(ProcessDefinitionDeployerImpl.class.getName());
 
 	private ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker;
-	private long timeout = 5000;
+	private long timeout = TimeUnit.MILLISECONDS.convert(20L, TimeUnit.SECONDS);
 
 	public ProcessDefinitionDeployerImpl(ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker) {
 		this.engineServiceTracker = engineServiceTracker;
