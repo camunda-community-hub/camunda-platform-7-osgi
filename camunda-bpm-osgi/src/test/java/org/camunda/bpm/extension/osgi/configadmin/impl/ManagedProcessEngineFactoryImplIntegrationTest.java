@@ -35,7 +35,7 @@ import org.osgi.service.cm.ManagedServiceFactory;
 @ExamReactorStrategy(PerMethod.class)
 public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase {
   @Inject
-  @Filter("(service.pid=" + ManagedProcessEngineFactory.SERVICE_PID + ")")
+  @Filter(value="(service.pid=" + ManagedProcessEngineFactory.SERVICE_PID + ")", timeout=20000L)
   private ManagedServiceFactory serviceFactory;
   @Inject
   private BundleContext ctx;
@@ -58,7 +58,7 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     assertThat(serviceFactory, is(notNullValue()));
   }
 
-  @Test(timeout = 20000L)
+  @Test(timeout = 30000L)
   public void createProcessEngine() throws IOException, InterruptedException {
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
@@ -69,14 +69,15 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     config.update(props);
     ServiceReference reference = null;
     do {
+      Thread.sleep(500L);
       reference = ctx.getServiceReference(ProcessEngine.class.getName());
     } while (reference == null);
     ProcessEngine engine = (ProcessEngine) ctx.getService(reference);
     assertThat(engine, is(notNullValue()));
     assertThat(engine.getName(), is("TestEngine"));
   }
-  
-  @Test(timeout = 20000L)
+
+  @Test(timeout = 40000L)
   public void shutdownProcessEngine() throws IOException, InterruptedException {
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("databaseSchemaUpdate", ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP);
@@ -86,11 +87,12 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
     org.osgi.service.cm.Configuration config = configAdmin.createFactoryConfiguration(ManagedProcessEngineFactory.SERVICE_PID, null);
     config.update(props);
     //give the engine some time to be created
-    Thread.sleep(11000L);
+    Thread.sleep(10000L);
     config.delete();
     Thread.sleep(5000L);
     ServiceReference reference = null;
     do {
+      Thread.sleep(500L);
       reference = ctx.getServiceReference(ProcessEngine.class.getName());
     } while (reference != null);
   }
