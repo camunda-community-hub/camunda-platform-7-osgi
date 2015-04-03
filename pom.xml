@@ -21,6 +21,7 @@
     <module>camunda-bpm-karaf-feature</module>
     <module>camunda-bpm-karaf-assembly</module>
     <module>camunda-bpm-osgi-fileinstall</module>
+    <module>camunda-bpm-osgi-configadmin</module>
   </modules>
 
   <properties>

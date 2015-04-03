@@ -16,7 +16,6 @@ import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
@@ -26,11 +25,7 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
 
   private Map<String, ProcessEngine> existingEngines = new ConcurrentHashMap<String, ProcessEngine>();
   private Map<String, ServiceRegistration> existingRegisteredEngines = new ConcurrentHashMap<String, ServiceRegistration>();
-  private BundleContext ctx;
-
-  public ManagedProcessEngineFactoryImpl(BundleContext bundleContext) {
-    this.ctx = bundleContext;
-  }
+  private volatile Bundle bundle;
 
   @Override
   public String getName() {
@@ -64,7 +59,7 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
     existingEngines.put(pid, engine);
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("process-engine-name", engine.getName());
-    ServiceRegistration serviceRegistration = ctx.registerService(ProcessEngine.class.getName(), engine, props);
+    ServiceRegistration serviceRegistration = this.bundle.getBundleContext().registerService(ProcessEngine.class.getName(), engine, props);
     existingRegisteredEngines.put(pid, serviceRegistration);
   }
 

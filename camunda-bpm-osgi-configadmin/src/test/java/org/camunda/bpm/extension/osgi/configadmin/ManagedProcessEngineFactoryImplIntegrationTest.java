@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.configadmin.impl;
+package org.camunda.bpm.extension.osgi.configadmin;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -14,11 +14,10 @@ import javax.inject.Inject;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.extension.osgi.OSGiTestCase;
-import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -33,7 +32,10 @@ import org.osgi.service.cm.ManagedServiceFactory;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase {
+public class ManagedProcessEngineFactoryImplIntegrationTest {
+  
+  public static final String CAMUNDA_VERSION = "7.2.0";
+  
   @Inject
   @Filter("(service.pid=" + ManagedProcessEngineFactory.SERVICE_PID + ")")
   private ManagedServiceFactory serviceFactory;
@@ -42,16 +44,29 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestCase
   @Inject
   private ConfigurationAdmin configAdmin;
 
-  @Override
   @Configuration
   public Option[] createConfiguration() {
-    Option[] parentConfig = super.createConfiguration();
+    Option[] camundaBundles = options(
+
+        mavenBundle("org.camunda.bpm", "camunda-engine").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.model", "camunda-bpmn-model").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.model", "camunda-cmmn-model").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.model", "camunda-xml-model").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi").versionAsInProject(),
+        
+        mavenBundle("joda-time", "joda-time").versionAsInProject(),
+        mavenBundle("com.h2database", "h2").versionAsInProject(),
+        mavenBundle("org.mybatis", "mybatis").versionAsInProject(),
+        mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
+        
+        mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(),
+        
+        bundle("reference:file:target/classes"));
+
     Option[] compendiumBundles = options(mavenBundle().groupId("commons-beanutils").artifactId("commons-beanutils").version("1.9.1"),
         mavenBundle().groupId("commons-collections").artifactId("commons-collections").version("3.2.1"),
-        mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin").version("1.8.0"),
-        // make sure compiled classes from src/main are included
-        bundle("reference:file:target/classes"));
-    return OptionUtils.combine(compendiumBundles, parentConfig);
+        mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin").version("1.8.0"));
+    return OptionUtils.combine(OptionUtils.combine(compendiumBundles, camundaBundles),CoreOptions.junitBundles());
   }
 
   @Test
