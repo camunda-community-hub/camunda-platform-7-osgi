@@ -16,3 +16,14 @@ Also, you can add a version to the file name. For example the following schemes 
 | process-2-RC1.bpmn     | process             | 2.0.0.RC1 |
 | process-1.4.5.RC2.bpmn | process             | 1.4.5.RC2 |
 
+Alternatively, you can include a ``<manifest>`` tag with the appropriate values in the BPMN file, e.g.:
+```
+  <manifest>
+  	Manifest-Version: 2
+  	Bundle-ManifestVersion: 2
+  	Bundle-SymbolicName: org.camunda.test.processWithManifest
+  	Bundle-Version: 1.2.3
+  	Process-Definitions: OSGI-INF/my-processes/
+  </manifest>
+```
+Please note that the values have to be valid [Manifest headers](http://wiki.osgi.org/wiki/Category:Manifest_Header).
