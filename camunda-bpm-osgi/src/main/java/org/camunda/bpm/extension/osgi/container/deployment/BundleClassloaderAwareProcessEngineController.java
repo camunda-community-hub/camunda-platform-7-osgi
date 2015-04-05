@@ -12,7 +12,7 @@
  */
 package org.camunda.bpm.extension.osgi.container.deployment;
 
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessEngineController;
 import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
@@ -32,7 +32,7 @@ public class BundleClassloaderAwareProcessEngineController extends JmxManagedPro
 
   protected ProcessEngineFactory processEngineFactory;
   protected BundleContext context;
-  protected ServiceRegistration registration;
+  protected ServiceRegistration<ProcessEngine> registration;
 
   public BundleClassloaderAwareProcessEngineController(ProcessEngineConfiguration processEngineConfiguration, BundleContext context) {
     super(processEngineConfiguration);
@@ -40,6 +40,7 @@ public class BundleClassloaderAwareProcessEngineController extends JmxManagedPro
     this.processEngineFactory = new ProcessEngineFactory();
   }
 
+  @Override
   public void start(PlatformServiceContainer contanier) {
 
     processEngineFactory.setProcessEngineConfiguration(processEngineConfiguration);
@@ -48,10 +49,11 @@ public class BundleClassloaderAwareProcessEngineController extends JmxManagedPro
 
     processEngine = processEngineFactory.getObject();
 
-    registration = context.registerService(ProcessEngine.class.getName(), processEngine, new Properties());
+    registration = context.registerService(ProcessEngine.class, processEngine, new Hashtable<String, String>());
 
   }
 
+  @Override
   public void stop(PlatformServiceContainer container) {
     registration.unregister();
     processEngineFactory.destroy();

@@ -15,10 +15,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 
-import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionParser;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 
@@ -27,7 +26,7 @@ public class ProcessDefinitionParserTest {
 	@Test
 	public void parseDirectoryPathFromHeader() throws MalformedURLException {
 		Bundle bundle = mock(Bundle.class);
-		Properties properties = new Properties();
+		Hashtable<String, String> properties = new Hashtable<String, String>();
 		String path = "/foo/bar/";
 		properties.put(BUNDLE_PROCESS_DEFINITIONS_HEADER, path);
 		when(bundle.getHeaders()).thenReturn(properties);
@@ -44,7 +43,7 @@ public class ProcessDefinitionParserTest {
 	@Test
 	public void parseFilePathFromHeader() throws MalformedURLException {
 		Bundle bundle = mock(Bundle.class);
-		Properties properties = new Properties();
+		Hashtable<String, String> properties = new Hashtable<String, String>();
 		String path = "/foo/bar/file.bpmn";
 		properties.put(BUNDLE_PROCESS_DEFINITIONS_HEADER, path);
 		when(bundle.getHeaders()).thenReturn(properties);
@@ -59,7 +58,7 @@ public class ProcessDefinitionParserTest {
 	@Test
 	public void parseWildcardFilePathFromHeader() throws MalformedURLException {
 		Bundle bundle = mock(Bundle.class);
-		Properties properties = new Properties();
+		Hashtable<String, String> properties = new Hashtable<String, String>();
 		String path = "/foo/bar/";
 		String filePattern = "fi*.bpmn";
 		properties.put(BUNDLE_PROCESS_DEFINITIONS_HEADER, path + filePattern);
@@ -76,7 +75,7 @@ public class ProcessDefinitionParserTest {
 	@Test
 	public void parseDirectFilePathFromHeader() throws MalformedURLException {
 		Bundle bundle = mock(Bundle.class);
-		Properties properties = new Properties();
+		Hashtable<String, String> properties = new Hashtable<String, String>();
 		String path = "process.bpmn";
 		properties.put(BUNDLE_PROCESS_DEFINITIONS_HEADER, path);
 		when(bundle.getHeaders()).thenReturn(properties);
@@ -91,7 +90,7 @@ public class ProcessDefinitionParserTest {
 	public void parseFilePathFromDefaultLocation() throws MalformedURLException {
 		Bundle bundle = mock(Bundle.class);
 		String path = "process.bpmn";
-		when(bundle.getHeaders()).thenReturn(new Properties());
+		when(bundle.getHeaders()).thenReturn(new Hashtable<String, String>());
 		URL url = new URL("file://" + path);
 		when(
 				bundle.findEntries(eq(BUNDLE_PROCESS_DEFINTIONS_DEFAULT),

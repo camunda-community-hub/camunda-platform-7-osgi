@@ -16,6 +16,9 @@ public class JustAnotherJavaDelegate implements JavaDelegate {
 		called = true;
 	}
 	 
+  /**
+   * @param string  
+   */
   public void toggleCalledWithParam(String string){
     called = true;
   }

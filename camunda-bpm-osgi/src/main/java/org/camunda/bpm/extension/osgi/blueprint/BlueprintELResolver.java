@@ -19,7 +19,8 @@ public class BlueprintELResolver extends ELResolver {
 			.getLogger(BlueprintELResolver.class.getName());
 	private Map<String, JavaDelegate> delegateMap = new HashMap<String, JavaDelegate>();
 
-	public Object getValue(ELContext context, Object base, Object property) {
+	@Override
+  public Object getValue(ELContext context, Object base, Object property) {
 		if (base == null) {
 			// according to javadoc, can only be a String
 			String key = (String) property;
@@ -39,6 +40,9 @@ public class BlueprintELResolver extends ELResolver {
 		LOGGER.info("added service to delegate cache " + name);
 	}
 
+	/**
+   * @param delegate the delegate, necessary parameter because of Blueprint 
+   */
 	public void unbindService(JavaDelegate delegate, Map<?, ?> props) {
 		String name = (String) props.get("osgi.service.blueprint.compname");
 		if (delegateMap.containsKey(name)) {
@@ -47,24 +51,29 @@ public class BlueprintELResolver extends ELResolver {
 		LOGGER.info("removed service from delegate cache " + name);
 	}
 
-	public boolean isReadOnly(ELContext context, Object base, Object property) {
+	@Override
+  public boolean isReadOnly(ELContext context, Object base, Object property) {
 		return true;
 	}
 
-	public void setValue(ELContext context, Object base, Object property,
+	@Override
+  public void setValue(ELContext context, Object base, Object property,
 			Object value) {
 	}
 
-	public Class<?> getCommonPropertyType(ELContext context, Object arg) {
+	@Override
+  public Class<?> getCommonPropertyType(ELContext context, Object arg) {
 		return Object.class;
 	}
 
-	public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
+	@Override
+  public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context,
 			Object arg) {
 		return null;
 	}
 
-	public Class<?> getType(ELContext context, Object arg1, Object arg2) {
+	@Override
+  public Class<?> getType(ELContext context, Object arg1, Object arg2) {
 		return Object.class;
 	}
 }

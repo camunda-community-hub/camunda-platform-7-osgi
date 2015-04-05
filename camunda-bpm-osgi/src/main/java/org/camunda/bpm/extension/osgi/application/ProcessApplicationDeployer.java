@@ -28,9 +28,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author Ronny Bräunlich
  *
  */
-public class ProcessApplicationDeployer implements ServiceTrackerCustomizer {
+public class ProcessApplicationDeployer implements ServiceTrackerCustomizer<ProcessApplicationInterface, ProcessApplicationInterface> {
 
-  public Object addingService(ServiceReference reference) {
+  @Override
+  public ProcessApplicationInterface addingService(ServiceReference<ProcessApplicationInterface> reference) {
 
     Bundle bundle = reference.getBundle();
     BundleContext bundleContext = bundle.getBundleContext();
@@ -38,38 +39,30 @@ public class ProcessApplicationDeployer implements ServiceTrackerCustomizer {
     ClassLoader previous = Thread.currentThread().getContextClassLoader();
 
     try {
-        ClassLoader cl = new BundleDelegatingClassLoader(bundle);
+      ClassLoader cl = new BundleDelegatingClassLoader(bundle);
 
-        Thread.currentThread().setContextClassLoader(new ClassLoaderWrapper(
-                cl,
-                ProcessEngineFactory.class.getClassLoader(),
-                ProcessEngineConfiguration.class.getClassLoader(),
-                previous
-        ));
+      Thread.currentThread().setContextClassLoader(
+          new ClassLoaderWrapper(cl, ProcessEngineFactory.class.getClassLoader(), ProcessEngineConfiguration.class.getClassLoader(), previous));
 
-        ProcessApplicationInterface app = (ProcessApplicationInterface) bundleContext.getService(reference);
-        
-        app.deploy();
-        return app;
+      ProcessApplicationInterface app = bundleContext.getService(reference);
 
+      app.deploy();
+      return app;
 
     } finally {
-        Thread.currentThread().setContextClassLoader(previous);
+      Thread.currentThread().setContextClassLoader(previous);
     }
 
   }
 
-  public void modifiedService(ServiceReference reference, Object service) {
+  @Override
+  public void modifiedService(ServiceReference<ProcessApplicationInterface> reference, ProcessApplicationInterface service) {
 
   }
 
-  public void removedService(ServiceReference reference, Object service) {
-    ProcessApplicationInterface app = (ProcessApplicationInterface) service;
-
-    app.undeploy();
-
+  @Override
+  public void removedService(ServiceReference<ProcessApplicationInterface> reference, ProcessApplicationInterface service) {
+    service.undeploy();
   }
-
-
 
 }

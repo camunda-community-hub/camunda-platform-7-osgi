@@ -23,8 +23,6 @@ public class VariableList extends OsgiCommandSupport {
       description = "Id of the process definition",
       multiValued = false)
 
-  private String instanceId;
-
   private final ProcessEngine engine;
 
   public VariableList(ProcessEngine engine) {
@@ -47,8 +45,8 @@ public class VariableList extends OsgiCommandSupport {
         data[i++] = new String[]{
             variable.getId(),
             variable.getProcessInstanceId(),
-            variable.getVariableName(),
-            variable.getVariableTypeName(),
+            variable.getName(),
+            variable.getTypeName(),
             value
         };
       }

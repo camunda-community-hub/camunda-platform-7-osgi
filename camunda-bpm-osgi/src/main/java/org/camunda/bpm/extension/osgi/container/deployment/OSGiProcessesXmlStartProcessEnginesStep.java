@@ -31,6 +31,7 @@ public class OSGiProcessesXmlStartProcessEnginesStep extends ProcessesXmlStartPr
     this.context = context;
   }
 
+  @Override
   protected StartProcessEngineStep createStartProcessEngineStep(ProcessEngineXml processEngineXml) {
     return new OSGiStartProcessEngineStep(processEngineXml, context);
   }

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
 import org.camunda.bpm.engine.ProcessEngine;
@@ -21,21 +21,23 @@ import org.osgi.framework.ServiceRegistration;
 
 public class BundleClassloaderAwareProcessEngineControllerTest {
 
+  @SuppressWarnings("unchecked")
   @Test
   public void start(){
     BundleContext context = mock(BundleContext.class);
     when(context.getBundle()).thenReturn(mock(Bundle.class));
     BundleClassloaderAwareProcessEngineController controller = new TestBundleClassloaderAwareProcessEngineController(new StandaloneInMemProcessEngineConfiguration(), context);
     controller.start(mock(PlatformServiceContainer.class));
-    verify(context, atLeastOnce()).registerService(eq(ProcessEngine.class.getName()), any(ProcessEngine.class), any(Dictionary.class));
+    verify(context, atLeastOnce()).registerService(eq(ProcessEngine.class), any(ProcessEngine.class), any(Hashtable.class));
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void stop(){
     BundleContext context = mock(BundleContext.class);
     when(context.getBundle()).thenReturn(mock(Bundle.class));
     TestBundleClassloaderAwareProcessEngineController controller = new TestBundleClassloaderAwareProcessEngineController(new StandaloneInMemProcessEngineConfiguration(), context);
-    ServiceRegistration reg = mock(ServiceRegistration.class);
+    ServiceRegistration<ProcessEngine> reg = mock(ServiceRegistration.class);
     controller.setRegistration(reg);
     controller.stop(null);
     verify(reg, atLeastOnce()).unregister();
@@ -50,7 +52,7 @@ public class BundleClassloaderAwareProcessEngineControllerTest {
       when(processEngineFactory.getObject()).thenReturn(mock(ProcessEngine.class));
     }
     
-    void setRegistration(ServiceRegistration reg){
+    void setRegistration(ServiceRegistration<ProcessEngine> reg){
       this.registration = reg;
     }
     

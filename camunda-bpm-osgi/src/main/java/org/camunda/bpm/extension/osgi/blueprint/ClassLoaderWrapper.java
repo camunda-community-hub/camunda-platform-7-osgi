@@ -25,6 +25,7 @@ public class ClassLoaderWrapper extends ClassLoader {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //
         // Check if class is in the loaded classes cache
@@ -59,6 +60,7 @@ public class ClassLoaderWrapper extends ClassLoader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public URL getResource(String name) {
         //
         // Check parent class loaders
@@ -77,6 +79,7 @@ public class ClassLoaderWrapper extends ClassLoader {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Enumeration<URL> findResources(String name) throws IOException {
         List<URL> resources = new ArrayList<URL>();
 

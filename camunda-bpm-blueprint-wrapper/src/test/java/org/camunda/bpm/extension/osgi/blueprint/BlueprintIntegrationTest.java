@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -139,8 +139,8 @@ public class BlueprintIntegrationTest {
 
   @Test(timeout = 35000L)
   public void exportJavaDelegate() throws InterruptedException {
-    Properties properties = new Properties();
-    properties.setProperty("osgi.service.blueprint.compname", "testDelegate");
+    Hashtable<String, String> properties = new Hashtable<String, String>();
+    properties.put("osgi.service.blueprint.compname", "testDelegate");
     ctx.registerService(JavaDelegate.class.getName(), new TestDelegate(), properties);
     // wait a little bit
     ProcessDefinition definition = null;

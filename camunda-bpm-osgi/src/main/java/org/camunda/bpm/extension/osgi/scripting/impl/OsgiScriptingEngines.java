@@ -12,6 +12,7 @@
  */
 package org.camunda.bpm.extension.osgi.scripting.impl;
 
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.script.Bindings;
@@ -75,19 +76,18 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 
 	ScriptEngine resolveScriptEngine(String scriptEngineName)
 			throws InvalidSyntaxException {
-		ServiceReference[] refs = getBundleContext().getServiceReferences(
-				ScriptEngineResolver.class.getName(), null);
+		Collection<ServiceReference<ScriptEngineResolver>> refs = getBundleContext().getServiceReferences(
+				ScriptEngineResolver.class, null);
 		if (refs == null) {
 			LOGGER.info("No OSGi script engine resolvers available!");
 			return null;
 		}
 
-		LOGGER.fine("Found " + refs.length
+		LOGGER.fine("Found " + refs.size()
 				+ " OSGi ScriptEngineResolver services");
 
-		for (ServiceReference ref : refs) {
-			ScriptEngineResolver resolver = (ScriptEngineResolver) getBundleContext()
-					.getService(ref);
+		for (ServiceReference<ScriptEngineResolver> ref : refs) {
+      ScriptEngineResolver resolver = getBundleContext().getService(ref);
 			ScriptEngine engine = resolver
 					.resolveScriptEngine(scriptEngineName);
 			getBundleContext().ungetService(ref);

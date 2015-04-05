@@ -24,7 +24,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
  * 
  */
 public class ScriptEngineBundleTrackerCustomizer implements
-		BundleTrackerCustomizer {
+		BundleTrackerCustomizer<Bundle> {
 
 	private static final String META_INF_SERVICES_DIR = "META-INF/services";
 	private static final String SCRIPT_ENGINE_SERVICE_FILE = "javax.script.ScriptEngineFactory";
@@ -38,7 +38,7 @@ public class ScriptEngineBundleTrackerCustomizer implements
 	}
 
 	@Override
-	public Object addingBundle(Bundle bundle, BundleEvent event) {
+	public Bundle addingBundle(Bundle bundle, BundleEvent event) {
 		if (event == null) {
 			// existing bundles first added to the tracker with no event change
 			checkInitialBundle(bundle);
@@ -56,7 +56,7 @@ public class ScriptEngineBundleTrackerCustomizer implements
 	}
 
 	@Override
-	public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+	public void modifiedBundle(Bundle bundle, BundleEvent event, Bundle object) {
 		if (event == null) {
 			// cannot think of why we would be interested in a modified bundle
 			// with no bundle event
@@ -68,7 +68,7 @@ public class ScriptEngineBundleTrackerCustomizer implements
 	// don't think we would be interested in removedBundle, as that is
 	// called when bundle is removed from the tracker
 	@Override
-	public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+	public void removedBundle(Bundle bundle, BundleEvent event, Bundle object) {
 		List<BundleScriptEngineResolver> r = resolvers.remove(bundle
 				.getBundleId());
 		if (r != null) {
@@ -109,19 +109,17 @@ public class ScriptEngineBundleTrackerCustomizer implements
 
 	protected void registerScriptEngines(Bundle bundle,
 			List<BundleScriptEngineResolver> resolvers) {
-		@SuppressWarnings("unchecked")
 		Enumeration<URL> scriptEnginesUrls = bundle.findEntries(
 				META_INF_SERVICES_DIR, SCRIPT_ENGINE_SERVICE_FILE, false);
 		if (scriptEnginesUrls == null) {
 			return;
-		} else {
-			for (URL configURL : Collections.list(scriptEnginesUrls)) {
-				LOGGER.info("Found ScriptEngineFactory in "
-						+ bundle.getSymbolicName());
-				resolvers
-						.add(new BundleScriptEngineResolver(bundle, configURL));
-			}
 		}
+    for (URL configURL : Collections.list(scriptEnginesUrls)) {
+    	LOGGER.info("Found ScriptEngineFactory in "
+    			+ bundle.getSymbolicName());
+    	resolvers
+    			.add(new BundleScriptEngineResolver(bundle, configURL));
+    }
 	}
 
 	public Map<Long, List<BundleScriptEngineResolver>> getResolvers() {

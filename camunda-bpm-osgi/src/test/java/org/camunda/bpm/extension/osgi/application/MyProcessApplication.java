@@ -4,7 +4,6 @@ import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.extension.osgi.application.OSGiProcessApplication;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.osgi.framework.BundleContext;
@@ -18,10 +17,14 @@ public class MyProcessApplication extends OSGiProcessApplication {
     super(ctx.getBundle(), blueprintContainer);
   }
 
+  /**
+   * @param processEngine  
+   */
   @PostDeploy
   public void sayHello(ProcessEngine processEngine) {
   }
 
+  @Override
   public void createDeployment(String processArchiveName, DeploymentBuilder deploymentBuilder) {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("foo")
       .startEvent()

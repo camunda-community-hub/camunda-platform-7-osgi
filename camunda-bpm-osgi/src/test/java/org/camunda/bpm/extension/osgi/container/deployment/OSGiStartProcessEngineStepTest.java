@@ -20,7 +20,7 @@ public class OSGiStartProcessEngineStepTest {
     assertThat(controller, is(instanceOf(BundleClassloaderAwareProcessEngineController.class)));
   }
   
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Test
   public void loadClassWithCustomClassloader() throws ClassNotFoundException{
     OSGiStartProcessEngineStep step = new OSGiStartProcessEngineStep(mock(ProcessEngineXml.class), mock(BundleContext.class));

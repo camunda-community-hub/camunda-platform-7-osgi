@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -25,25 +25,21 @@ import org.ops4j.pax.exam.spi.reactors.PerMethod;
  */
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerMethod.class)
-public class OSGiELResolverLdapMethodCallIntegrationTest extends
-		AbstractOSGiELResolverIntegrationTest {
+public class OSGiELResolverLdapMethodCallIntegrationTest extends AbstractOSGiELResolverIntegrationTest {
 
-	@Override
-	protected File getProcessDefinition() {
-		return new File(
-				"src/test/resources/org/camunda/bpm/extension/osgi/el/ldapmethodcalltestprocess.bpmn");
-	}
+  @Override
+  protected File getProcessDefinition() {
+    return new File("src/test/resources/org/camunda/bpm/extension/osgi/el/ldapmethodcalltestprocess.bpmn");
+  }
 
-	@Test
-	public void runProcess() throws Exception {
-		Properties properties = new Properties();
-		properties.setProperty("processExpression", "thisIsAReallyNeatFeature");
-		JustAnotherJavaDelegate service = new JustAnotherJavaDelegate();
-		ctx.registerService(JavaDelegate.class.getName(), service, properties);
-		ProcessInstance processInstance = processEngine.getRuntimeService()
-				.startProcessInstanceByKey("ldap");
-		assertThat(service.called, is(true));
-		assertThat(processInstance.isEnded(), is(true));
-	}
-
+  @Test
+  public void runProcess() throws Exception {
+    Hashtable<String, String> properties = new Hashtable<String, String>();
+    properties.put("processExpression", "thisIsAReallyNeatFeature");
+    JustAnotherJavaDelegate service = new JustAnotherJavaDelegate();
+    ctx.registerService(JavaDelegate.class, service, properties);
+    ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey("ldap");
+    assertThat(service.called, is(true));
+    assertThat(processInstance.isEnded(), is(true));
+  }
 }

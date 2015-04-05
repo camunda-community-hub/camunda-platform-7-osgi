@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,10 +26,10 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionDeployerImpl.class.getName());
 
-	private ServiceTracker engineServiceTracker;
-	private long timeout = 5000;
+	private ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker;
+	private long timeout = TimeUnit.MILLISECONDS.convert(20L, TimeUnit.SECONDS);
 
-	public ProcessDefinitionDeployerImpl(ServiceTracker engineServiceTracker) {
+	public ProcessDefinitionDeployerImpl(ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker) {
 		this.engineServiceTracker = engineServiceTracker;
 	}
 
@@ -39,7 +40,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 					"Found process in bundle " + bundleSymbolicName
 							+ " with paths: " + pathList);
 
-			ProcessEngine engine = (ProcessEngine) engineServiceTracker
+			ProcessEngine engine = engineServiceTracker
 					.waitForService(timeout);
 			if (engine == null) {
 				throw new IllegalStateException(
@@ -60,7 +61,7 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 					is.close();
 				}
 			}
-			builder.enableDuplicateFiltering();
+			builder.enableDuplicateFiltering(true);
 			builder.deploy();
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to deploy bundle", e);

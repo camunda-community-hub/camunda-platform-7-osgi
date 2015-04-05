@@ -62,7 +62,6 @@ public class OSGiProcessApplicationScanner implements ProcessApplicationScanner 
     return resourceMap;
   }
 
-  @SuppressWarnings("unchecked")
   private void scanPathInBundle(List<String> suffixes, final Map<String, byte[]> resourceMap, String strippedPath) {
     for (String suffix : suffixes) {
       Enumeration<URL> entries = bundle.findEntries(strippedPath, "*." + suffix, true);
