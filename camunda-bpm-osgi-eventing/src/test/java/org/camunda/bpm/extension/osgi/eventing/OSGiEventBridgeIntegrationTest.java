@@ -1,11 +1,27 @@
 package org.camunda.bpm.extension.osgi.eventing;
 
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.bundle;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import javax.inject.Inject;
+
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseListener;
 import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.extension.osgi.el.OSGiExpressionManager;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
@@ -23,27 +39,11 @@ import org.ops4j.pax.exam.util.Filter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
-
-import javax.inject.Inject;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.*;
 
 /**
  * @author Ronny Bräunlich
@@ -55,9 +55,6 @@ public class OSGiEventBridgeIntegrationTest {
   public static final String BUNDLE_SYMBOLIC_NAME = "org.camunda.bpm.extension.osgi.eventing";
   @Inject
   private BundleContext bundleContext;
-
-  @Inject
-  private EventAdmin eventAdmin;
 
   @Inject
   private LogReaderService logReaderService;
@@ -195,7 +192,7 @@ public class OSGiEventBridgeIntegrationTest {
   }
 
   private void registerEventHandler(TestEventHandler eventHandler) {
-    Dictionary props = new Hashtable();
+    Dictionary<String, String> props = new Hashtable<String, String>();
     props.put(EventConstants.EVENT_TOPIC, Topics.EXECUTION_EVENT_TOPIC);
     bundleContext.registerService(EventHandler.class.getName(), eventHandler, props);
   }

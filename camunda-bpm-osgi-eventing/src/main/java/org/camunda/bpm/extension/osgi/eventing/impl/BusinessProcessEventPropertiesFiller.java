@@ -148,10 +148,20 @@ public enum BusinessProcessEventPropertiesFiller {
     return propertyKey;
   }
 
+  /**
+   * 
+   * @param dictionary the dictionary with the properties for the event
+   * @param execution the execution that was executed
+   */
   void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 
   }
 
+  /**
+   * 
+   * @param dictionary the dictionary with the properties for the event
+   * @param task the task that was executed
+   */
   void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
 
   }

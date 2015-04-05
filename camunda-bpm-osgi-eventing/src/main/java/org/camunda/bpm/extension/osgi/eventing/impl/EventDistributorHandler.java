@@ -1,15 +1,13 @@
 package org.camunda.bpm.extension.osgi.eventing.impl;
 
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 
 /**
  * @author Ronny Bräunlich
@@ -30,11 +28,10 @@ public class EventDistributorHandler implements InvocationHandler {
     if (isObjectMethod(method)) {
       return handleObjectMethod(proxy, method, args);
     }
-    ServiceReference reference = systemBundle.getBundleContext().getServiceReference(OSGiEventBridgeActivator.class.getName());
     if (isEventBridgeActivatorPresent(systemBundle.getBundleContext())) {
       EventAdmin eventAdmin = findEventAdmin(systemBundle.getBundleContext());
       if (eventAdmin != null) {
-        OSGiEventDistributor distributor = new OSGiEventDistributor(eventAdmin, (CoreModelElement) null);
+        OSGiEventDistributor distributor = new OSGiEventDistributor(eventAdmin);
         return method.invoke(distributor, args);
       }
     }
@@ -61,7 +58,7 @@ public class EventDistributorHandler implements InvocationHandler {
   }
 
   private boolean isEventBridgeActivatorPresent(BundleContext ctx) {
-    ServiceReference reference = ctx.getServiceReference(OSGiEventBridgeActivator.class.getName());
+    ServiceReference<OSGiEventBridgeActivator> reference = ctx.getServiceReference(OSGiEventBridgeActivator.class);
     if (reference != null) {
       return ctx.getService(reference) != null;
     }
@@ -69,10 +66,10 @@ public class EventDistributorHandler implements InvocationHandler {
   }
 
   private EventAdmin findEventAdmin(BundleContext ctx) {
-    ServiceReference ref = ctx.getServiceReference(EventAdmin.class.getName());
+    ServiceReference<EventAdmin> ref = ctx.getServiceReference(EventAdmin.class);
     EventAdmin eventAdmin = null;
     if (ref != null) {
-      eventAdmin = (EventAdmin) ctx.getService(ref);
+      eventAdmin = ctx.getService(ref);
     }
     return eventAdmin;
   }

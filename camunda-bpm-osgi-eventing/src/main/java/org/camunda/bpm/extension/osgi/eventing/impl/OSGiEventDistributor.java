@@ -1,45 +1,28 @@
 package org.camunda.bpm.extension.osgi.eventing.impl;
 
 
+import java.io.Serializable;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.extension.osgi.eventing.api.Topics;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-
-import java.io.Serializable;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 /**
  * @author Ronny Bräunlich
  */
 public class OSGiEventDistributor implements TaskListener, ExecutionListener, Serializable {
 
-  /**
-   * The task element this listener has been added to
-   */
-  private TaskDefinition taskDefinition;
+  private static final long serialVersionUID = -3778622638807349820L;
   private EventAdmin eventAdmin;
-  /**
-   * The BPMN element this listener has been added to
-   */
-  private CoreModelElement element;
 
-  public OSGiEventDistributor(EventAdmin eventAdmin, CoreModelElement element) {
+  public OSGiEventDistributor(EventAdmin eventAdmin) {
     this.eventAdmin = eventAdmin;
-    this.element = element;
-  }
-
-  public OSGiEventDistributor(EventAdmin eventAdmin, TaskDefinition taskDefinition) {
-    this.eventAdmin = eventAdmin;
-    this.taskDefinition = taskDefinition;
   }
 
   @Override

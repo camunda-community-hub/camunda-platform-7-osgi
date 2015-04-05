@@ -1,28 +1,31 @@
 package org.camunda.bpm.extension.osgi.eventing.impl;
 
 
-import org.camunda.bpm.engine.delegate.*;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.extension.osgi.eventing.api.Topics;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.SynchronousBundleListener;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
-
 import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.DelegateListener;
+import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.ExecutionListener;
+import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
+import org.camunda.bpm.engine.impl.task.TaskDefinition;
+import org.camunda.bpm.extension.osgi.eventing.api.Topics;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
+
 /**
  * @author Ronny Bräunlich
  */
 public class SelfDestructingOSGiEventDistributor implements TaskListener, ExecutionListener, SynchronousBundleListener, Serializable {
 
+  private static final long serialVersionUID = -6407460127392050346L;
   /**
    * The task element this listener has been added to
    */
