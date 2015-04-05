@@ -9,6 +9,7 @@ import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.extension.osgi.el.OSGiExpressionManager;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
+import org.camunda.bpm.extension.osgi.eventing.api.Topics;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -30,6 +31,7 @@ import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 
 import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -194,7 +196,7 @@ public class OSGiEventBridgeIntegrationTest {
 
   private void registerEventHandler(TestEventHandler eventHandler) {
     Dictionary props = new Hashtable();
-    props.put(EventConstants.EVENT_TOPIC, Execution.class.getName().replace('.', '/'));
+    props.put(EventConstants.EVENT_TOPIC, Topics.EXECUTION_EVENT_TOPIC);
     bundleContext.registerService(EventHandler.class.getName(), eventHandler, props);
   }
 

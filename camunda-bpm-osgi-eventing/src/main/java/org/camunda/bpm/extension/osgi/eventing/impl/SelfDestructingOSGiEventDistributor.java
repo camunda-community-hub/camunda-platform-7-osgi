@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
 import org.camunda.bpm.engine.impl.task.TaskDefinition;
 import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.task.Task;
+import org.camunda.bpm.extension.osgi.eventing.api.Topics;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.event.Event;
@@ -58,13 +59,13 @@ public class SelfDestructingOSGiEventDistributor implements TaskListener, Execut
   private Event createEvent(DelegateTask delegateTask) {
     Dictionary<String, String> properties = new Hashtable<String, String>();
     BusinessProcessEventPropertiesFiller.fillDictionary(properties, delegateTask);
-    return new Event(Task.class.getName().replace('.', '/'), properties);
+    return new Event(Topics.TASK_EVENT_TOPIC, properties);
   }
 
   private Event createEvent(DelegateExecution execution) {
     Dictionary<String, String> properties = new Hashtable<String, String>();
     BusinessProcessEventPropertiesFiller.fillDictionary(properties, execution);
-    return new Event(Execution.class.getName().replace('.', '/'), properties);
+    return new Event(Topics.EXECUTION_EVENT_TOPIC, properties);
   }
 
   @Override
