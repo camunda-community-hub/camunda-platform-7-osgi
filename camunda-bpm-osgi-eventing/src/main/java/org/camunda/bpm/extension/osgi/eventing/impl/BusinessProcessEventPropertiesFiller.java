@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.Dictionary;
 
 /**
+ * This enum defines all the possible properties that can be placed inside the
+ * dictionary of a event.
+ * 
  * @author Ronny Bräunlich
  */
 public enum BusinessProcessEventPropertiesFiller {
@@ -27,8 +30,8 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the id of the activity the process is currently in / was in at the
-   * moment the event was fired.
+   * the id of the activity the process is currently in / was in at the moment
+   * the event was fired.
    */
   ACTIVITY_ID(BusinessProcessEventProperties.ACTIVITY_ID) {
     @Override
@@ -60,7 +63,8 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the id of the {@link org.camunda.bpm.engine.runtime.ProcessInstance} this event corresponds to
+   * the id of the {@link org.camunda.bpm.engine.runtime.ProcessInstance} this
+   * event corresponds to
    */
   PROCESS_INSTANCE_ID(BusinessProcessEventProperties.PROCESS_INSTANCE_ID) {
     @Override
@@ -74,7 +78,8 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the id of the {@link org.camunda.bpm.engine.runtime.Execution} this event corresponds to
+   * the id of the {@link org.camunda.bpm.engine.runtime.Execution} this event
+   * corresponds to
    */
   EXECUTION_ID(BusinessProcessEventProperties.EXECUTION_ID) {
     @Override
@@ -88,7 +93,9 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the type of the event, one of the constants in {@link org.camunda.bpm.engine.delegate.TaskListener} or {@link org.camunda.bpm.engine.delegate.ExecutionListener}
+   * the type of the event, one of the constants in
+   * {@link org.camunda.bpm.engine.delegate.TaskListener} or
+   * {@link org.camunda.bpm.engine.delegate.ExecutionListener}
    */
   TYPE(BusinessProcessEventProperties.TYPE) {
     @Override
@@ -104,8 +111,7 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the timestamp indicating the local time at which the event was
-   * fired.
+   * the timestamp indicating the local time at which the event was fired.
    */
   TIMESTAMP(BusinessProcessEventProperties.TIMESTAMP) {
     @Override
@@ -128,7 +134,8 @@ public enum BusinessProcessEventPropertiesFiller {
     }
   },
   /**
-   * the id of the task in the process definition (BPMN XML) or null if this is not a task event.
+   * the id of the task in the process definition (BPMN XML) or null if this is
+   * not a task event.
    */
   TASK_DEFINITION_KEY(BusinessProcessEventProperties.TASK_DEFINITION_KEY) {
     @Override
@@ -138,7 +145,6 @@ public enum BusinessProcessEventPropertiesFiller {
   };
 
   private final String propertyKey;
-
 
   BusinessProcessEventPropertiesFiller(String propertyKey) {
     this.propertyKey = propertyKey;
@@ -150,8 +156,10 @@ public enum BusinessProcessEventPropertiesFiller {
 
   /**
    * 
-   * @param dictionary the dictionary with the properties for the event
-   * @param execution the execution that was executed
+   * @param dictionary
+   *          the dictionary with the properties for the event
+   * @param execution
+   *          the execution that was executed
    */
   void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
 
@@ -159,8 +167,10 @@ public enum BusinessProcessEventPropertiesFiller {
 
   /**
    * 
-   * @param dictionary the dictionary with the properties for the event
-   * @param task the task that was executed
+   * @param dictionary
+   *          the dictionary with the properties for the event
+   * @param task
+   *          the task that was executed
    */
   void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
 

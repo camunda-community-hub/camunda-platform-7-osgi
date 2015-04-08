@@ -19,6 +19,7 @@ import org.osgi.service.event.EventAdmin;
 public class OSGiEventDistributor implements TaskListener, ExecutionListener, Serializable {
 
   private static final long serialVersionUID = -3778622638807349820L;
+  
   private EventAdmin eventAdmin;
 
   public OSGiEventDistributor(EventAdmin eventAdmin) {

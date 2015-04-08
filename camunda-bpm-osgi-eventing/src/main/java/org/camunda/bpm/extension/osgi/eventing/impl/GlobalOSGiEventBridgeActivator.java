@@ -1,5 +1,8 @@
 package org.camunda.bpm.extension.osgi.eventing.impl;
 
+import java.lang.reflect.Proxy;
+import java.util.List;
+
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
@@ -14,20 +17,19 @@ import org.camunda.bpm.engine.impl.util.xml.Element;
 import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.event.EventAdmin;
-
-import java.lang.reflect.Proxy;
-import java.util.List;
 
 /**
+ * This class adds listeners to the processes in the form of a dynamic proxy.
+ * The listeners create events and send them into the OSGi "world", without
+ * targeting any specific receiver. That's why is activator is global.
+ * 
  * @author Ronny Bräunlich
  */
 public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener implements OSGiEventBridgeActivator {
 
-  private volatile EventAdmin eventAdmin;
-
   private volatile Bundle bundle;
+
+  private EventDistributorHandler handler;
 
   protected void addEndEventListener(ActivityImpl activity) {
     activity.addExecutionListener(ExecutionListener.EVENTNAME_END, createExecutionListener(activity));
@@ -58,20 +60,24 @@ public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener im
   }
 
   private TaskListener createTaskListener(TaskDefinition taskDefinition) {
-    SelfDestructingOSGiEventDistributor distributor = new SelfDestructingOSGiEventDistributor(eventAdmin, taskDefinition);
-    bundle.getBundleContext().addBundleListener(distributor);
-    return distributor;
-//    return (TaskListener) Proxy.newProxyInstance(taskDefinition.getClass().getClassLoader(), new Class[]{TaskListener.class}, new EventDistributorHandler(bundle.getBundleContext()));
+    return (TaskListener) Proxy.newProxyInstance(taskDefinition.getClass().getClassLoader(), new Class[] { TaskListener.class },
+        createEventDistributorHandler());
   }
 
   private ExecutionListener createExecutionListener(CoreModelElement activity) {
-    SelfDestructingOSGiEventDistributor distributor = new SelfDestructingOSGiEventDistributor(eventAdmin, activity);
-    bundle.getBundleContext().addBundleListener(distributor);
-    return distributor;
-//    return (ExecutionListener) Proxy.newProxyInstance(activity.getClass().getClassLoader(), new Class[]{ExecutionListener.class}, new EventDistributorHandler(bundle.getBundleContext()));
+    return (ExecutionListener) Proxy.newProxyInstance(activity.getClass().getClassLoader(), new Class[] { ExecutionListener.class },
+        createEventDistributorHandler());
   }
 
-  // BpmnParseListener implementation /////////////////////////////////////////////////////////
+  private EventDistributorHandler createEventDistributorHandler() {
+    if (handler == null) {
+      this.handler = new EventDistributorHandler(bundle.getBundleContext());
+    }
+    return handler;
+  }
+
+  // BpmnParseListener implementation
+  // /////////////////////////////////////////////////////////
   @Override
   public void parseProcess(Element processElement, ProcessDefinitionEntity processDefinition) {
   }
@@ -150,12 +156,12 @@ public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener im
 
   @Override
   public void parseBoundaryTimerEventDefinition(Element timerEventDefinition, boolean interrupting, ActivityImpl timerActivity) {
-// start and end event listener are set by parseBoundaryEvent()
+    // start and end event listener are set by parseBoundaryEvent()
   }
 
   @Override
   public void parseBoundaryErrorEventDefinition(Element errorEventDefinition, boolean interrupting, ActivityImpl activity, ActivityImpl nestedErrorEventActivity) {
-// start and end event listener are set by parseBoundaryEvent()
+    // start and end event listener are set by parseBoundaryEvent()
   }
 
   @Override
@@ -213,7 +219,7 @@ public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener im
 
   @Override
   public void parseBoundarySignalEventDefinition(Element signalEventDefinition, boolean interrupting, ActivityImpl signalActivity) {
-// start and end event listener are set by parseBoundaryEvent()
+    // start and end event listener are set by parseBoundaryEvent()
   }
 
   @Override

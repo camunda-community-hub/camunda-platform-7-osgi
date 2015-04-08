@@ -10,12 +10,18 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.EventAdmin;
 
 /**
+ * This InvocationHandler sends OSGi events only in case that the required
+ * services are present. If not no events will be sent. This has the advantage
+ * that we stop distributing events after the camunda-bpm-osgi-eventing bundle
+ * has been stopped but we can continue after it has been reactivated.
+ * 
  * @author Ronny Bräunlich
  */
 public class EventDistributorHandler implements InvocationHandler {
 
   /**
-   * We are just fine with the system bundle because all we do is service lookups
+   * We are just fine with the system bundle because all we do is service
+   * lookups
    */
   private final Bundle systemBundle;
 
@@ -49,9 +55,7 @@ public class EventDistributorHandler implements InvocationHandler {
     } else if ("hashCode".equals(name)) {
       return System.identityHashCode(proxy);
     } else if ("toString".equals(name)) {
-      return proxy.getClass().getName() + "@" +
-        Integer.toHexString(System.identityHashCode(proxy)) +
-        ", with InvocationHandler " + this;
+      return proxy.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(proxy)) + ", with InvocationHandler " + this;
     } else {
       throw new IllegalStateException(String.valueOf(method));
     }
