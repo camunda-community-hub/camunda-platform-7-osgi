@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Camunda BPM - OSGi Eventing - API</name>
+  <name>Camunda BPM - OSGi Eventing</name>
   <artifactId>camunda-bpm-osgi-eventing</artifactId>
   <packaging>bundle</packaging>
   <description>This bundle activates camunda business process events inside an OSGi environment.</description>

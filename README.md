@@ -107,6 +107,10 @@ The third steps works likes the second one, only that it searches for exported A
 
 If you used a ProcessApplication to start you engine and deploy your processes the EL resolution is limited to beans in your context.xml (that's why you need Blueprint). Every bean will be matched by its id in the context.xml. The `BlueprintBundleLocalELResolver` won't find any classes/services outside of it. 
 
+## OSGi Event Bridge
+
+See [camunda BPM OSGi eventing API](https://github.com/camunda/camunda-bpm-platform-osgi/tree/messaging/camunda-bpm-osgi-eventing-api).
+
 ## Resources
 
 * [Issue Tracker](https://github.com/camunda/camunda-bpm-platform-osgi/issues)
