@@ -13,5 +13,5 @@ You can then register your own ``org.osgi.service.event.EventHandler`` for one o
 * org/camunda/bpm/extension/osgi/eventing/Execution
 * org/camunda/bpm/extension/osgi/eventing/&#42; (wildcard to receive events for both topics)
 
-Both are constants in ``org.camunda.bpm.extension.osgi.eventing.api.Topics``.
+All are constants in ``org.camunda.bpm.extension.osgi.eventing.api.Topics``.
 The possible keys for the properties inside the event are listed in ``org.camunda.bpm.extension.osgi.eventing.api.BusinessProcessEventProperties``.

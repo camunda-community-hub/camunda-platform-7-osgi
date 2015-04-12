@@ -26,6 +26,7 @@ import org.camunda.bpm.extension.osgi.el.OSGiExpressionManager;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.eventing.api.OSGiEventBridgeActivator;
 import org.camunda.bpm.extension.osgi.eventing.api.Topics;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -63,33 +64,30 @@ public class OSGiEventBridgeIntegrationTest {
   @Filter(timeout = 30000L)
   private OSGiEventBridgeActivator eventBridgeActivator;
 
+  private ErrorLogListener logListener;
+
   @Configuration
   public Option[] createConfiguration() {
-    Option[] camundaBundles = options(
-      mavenBundle("org.camunda.bpm", "camunda-engine").versionAsInProject(),
-      mavenBundle("org.camunda.bpm.model", "camunda-bpmn-model").versionAsInProject(),
-      mavenBundle("org.camunda.bpm.model", "camunda-cmmn-model").versionAsInProject(),
-      mavenBundle("org.camunda.bpm.model", "camunda-xml-model").versionAsInProject(),
+    Option[] camundaBundles = options(mavenBundle("org.camunda.bpm", "camunda-engine").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.model", "camunda-bpmn-model").versionAsInProject(), mavenBundle("org.camunda.bpm.model", "camunda-cmmn-model")
+            .versionAsInProject(), mavenBundle("org.camunda.bpm.model", "camunda-xml-model").versionAsInProject(),
 
-      mavenBundle("joda-time", "joda-time").versionAsInProject(),
-      mavenBundle("com.h2database", "h2").versionAsInProject(),
-      mavenBundle("org.mybatis", "mybatis").versionAsInProject(),
-      mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
+        mavenBundle("joda-time", "joda-time").versionAsInProject(), mavenBundle("com.h2database", "h2").versionAsInProject(),
+        mavenBundle("org.mybatis", "mybatis").versionAsInProject(), mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
 
-
-      mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi")
-        .versionAsInProject(),
-      mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi-eventing-api")
-        .versionAsInProject(),
-      mavenBundle("org.apache.felix", "org.apache.felix.eventadmin")
-        .versionAsInProject(),
-      mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager")
-        .versionAsInProject(),
-      mavenBundle("org.apache.felix", "org.apache.felix.log")
-        .version("1.0.1"),
-      // make sure compiled classes from src/main are included
-      bundle("reference:file:target/classes"));
+        mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi").versionAsInProject(),
+        mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi-eventing-api").versionAsInProject(),
+        mavenBundle("org.apache.felix", "org.apache.felix.eventadmin").versionAsInProject(),
+        mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(), mavenBundle("org.apache.felix", "org.apache.felix.log")
+            .version("1.0.1"),
+        // make sure compiled classes from src/main are included
+        bundle("reference:file:target/classes"));
     return OptionUtils.combine(camundaBundles, CoreOptions.junitBundles());
+  }
+
+  @Before
+  public void setUp() {
+    logListener = createErrorLogListener();
   }
 
   @Test
@@ -99,20 +97,14 @@ public class OSGiEventBridgeIntegrationTest {
 
   @Test
   public void testEventBrigde() throws FileNotFoundException {
-    // we have to use a LogListener to find Errors in the log
-    ErrorLogListener logListener = new ErrorLogListener();
-    logReaderService.addLogListener(logListener);
     TestEventHandler eventHandler = new TestEventHandler();
     registerEventHandler(eventHandler);
     ProcessEngine processEngine = createProcessEngine();
-    DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
-    deploymentBuilder.name("testProcess").addInputStream("testProcess.bpmn", new FileInputStream(new File(
-      "src/test/resources/testProcess.bpmn"))).deploy();
+    deployProcess(processEngine, "testProcess", "src/test/resources/testProcess.bpmn");
     processEngine.getRuntimeService().startProcessInstanceByKey("Process_1");
     processEngine.close();
-    if (logListener.getErrorMessage() != null) {
-      fail(logListener.getErrorMessage());
-    }
+
+    checkLogListener();
     assertThat(eventHandler.isCalled(), is(true));
   }
 
@@ -120,53 +112,40 @@ public class OSGiEventBridgeIntegrationTest {
    * We don't want to receive any more events after shutting the bundle down.
    */
   @Test
-  public void shutdownDuringRunningProcess() throws FileNotFoundException, BundleException, InterruptedException {
-    // we have to use a LogListener to find Errors in the log
-    ErrorLogListener logListener = new ErrorLogListener();
-    logReaderService.addLogListener(logListener);
+  public void shutdownDuringRunningProcess() throws Exception {
     TestEventHandler eventHandler = new TestEventHandler();
     registerEventHandler(eventHandler);
     final ProcessEngine processEngine = createProcessEngine();
-    DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
-    deploymentBuilder.name("longRunningTestProcess").addInputStream("longRunningTestProcess.bpmn", new FileInputStream(new File(
-      "src/test/resources/longRunningTestProcess.bpmn"))).deploy();
+    deployProcess(processEngine, "longRunningTestProcess", "src/test/resources/longRunningTestProcess.bpmn");
     stopEventingBundle();
     processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
     processEngine.close();
-    if (logListener.getErrorMessage() != null) {
-      fail(logListener.getErrorMessage());
-    }
+
+    checkLogListener();
     assertThat(eventHandler.endCalled(), is(false));
   }
 
-  private void stopEventingBundle() throws BundleException {
-    for (Bundle bundle : bundleContext.getBundles()) {
-      if (bundle.getSymbolicName().equals(BUNDLE_SYMBOLIC_NAME)) {
-        bundle.stop();
-        break;
-      }
-    }
-  }
-
+  /**
+   * If we stop the eventing bundle and restart it afterwards we want to receive
+   * events again.
+   * 
+   * @throws FileNotFoundException
+   * @throws BundleException
+   * @throws InterruptedException
+   */
   @Test
-  public void restartBundleAfterShutdown() throws FileNotFoundException, BundleException, InterruptedException {
-    // we have to use a LogListener to find Errors in the log
-    ErrorLogListener logListener = new ErrorLogListener();
-    logReaderService.addLogListener(logListener);
+  public void restartEventingBundleAfterShutdown() throws FileNotFoundException, BundleException, InterruptedException {
     final ProcessEngine processEngine = createProcessEngine();
-    DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
-    deploymentBuilder.name("longRunningTestProcess").addInputStream("longRunningTestProcess.bpmn", new FileInputStream(new File(
-      "src/test/resources/longRunningTestProcess.bpmn"))).deploy();
+    deployProcess(processEngine, "longRunningTestProcess", "src/test/resources/longRunningTestProcess.bpmn");
     stopEventingBundle();
     processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
     TestEventHandler eventHandler = new TestEventHandler();
     registerEventHandler(eventHandler);
     startEventingBundle();
     processEngine.getRuntimeService().startProcessInstanceByKey("slowProcess");
-    if (logListener.getErrorMessage() != null) {
-      fail(logListener.getErrorMessage());
-    }
     processEngine.close();
+
+    checkLogListener();
     assertThat(eventHandler.endCalled(), is(true));
   }
 
@@ -181,7 +160,7 @@ public class OSGiEventBridgeIntegrationTest {
 
   private ProcessEngine createProcessEngine() {
     StandaloneInMemProcessEngineConfiguration configuration = new StandaloneInMemProcessEngineConfiguration();
-    configuration.setCustomPreBPMNParseListeners(Collections.<BpmnParseListener>singletonList(eventBridgeActivator));
+    configuration.setCustomPreBPMNParseListeners(Collections.<BpmnParseListener> singletonList(eventBridgeActivator));
     configuration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
     ProcessEngineFactoryWithELResolver engineFactory = new ProcessEngineFactoryWithELResolver();
     engineFactory.setProcessEngineConfiguration(configuration);
@@ -193,14 +172,43 @@ public class OSGiEventBridgeIntegrationTest {
 
   private void registerEventHandler(TestEventHandler eventHandler) {
     Dictionary<String, String> props = new Hashtable<String, String>();
-    props.put(EventConstants.EVENT_TOPIC, Topics.EXECUTION_EVENT_TOPIC);
+    props.put(EventConstants.EVENT_TOPIC, Topics.ALL_EVENTING_EVENTS_TOPIC);
     bundleContext.registerService(EventHandler.class.getName(), eventHandler, props);
   }
 
+  private void checkLogListener() {
+    if (logListener.getErrorMessage() != null) {
+      fail(logListener.getErrorMessage());
+    }
+  }
+
   /**
-   * If an exception happens during event distribution the EventAdmin will log this
-   * with OSGi logging if present, so we need a listener to make sure no exceptions
-   * were thrown.
+   * we have to use a LogListener to find Errors in the log
+   */
+  private ErrorLogListener createErrorLogListener() {
+    ErrorLogListener logListener = new ErrorLogListener();
+    logReaderService.addLogListener(logListener);
+    return logListener;
+  }
+
+  private void deployProcess(ProcessEngine processEngine, String processName, String fileLocation) throws FileNotFoundException {
+    DeploymentBuilder deploymentBuilder = processEngine.getRepositoryService().createDeployment();
+    deploymentBuilder.name(processName).addInputStream(processName + ".bpmn", new FileInputStream(new File(fileLocation))).deploy();
+  }
+
+  private void stopEventingBundle() throws BundleException {
+    for (Bundle bundle : bundleContext.getBundles()) {
+      if (bundle.getSymbolicName().equals(BUNDLE_SYMBOLIC_NAME)) {
+        bundle.stop();
+        break;
+      }
+    }
+  }
+
+  /**
+   * If an exception happens during event distribution the EventAdmin will log
+   * this with OSGi logging if present, so we need a listener to make sure no
+   * exceptions were thrown.
    */
   private static class ErrorLogListener implements LogListener {
     private String errorMessage;
