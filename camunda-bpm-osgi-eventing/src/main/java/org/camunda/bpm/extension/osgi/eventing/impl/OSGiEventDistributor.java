@@ -27,7 +27,7 @@ public class OSGiEventDistributor implements TaskListener, ExecutionListener, Se
   }
 
   @Override
-  public void notify(DelegateExecution execution) throws Exception {
+  public void notify(DelegateExecution execution){
     Event event = createEvent(execution);
     eventAdmin.postEvent(event);
   }

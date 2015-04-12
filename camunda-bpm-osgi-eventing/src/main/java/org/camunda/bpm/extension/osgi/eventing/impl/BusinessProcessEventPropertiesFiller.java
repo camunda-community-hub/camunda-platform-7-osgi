@@ -105,8 +105,8 @@ public enum BusinessProcessEventPropertiesFiller {
 
     @Override
     void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
-      if (task.getExecution().getEventName() != null) {
-        dictionary.put(getPropertyKey(), task.getExecution().getEventName());
+      if (task.getEventName() != null) {
+        dictionary.put(getPropertyKey(), task.getEventName());
       }
     }
   },
@@ -116,12 +116,12 @@ public enum BusinessProcessEventPropertiesFiller {
   TIMESTAMP(BusinessProcessEventProperties.TIMESTAMP) {
     @Override
     void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateExecution execution) {
-      dictionary.put(getPropertyKey(), new Date().toString());
+      dictionary.put(getPropertyKey(), String.valueOf(new Date().getTime()));
     }
 
     @Override
     void setValueIntoDictionary(Dictionary<String, String> dictionary, DelegateTask task) {
-      dictionary.put(getPropertyKey(), new Date().toString());
+      dictionary.put(getPropertyKey(), String.valueOf(new Date().getTime()));
     }
   },
   /**
