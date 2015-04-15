@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -16,7 +14,7 @@ import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 
@@ -24,8 +22,18 @@ import org.osgi.service.cm.ConfigurationException;
 public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFactory {
 
   private Map<String, ProcessEngine> existingEngines = new ConcurrentHashMap<String, ProcessEngine>();
-  private Map<String, ServiceRegistration> existingRegisteredEngines = new ConcurrentHashMap<String, ServiceRegistration>();
+  private Map<String, ServiceRegistration<ProcessEngine>> existingRegisteredEngines = new ConcurrentHashMap<String, ServiceRegistration<ProcessEngine>>();
   private volatile Bundle bundle;
+
+  /**
+   * Default constructor for Apache Felix Dependency Manager.
+   */
+  public ManagedProcessEngineFactoryImpl() {
+  }
+
+  public ManagedProcessEngineFactoryImpl(Bundle bundle) {
+    this.bundle = bundle;
+  }
 
   @Override
   public String getName() {
@@ -44,7 +52,6 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
       return;
     }
     ClassLoader previous = Thread.currentThread().getContextClassLoader();
-    Bundle bundle = FrameworkUtil.getBundle(ProcessEngine.class);
     ProcessEngine engine;
     try {
       ClassLoader cl = new BundleDelegatingClassLoader(bundle);
@@ -59,7 +66,7 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
     existingEngines.put(pid, engine);
     Hashtable<String, Object> props = new Hashtable<String, Object>();
     props.put("process-engine-name", engine.getName());
-    ServiceRegistration serviceRegistration = this.bundle.getBundleContext().registerService(ProcessEngine.class.getName(), engine, props);
+    ServiceRegistration<ProcessEngine> serviceRegistration = this.bundle.getBundleContext().registerService(ProcessEngine.class, engine, props);
     existingRegisteredEngines.put(pid, serviceRegistration);
   }
 
@@ -77,7 +84,7 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
     for (Object key : Collections.list(properties.keys())) {
       mapProperties.put(key, properties.get(key));
     }
-    mapProperties.remove("service.pid");
+    mapProperties.remove(Constants.SERVICE_PID);
     mapProperties.remove("service.factoryPid");
     return !mapProperties.isEmpty();
   }
@@ -91,14 +98,12 @@ public class ManagedProcessEngineFactoryImpl implements ManagedProcessEngineFact
 
   @Override
   public void deleted(String pid) {
-    try {
-      ProcessEngine engine = existingEngines.get(pid);
+    ProcessEngine engine = existingEngines.get(pid);
+    if (engine != null) {
       engine.close();
       existingEngines.remove(pid);
       existingRegisteredEngines.get(pid).unregister();
       existingRegisteredEngines.remove(pid);
-    } catch (Exception e) {
-      Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "Exception when trying to delete service with pid " + pid, e);
     }
   }
 
