@@ -176,7 +176,7 @@ public class ProcessEngineConfigurationPropertiesTest {
   public void setDefaultCharsetName() {
     String charset = "ISO-8859-1";
     DEFAULT_CHARSET_NAME.setPropertyOnConfiguration(config, charset);
-    JDBC_URL.setPropertyOnConfiguration(config, "jdbc:h2:mem");
+    JDBC_URL.setPropertyOnConfiguration(config, "jdbc:h2:mem:camunda");
     DATABASE_SCHEMA_UPDATE.setPropertyOnConfiguration(config, "true");
     // we have to build the engine or else the charset won't be initiated
     config.buildProcessEngine();
@@ -374,7 +374,7 @@ public class ProcessEngineConfigurationPropertiesTest {
 
   @Test
   public void setJdbcUrl() {
-    String url = "jdbc:h2:mem";
+    String url = "jdbc:h2:mem:camunda";
     JDBC_URL.setPropertyOnConfiguration(config, url);
 
     assertThat(config.getJdbcUrl(), is(url));
