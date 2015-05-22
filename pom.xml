@@ -11,7 +11,7 @@
   <name>Camunda BPM - OSGi - Root</name>
   <groupId>org.camunda.bpm.extension.osgi</groupId>
   <artifactId>camunda-bpm-osgi-root</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <camunda-bpm.version>7.2.0</camunda-bpm.version>
+    <camunda-bpm.version>7.3.0-SNAPSHOT</camunda-bpm.version>
     <camunda-spin.version>1.0.0</camunda-spin.version>
     <camunda-connect.version>1.0.0</camunda-connect.version>
     <camunda-commons.version>1.0.6</camunda-commons.version>
