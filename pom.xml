@@ -23,9 +23,9 @@
   </modules>
 
   <properties>
-    <camunda-bpm.version>7.3.0-SNAPSHOT</camunda-bpm.version>
-    <camunda-spin.version>1.0.0</camunda-spin.version>
-    <camunda-connect.version>1.0.0</camunda-connect.version>
+    <camunda-bpm.version>7.3.0</camunda-bpm.version>
+    <camunda-spin.version>1.1.0</camunda-spin.version>
+    <camunda-connect.version>1.0.1</camunda-connect.version>
     <camunda-commons.version>1.0.6</camunda-commons.version>
 
     <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
