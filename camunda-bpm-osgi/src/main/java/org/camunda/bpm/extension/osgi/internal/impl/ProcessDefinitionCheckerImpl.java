@@ -22,8 +22,10 @@ public class ProcessDefinitionCheckerImpl implements ProcessDefintionChecker {
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionCheckerImpl.class.getName());
 
-	private ProcessDefinitionDeployer deployer;
+	private volatile ProcessDefinitionDeployer deployer;
 
+	public ProcessDefinitionCheckerImpl() {}
+	
 	public ProcessDefinitionCheckerImpl(ProcessDefinitionDeployer deployer) {
 		this.deployer = deployer;
 	}
@@ -32,11 +34,16 @@ public class ProcessDefinitionCheckerImpl implements ProcessDefintionChecker {
 	public void checkBundle(Bundle bundle) {
 		List<URL> pathList = ProcessDefinitionParser.scanForProcesses(bundle);
 		if (!pathList.isEmpty()) {
-			deployer.deployProcessDefinitions(bundle.getSymbolicName(), pathList);
+			deployer.deployProcessDefinitions(bundle.getSymbolicName(),
+					pathList);
 		} else {
 			LOGGER.log(Level.FINE, "No process found in bundle {}",
 					bundle.getSymbolicName());
 		}
+	}
+
+	public void bundleRemoved(Bundle bundle) {
+		// so far do nothing
 	}
 
 }

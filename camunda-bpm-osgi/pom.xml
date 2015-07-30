@@ -58,6 +58,10 @@
       <version>4.0.3</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.apache.felix.dependencymanager</artifactId>
+	</dependency>
 
     <dependency>
       <groupId>junit</groupId>

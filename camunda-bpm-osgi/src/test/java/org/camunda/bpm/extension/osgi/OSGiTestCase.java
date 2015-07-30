@@ -53,6 +53,7 @@ public class OSGiTestCase implements ConfigurationFactory {
       mavenBundle("com.h2database", "h2").versionAsInProject(),
       mavenBundle("org.mybatis", "mybatis").versionAsInProject(),
       mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
+      mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(),
 
 //      mavenBundle("org.slf4j", "slf4j-api", "1.7.7"),
 //      mavenBundle("ch.qos.logback", "logback-core", "1.1.2"),

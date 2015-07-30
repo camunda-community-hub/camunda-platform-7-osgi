@@ -12,14 +12,14 @@
  */
 package org.camunda.bpm.extension.osgi;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.osgi.framework.BundleActivator;
+import org.apache.felix.dm.DependencyActivatorBase;
+import org.apache.felix.dm.DependencyManager;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
+import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionCheckerImpl;
+import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionDeployerImpl;
+import org.camunda.bpm.extension.osgi.scripting.impl.ScriptEngineBundleTrackerCustomizer;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * OSGi Activator
@@ -29,53 +29,31 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Daniel Meyer
  * @author Roman Smirnov
  */
-public class Activator implements BundleActivator {
+public class Activator extends DependencyActivatorBase {
 
-  private List<Runnable> callbacks = new ArrayList<Runnable>();
+	@Override
+	public void init(BundleContext context, DependencyManager manager)
+			throws Exception {
+		
+		manager.add(createComponent()
+						.setImplementation(ProcessDefinitionDeployerImpl.class)
+						.setInterface(ProcessDefinitionDeployer.class.getName(), null)
+						.add(createServiceDependency()
+								.setService(ProcessEngine.class)
+								.setRequired(true)));
+		
+		manager.add(createComponent()
+						.setImplementation(ProcessDefinitionCheckerImpl.class)
+						.add(createBundleDependency()
+								.setCallbacks("checkBundle","checkBundle", "bundleRemoved"))
+						.add(createServiceDependency()
+								.setService(ProcessDefinitionDeployer.class)
+								.setRequired(true)));
 
-  @Override
-  public void start(BundleContext context) throws Exception {
-
-    callbacks.add(new Tracker(new Extender(context)));
-
-  }
-
-  @Override
-  public void stop(BundleContext context) throws Exception {
-    for (Runnable r : callbacks) {
-      r.run();
-    }
-  }
-
-  private static class Tracker implements Runnable {
-
-    private final Extender extender;
-
-    private Tracker(Extender extender) {
-      this.extender = extender;
-      this.extender.open();
-    }
-
-    @Override
-    public void run() {
-      extender.close();
-    }
-  }
-
-  private static class CloseTrackerCallback<S, T> implements Runnable {
-
-    protected ServiceTracker<S, T> tracker;
-
-    public CloseTrackerCallback(ServiceTracker<S, T> tracker, boolean isTrackAllServices) {
-      this.tracker = tracker;
-      tracker.open(isTrackAllServices);
-    }
-
-    @Override
-    public void run() {
-      tracker.close();
-    }
-
-  }
-
+		manager.add(createComponent()
+						.setImplementation(ScriptEngineBundleTrackerCustomizer.class)
+						.add(createBundleDependency()
+								.setCallbacks("addingBundle", "modifiedBundle", "removedBundle")));
+		
+	}
 }

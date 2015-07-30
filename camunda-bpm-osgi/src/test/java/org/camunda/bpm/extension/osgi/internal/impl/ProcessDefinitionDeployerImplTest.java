@@ -1,8 +1,6 @@
 package org.camunda.bpm.extension.osgi.internal.impl;
 
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -19,7 +17,6 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
 import org.junit.Test;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class ProcessDefinitionDeployerImplTest {
 
@@ -27,18 +24,17 @@ public class ProcessDefinitionDeployerImplTest {
 
 	@Test
 	public void deployEmptyPathList() {
-		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = createProcessEngineServiceTrackerMock();
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
-				serviceTracker);
-		deployer.deployProcessDefinitions("test bundle", Collections.<URL> emptyList());
+				createProcessEngineMock());
+		deployer.deployProcessDefinitions("test bundle",
+				Collections.<URL> emptyList());
 		verify(deploymentBuilder).deploy();
 	}
 
 	@Test
 	public void deploySingleProcess() throws MalformedURLException {
-		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = createProcessEngineServiceTrackerMock();
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
-				serviceTracker);
+				createProcessEngineMock());
 		URL url = new File("src/test/resources/testprocess.bpmn").toURI()
 				.toURL();
 		deployer.deployProcessDefinitions("test bundle",
@@ -48,9 +44,7 @@ public class ProcessDefinitionDeployerImplTest {
 				any(InputStream.class));
 	}
 
-	@SuppressWarnings("unchecked")
-  private ServiceTracker<ProcessEngine, ProcessEngine> createProcessEngineServiceTrackerMock() {
-		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = mock(ServiceTracker.class);
+	private ProcessEngine createProcessEngineMock() {
 		ProcessEngine processEngine = mock(ProcessEngine.class);
 		RepositoryService repositoryService = mock(RepositoryService.class);
 		when(processEngine.getRepositoryService())
@@ -58,26 +52,13 @@ public class ProcessDefinitionDeployerImplTest {
 		deploymentBuilder = mock(DeploymentBuilder.class);
 		when(repositoryService.createDeployment())
 				.thenReturn(deploymentBuilder);
-		try {
-			when(serviceTracker.waitForService(anyLong())).thenReturn(
-					processEngine);
-		} catch (InterruptedException e) {
-			fail(e.toString());
-		}
-		return serviceTracker;
+		return processEngine;
 	}
 
-	@SuppressWarnings("unchecked")
-  @Test
+	@Test
 	public void throwsExceptionWhenProcessEngineNotFound() {
-		ServiceTracker<ProcessEngine, ProcessEngine> serviceTracker = mock(ServiceTracker.class);
-		try {
-			when(serviceTracker.waitForService(anyLong())).thenReturn(null);
-		} catch (InterruptedException e) {
-			fail(e.toString());
-		}
 		ProcessDefinitionDeployer deployer = new ProcessDefinitionDeployerImpl(
-				serviceTracker);
+				null);
 		deployer.deployProcessDefinitions("test bundle", null);
 		// nothing should happen because the exception get's caught
 	}

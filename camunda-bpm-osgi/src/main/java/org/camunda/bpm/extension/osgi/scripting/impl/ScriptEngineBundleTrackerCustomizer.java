@@ -31,8 +31,10 @@ public class ScriptEngineBundleTrackerCustomizer implements
 	private static final Logger LOGGER = Logger
 			.getLogger(ScriptEngineBundleTrackerCustomizer.class.getName());
 	private Map<Long, List<BundleScriptEngineResolver>> resolvers = new ConcurrentHashMap<Long, List<BundleScriptEngineResolver>>();
-	private ProcessDefintionChecker checker;
+	private volatile ProcessDefintionChecker checker;
 
+	public ScriptEngineBundleTrackerCustomizer(){}
+	
 	public ScriptEngineBundleTrackerCustomizer(ProcessDefintionChecker checker) {
 		this.checker = checker;
 	}

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,11 +25,12 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 	private static final Logger LOGGER = Logger
 			.getLogger(ProcessDefinitionDeployerImpl.class.getName());
 
-	private ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker;
-	private long timeout = TimeUnit.MILLISECONDS.convert(20L, TimeUnit.SECONDS);
-
-	public ProcessDefinitionDeployerImpl(ServiceTracker<ProcessEngine, ProcessEngine> engineServiceTracker) {
-		this.engineServiceTracker = engineServiceTracker;
+	private volatile ProcessEngine engine;
+	
+	public ProcessDefinitionDeployerImpl(){}
+	
+	public ProcessDefinitionDeployerImpl(ProcessEngine engine) {
+		this.engine = engine;
 	}
 
 	@Override
@@ -40,8 +40,6 @@ public class ProcessDefinitionDeployerImpl implements ProcessDefinitionDeployer 
 					"Found process in bundle " + bundleSymbolicName
 							+ " with paths: " + pathList);
 
-			ProcessEngine engine = engineServiceTracker
-					.waitForService(timeout);
 			if (engine == null) {
 				throw new IllegalStateException(
 						"Unable to find a ProcessEngine service");

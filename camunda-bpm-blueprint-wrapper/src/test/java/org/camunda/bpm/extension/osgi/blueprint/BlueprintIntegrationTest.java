@@ -20,6 +20,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 
 import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -90,6 +91,7 @@ public class BlueprintIntegrationTest {
 //      mavenBundle("org.apache.logging.log4j", "log4j-core", "2.0-beta9").
 //        noStart(),
 
+      mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(),
       mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi")
         .versionAsInProject(),
 
