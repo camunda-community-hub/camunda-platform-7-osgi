@@ -53,9 +53,7 @@ Import the package `org.camunda.bpm.engine` and `org.camunda.bpm.engine.impl.cfg
 
 #### Using the ProcessApplication API
 
-You can also use the [ProcessApplication API](http://docs.camunda.org/latest/guides/user-guide/#process-applications) in camunda BPM OSGi. This only requires you to use Blueprint.
-Simple create a subclass of `OSGiProcessApplication`, pass the bundle and the BlueprintContext in the constructor and export it as OSGi service (`interface=ProcessApplicationInterface`).
-You can configure your `OSGiProcessApplication` just like a normal ProcessApplication via processes.xml. The engine will be automatically exported as a service for others to use it.
+See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
 
 #### Using the ConfigurationAdmin service
 
@@ -77,7 +75,7 @@ If you reference any `JavaDelegate`s or `ActivityBehavior`s from within your pro
 
 #### ProcessApplication API
 
-Like mentioned in the [User Guide](http://docs.camunda.org/latest/guides/user-guide/#process-applications) you can deploy the processes using the processes.xml. Alternatively you can do it manually inside your OSGiProcessApplication class in the createDeployment() method.
+See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
 
 ### Part 4 referencing inside processes
 
@@ -105,7 +103,7 @@ The third steps works likes the second one, only that it searches for exported A
 
 #### ProcessApplication API
 
-If you used a ProcessApplication to start you engine and deploy your processes the EL resolution is limited to beans in your context.xml (that's why you need Blueprint). Every bean will be matched by its id in the context.xml. The `BlueprintBundleLocalELResolver` won't find any classes/services outside of it. 
+See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
 
 ## OSGi Event Bridge
 
