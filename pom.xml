@@ -16,12 +16,14 @@
 
   <modules>
     <module>camunda-bpm-osgi</module>
+	<module>camunda-bpm-karaf-feature</module>
     <module>camunda-bpm-blueprint-wrapper</module>
     <module>camunda-bpm-karaf-commands</module>
-    <module>camunda-bpm-karaf-feature</module>
     <module>camunda-bpm-karaf-assembly</module>
     <module>camunda-bpm-osgi-fileinstall</module>
     <module>camunda-bpm-osgi-configadmin</module>
+    <module>camunda-bpm-osgi-eventing</module>
+    <module>camunda-bpm-osgi-eventing-api</module>
   </modules>
 
   <properties>
