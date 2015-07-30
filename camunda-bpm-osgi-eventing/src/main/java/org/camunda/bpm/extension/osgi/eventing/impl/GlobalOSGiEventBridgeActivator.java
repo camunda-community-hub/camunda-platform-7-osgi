@@ -177,7 +177,7 @@ public class GlobalOSGiEventBridgeActivator extends AbstractBpmnParseListener im
   }
 
   @Override
-  public void parseProperty(Element propertyElement, VariableDeclaration variableDeclaration, ActivityImpl activity) {
+  public void parseProperty(Element propertyElement, @SuppressWarnings("deprecation") VariableDeclaration variableDeclaration, ActivityImpl activity) {
   }
 
   @Override
