@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.extension.osgi.application;
+package org.camunda.bpm.extension.osgi.application.impl;
 
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -20,7 +20,6 @@ import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Daniel Meyer
@@ -28,10 +27,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author Ronny Bräunlich
  *
  */
-public class ProcessApplicationDeployer implements ServiceTrackerCustomizer<ProcessApplicationInterface, ProcessApplicationInterface> {
+public class ProcessApplicationDeployer {
 
-  @Override
-  public ProcessApplicationInterface addingService(ServiceReference<ProcessApplicationInterface> reference) {
+  public ProcessApplicationInterface addProcessApplication(ServiceReference<ProcessApplicationInterface> reference) {
 
     Bundle bundle = reference.getBundle();
     BundleContext bundleContext = bundle.getBundleContext();
@@ -55,13 +53,7 @@ public class ProcessApplicationDeployer implements ServiceTrackerCustomizer<Proc
 
   }
 
-  @Override
-  public void modifiedService(ServiceReference<ProcessApplicationInterface> reference, ProcessApplicationInterface service) {
-
-  }
-
-  @Override
-  public void removedService(ServiceReference<ProcessApplicationInterface> reference, ProcessApplicationInterface service) {
+  public void removeProcessApplication(ServiceReference<ProcessApplicationInterface> reference, ProcessApplicationInterface service) {
     service.undeploy();
   }
 

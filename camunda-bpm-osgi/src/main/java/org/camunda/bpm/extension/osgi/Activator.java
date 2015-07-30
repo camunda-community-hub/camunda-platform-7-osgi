@@ -17,8 +17,6 @@ import java.util.List;
 
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.extension.osgi.application.ProcessApplicationDeployer;
-import org.camunda.bpm.extension.osgi.container.OSGiRuntimeContainerDelegate;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -38,12 +36,7 @@ public class Activator implements BundleActivator {
   @Override
   public void start(BundleContext context) throws Exception {
 
-    RuntimeContainerDelegate.INSTANCE.set(new OSGiRuntimeContainerDelegate(context));
-
     callbacks.add(new Tracker(new Extender(context)));
-
-    ServiceTracker<ProcessApplicationInterface, ProcessApplicationInterface> paDeployer = new ServiceTracker<ProcessApplicationInterface, ProcessApplicationInterface>(context, ProcessApplicationInterface.class, new ProcessApplicationDeployer());
-    callbacks.add(new CloseTrackerCallback<ProcessApplicationInterface, ProcessApplicationInterface>(paDeployer, true));
 
   }
 

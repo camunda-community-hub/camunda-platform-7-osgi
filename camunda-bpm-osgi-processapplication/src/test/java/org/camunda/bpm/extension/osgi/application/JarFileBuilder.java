@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi;
+package org.camunda.bpm.extension.osgi.application;
 
 import java.io.File;
 import java.io.FileOutputStream;

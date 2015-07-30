@@ -24,6 +24,7 @@
     <module>camunda-bpm-osgi-configadmin</module>
     <module>camunda-bpm-osgi-eventing</module>
     <module>camunda-bpm-osgi-eventing-api</module>
+    <module>camunda-bpm-osgi-processapplication</module>
   </modules>
 
   <properties>

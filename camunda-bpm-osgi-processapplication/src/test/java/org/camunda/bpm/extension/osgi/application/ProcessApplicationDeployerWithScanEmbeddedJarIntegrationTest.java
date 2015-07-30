@@ -34,8 +34,6 @@ import org.camunda.bpm.ProcessApplicationService;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.extension.osgi.JarFileBuilder;
-import org.camunda.bpm.extension.osgi.OSGiTestCase;
 import org.camunda.bpm.extension.osgi.TestBean;
 import org.junit.Ignore;
 import org.junit.Test;

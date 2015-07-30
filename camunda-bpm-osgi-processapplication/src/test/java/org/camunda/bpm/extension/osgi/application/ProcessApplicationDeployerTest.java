@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.camunda.bpm.application.ProcessApplicationInterface;
+import org.camunda.bpm.extension.osgi.application.impl.ProcessApplicationDeployer;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -23,7 +24,7 @@ public class ProcessApplicationDeployerTest {
     when(bundle.getBundleContext()).thenReturn(bundleContext);
     ProcessApplicationInterface app = mock(ProcessApplicationInterface.class);
     when(bundleContext.getService(ref)).thenReturn(app);
-    new ProcessApplicationDeployer().addingService(ref);
+    new ProcessApplicationDeployer().addProcessApplication(ref);
     verify(app, atLeastOnce()).deploy();
   }
   
@@ -31,7 +32,7 @@ public class ProcessApplicationDeployerTest {
   public void removedService(){
     ProcessApplicationDeployer deployer = new ProcessApplicationDeployer();
     ProcessApplicationInterface app = mock(ProcessApplicationInterface.class);
-    deployer.removedService(null, app);
+    deployer.removeProcessApplication(null, app);
     verify(app, atLeastOnce()).undeploy();
   }
 }
