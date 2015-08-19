@@ -23,7 +23,7 @@ It contains a list of the required dependencies and a list containing all the op
 After you've done that you can drop the camunda-bpm-osgi bundle into the runtime.
 It should then move to the resolved state and you could start it.
 
-If you prefer to use Apache Karaf as your runtime you can use the feature.xml directly. The guide can be found [here](https://github.com/camunda/camunda-bpm-platform-osgi/blob/master/camunda-engine-karaf-feature/README.md).
+If you prefer to use Apache Karaf as your runtime you can use the feature.xml directly. The guide can be found [here](https://github.com/camunda/camunda-bpm-platform-osgi/blob/master/camunda-bpm-karaf-feature/README.md).
 
 ### Part 2 creating a process engine
 
