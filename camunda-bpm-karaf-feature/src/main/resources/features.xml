@@ -26,6 +26,7 @@
   <feature name="camunda-commons" version="${camunda-commons.version}">
     <bundle>mvn:org.camunda.commons/camunda-commons-logging/${camunda-commons.version}</bundle>
     <bundle>mvn:org.camunda.commons/camunda-commons-utils/${camunda-commons.version}</bundle>
+    <bundle>mvn:org.camunda.commons/camunda-commons-typed-values/${camunda-commons.version}</bundle>
   </feature>
 
   <feature name="camunda-models" version="${camunda-bpm.version}">
@@ -54,9 +55,21 @@
     <bundle>mvn:org.camunda.connect/camunda-connect-soap-http-client/${camunda-connect.version}</bundle>
     <bundle>mvn:org.camunda.connect/camunda-connect-http-client/${camunda-connect.version}</bundle>
   </feature>
+  
+  <feature name="camunda-dmn" version="${camunda-bpm.version}">
+    <feature version="${camunda-commons.version}">camunda-commons</feature>
+    <bundle>mvn:de.odysseus.juel/juel-api/2.2.7</bundle>
+    <bundle>mvn:de.odysseus.juel/juel-impl/2.2.7</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-feel-api/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-feel-juel/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.model/camunda-dmn-model/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-dmn/${camunda-bpm.version}</bundle>
+  </feature>
 
   <feature name="camunda-core" version="${camunda-bpm.version}">
     <feature version="${camunda-bpm.version}">camunda-models</feature>
+    <feature version="${camunda-commons.version}">camunda-commons</feature>
+    <feature version="${camunda-bpm.version}">camunda-dmn</feature>
     <bundle>mvn:javax.activation/com.springsource.javax.activation/1.1.1</bundle>
     <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/1.1.1</bundle>
     <bundle>mvn:joda-time/joda-time/2.1</bundle>

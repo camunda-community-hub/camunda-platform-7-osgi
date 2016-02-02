@@ -74,18 +74,25 @@ public class BlueprintIntegrationTest {
     Option[] camundaBundles = options(
 
       mavenBundle("org.camunda.bpm", "camunda-engine").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-feel-api").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-feel-juel").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-dmn").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-bpmn-model").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-cmmn-model").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-xml-model").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.model", "camunda-dmn-model").versionAsInProject(),
+      mavenBundle("org.camunda.commons", "camunda-commons-typed-values").versionAsInProject(),
 
-//      mavenBundle("org.camunda.commons", "camunda-commons-logging", "1.0.6"),
-//      mavenBundle("org.camunda.commons", "camunda-commons-utils", "1.0.6"),
+      mavenBundle("org.camunda.commons", "camunda-commons-logging").versionAsInProject(),
+      mavenBundle("org.camunda.commons", "camunda-commons-utils").versionAsInProject(),
 
       mavenBundle("joda-time", "joda-time").versionAsInProject(),
       mavenBundle("com.h2database", "h2").versionAsInProject(),
       mavenBundle("org.mybatis", "mybatis").versionAsInProject(),
       mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
-
+      mavenBundle("de.odysseus.juel", "juel-api").versionAsInProject(),
+      mavenBundle("de.odysseus.juel", "juel-impl").versionAsInProject(),
+      
 //      mavenBundle("org.apache.logging.log4j", "log4j-api", "2.0-beta9"),
 //      mavenBundle("org.apache.logging.log4j", "log4j-core", "2.0-beta9").
 //        noStart(),
@@ -93,9 +100,9 @@ public class BlueprintIntegrationTest {
       mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi")
         .versionAsInProject(),
 
-//      mavenBundle("org.slf4j", "slf4j-api", "1.7.7"),
-//      mavenBundle("ch.qos.logback", "logback-core", "1.1.2"),
-//      mavenBundle("ch.qos.logback", "logback-classic", "1.1.2"),
+      mavenBundle("org.slf4j", "slf4j-api", "1.7.7"),
+      mavenBundle("ch.qos.logback", "logback-core", "1.1.2"),
+      mavenBundle("ch.qos.logback", "logback-classic", "1.1.2"),
 //      mavenBundle("org.assertj", "assertj-core", "1.5.0"),
       mavenBundle("org.apache.aries.blueprint", "org.apache.aries.blueprint.core", "1.0.0"),
       mavenBundle("org.apache.aries.proxy", "org.apache.aries.proxy", "1.0.0"),
