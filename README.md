@@ -1,4 +1,4 @@
-# OSGi integration for camunda BPM platform - [![Build Status](https://buildhive.cloudbees.com/job/camunda/job/camunda-bpm-platform-osgi/badge/icon)](https://buildhive.cloudbees.com/job/camunda/job/camunda-bpm-platform-osgi/)
+# OSGi integration for camunda BPM platform
 
 camunda BPM community extension providing support for camunda BPM platform inside OSGi containers
 
