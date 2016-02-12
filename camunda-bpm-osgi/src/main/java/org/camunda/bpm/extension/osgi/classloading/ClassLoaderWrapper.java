@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.osgi.blueprint;
+package org.camunda.bpm.extension.osgi.classloading;
 
 import java.io.IOException;
 import java.net.URL;
@@ -8,11 +8,12 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: gnodet
- * Date: 11/5/10
- * Time: 11:58 AM
- * To change this template use File | Settings | File Templates.
+ * This class wraps several classloaders and uses all of them to find a class or resource.
+ * It's a workaround if some classloading issues due to class visibility
+ * inside the OSGi environment occur.
+ * @author gnodet
+ * @author Ronny Bräunlich
+ *
  */
 public class ClassLoaderWrapper extends ClassLoader {
 
@@ -76,9 +77,6 @@ public class ClassLoaderWrapper extends ClassLoader {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Enumeration<URL> findResources(String name) throws IOException {
         List<URL> resources = new ArrayList<URL>();

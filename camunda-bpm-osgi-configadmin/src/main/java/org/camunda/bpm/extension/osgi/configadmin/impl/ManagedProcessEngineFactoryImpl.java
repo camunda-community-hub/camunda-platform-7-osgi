@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
-import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
+import org.camunda.bpm.extension.osgi.classloading.BundleDelegatingClassLoader;
+import org.camunda.bpm.extension.osgi.classloading.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.configadmin.ManagedProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.osgi.framework.Bundle;

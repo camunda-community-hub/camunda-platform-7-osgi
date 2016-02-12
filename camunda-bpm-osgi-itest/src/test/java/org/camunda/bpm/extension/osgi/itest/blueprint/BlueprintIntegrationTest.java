@@ -93,7 +93,9 @@ public class BlueprintIntegrationTest extends OSGiBlueprintTestEnvironment {
         .bundle()
         .add(org.camunda.bpm.extension.osgi.Constants.BUNDLE_PROCESS_DEFINTIONS_DEFAULT + "testProcessSingleServiceTask.bpmn",
           new FileInputStream(new File("src/test/resources/testProcessSingleServiceTask.bpmn")))
+        .add("OSGI-INF/blueprint/context.xml", new FileInputStream(new File("src/test/resources/blueprint/context.xml")))
         .set(Constants.BUNDLE_SYMBOLICNAME, "org.camunda.bpm.extension.osgi.example")
+        .set(Constants.DYNAMICIMPORT_PACKAGE, "*")
         .build();
     } catch (FileNotFoundException fnfe) {
       fail(fnfe.toString());

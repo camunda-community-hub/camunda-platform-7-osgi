@@ -5,7 +5,7 @@ import org.camunda.bpm.application.ProcessApplicationReference;
 import org.camunda.bpm.engine.impl.javax.el.ELResolver;
 import org.camunda.bpm.extension.osgi.application.impl.BlueprintBundleLocalELResolver;
 import org.camunda.bpm.extension.osgi.application.impl.OSGiProcessApplicationReference;
-import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
+import org.camunda.bpm.extension.osgi.classloading.BundleDelegatingClassLoader;
 import org.osgi.framework.Bundle;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 

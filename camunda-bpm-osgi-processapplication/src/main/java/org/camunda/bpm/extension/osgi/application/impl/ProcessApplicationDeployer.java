@@ -14,8 +14,8 @@ package org.camunda.bpm.extension.osgi.application.impl;
 
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
-import org.camunda.bpm.extension.osgi.blueprint.ClassLoaderWrapper;
+import org.camunda.bpm.extension.osgi.classloading.BundleDelegatingClassLoader;
+import org.camunda.bpm.extension.osgi.classloading.ClassLoaderWrapper;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;

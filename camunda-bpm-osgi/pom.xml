@@ -25,7 +25,7 @@
     </camunda.artifact>
     <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
     <camunda.osgi.export.pkg>
-      ${camunda.artifact}.blueprint,
+      ${camunda.artifact}.classloading,
       ${camunda.artifact}.el,
       ${camunda.artifact}.engine,
       ${camunda.artifact}.util,

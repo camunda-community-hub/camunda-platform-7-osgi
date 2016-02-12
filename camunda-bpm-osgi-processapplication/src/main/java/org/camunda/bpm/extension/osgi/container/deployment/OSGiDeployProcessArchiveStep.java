@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
 import org.camunda.bpm.container.impl.deployment.DeployProcessArchiveStep;
-import org.camunda.bpm.extension.osgi.blueprint.BundleDelegatingClassLoader;
+import org.camunda.bpm.extension.osgi.classloading.BundleDelegatingClassLoader;
 
 /**
  * 
