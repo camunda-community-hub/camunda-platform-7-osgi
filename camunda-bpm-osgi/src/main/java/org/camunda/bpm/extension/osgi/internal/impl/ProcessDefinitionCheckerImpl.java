@@ -42,7 +42,8 @@ public class ProcessDefinitionCheckerImpl implements ProcessDefintionChecker {
 		}
 	}
 
-	public void bundleRemoved(Bundle bundle) {
+	@SuppressWarnings("unused")
+  public void bundleRemoved(Bundle bundle) {
 		// so far do nothing
 	}
 

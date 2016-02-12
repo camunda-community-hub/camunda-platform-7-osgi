@@ -18,7 +18,7 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.extension.osgi.internal.ProcessDefinitionDeployer;
 import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionCheckerImpl;
 import org.camunda.bpm.extension.osgi.internal.impl.ProcessDefinitionDeployerImpl;
-import org.camunda.bpm.extension.osgi.scripting.impl.ScriptEngineBundleTrackerCustomizer;
+import org.camunda.bpm.extension.osgi.scripting.impl.ScriptEngineBundleScanner;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -51,9 +51,9 @@ public class Activator extends DependencyActivatorBase {
 								.setRequired(true)));
 
 		manager.add(createComponent()
-						.setImplementation(ScriptEngineBundleTrackerCustomizer.class)
+						.setImplementation(ScriptEngineBundleScanner.class)
 						.add(createBundleDependency()
-								.setCallbacks("addingBundle", "modifiedBundle", "removedBundle")));
+								.setCallbacks("addBundle", "modifiedBundle", "removedBundle")));
 		
 	}
 }

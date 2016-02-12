@@ -15,12 +15,9 @@ package org.camunda.bpm.extension.osgi.scripting.impl;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import javax.script.Bindings;
 import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
@@ -43,28 +40,22 @@ public class OsgiScriptingEngines extends ScriptingEngines {
 	public OsgiScriptingEngines(ScriptBindingsFactory scriptBindingsFactory) {
 		super(scriptBindingsFactory);
 	}
+	
+	@Override
+	public ScriptEngine getScriptEngineForLanguage(String language) {
+    ScriptEngine scriptEngine = null;
+    try {
+      scriptEngine = resolveScriptEngine(language);
+    } catch (InvalidSyntaxException e) {
+      throw new ProcessEngineException(
+          "problem resolving scripting engine" + e.getMessage(), e);
+    }
 
-	public Object evaluate(String script, String language,
-			VariableScope variableScope) {
-		ScriptEngine scriptEngine = null;
-		try {
-			scriptEngine = resolveScriptEngine(language);
-		} catch (InvalidSyntaxException e) {
-			throw new ProcessEngineException(
-					"problem resolving scripting engine" + e.getMessage(), e);
-		}
-
-		if (scriptEngine == null) {
-			throw new ProcessEngineException(
-					"Can't find scripting engine for '" + language + "'");
-		}
-    Bindings bindings = createBindings(scriptEngine,variableScope);
-		try {
-			return scriptEngine.eval(script, bindings);
-		} catch (ScriptException e) {
-			throw new ProcessEngineException("problem evaluating script: "
-					+ e.getMessage(), e);
-		}
+    if (scriptEngine == null) {
+      throw new ProcessEngineException(
+          "Can't find scripting engine for '" + language + "'");
+    }
+    return scriptEngine;
 	}
 
 	protected BundleContext getBundleContext() {

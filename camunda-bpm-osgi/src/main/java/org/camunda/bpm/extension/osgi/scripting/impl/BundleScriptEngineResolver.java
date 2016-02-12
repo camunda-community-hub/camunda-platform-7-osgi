@@ -56,8 +56,8 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 			ScriptEngineFactory factory = (ScriptEngineFactory) cls
 					.newInstance();
 			List<String> names = factory.getNames();
-			for (String test : names) {
-				if (test.equals(name)) {
+			for (String n : names) {
+				if (n.equals(name)) {
 					ClassLoader old = Thread.currentThread()
 							.getContextClassLoader();
 					ScriptEngine engine;

@@ -17,7 +17,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.VariableScope;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
 import org.camunda.bpm.extension.osgi.TestScriptEngineFactory;
 import org.camunda.bpm.extension.osgi.scripting.ScriptEngineResolver;
@@ -36,20 +35,19 @@ public class OsgiScriptingEnginesTest {
   }
 
   @Test(expected = ProcessEngineException.class)
-  public void evaluateWithNonExistingEngine() throws InvalidSyntaxException {
+  public void getNonExistingScriptEngine() throws InvalidSyntaxException {
     BundleContext context = mock(BundleContext.class);
     when(context.getServiceReferences(anyString(), isNull(String.class))).thenReturn(null);
     ScriptBindingsFactory bindingsFactory = mock(ScriptBindingsFactory.class);
-    VariableScope variableScope = mock(VariableScope.class);
     TestOsgiScriptingEngines scriptingEngines = new TestOsgiScriptingEngines(bindingsFactory);
     scriptingEngines.ctx = context;
-    Object evaluate = scriptingEngines.evaluate("print String", "Python", variableScope);
-    assertThat(evaluate, is(nullValue()));
+    ScriptEngine engine = scriptingEngines.getScriptEngineForLanguage("Pythin");
+    assertThat(engine, is(nullValue()));
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void evaluateWithExistingEngine() throws InvalidSyntaxException, ScriptException {
+  public void getExistingScriptEngine() throws InvalidSyntaxException, ScriptException {
     BundleContext context = mock(BundleContext.class);
     ServiceReference<ScriptEngineResolver> serviceReference = mock(ServiceReference.class);
     ScriptEngineResolver scriptEngineResolver = mock(ScriptEngineResolver.class);
@@ -62,25 +60,8 @@ public class OsgiScriptingEnginesTest {
     when(scriptEngine.eval(anyString(), any(Bindings.class))).thenReturn("Success");
     TestOsgiScriptingEngines scriptingEngines = new TestOsgiScriptingEngines(bindingsFactory);
     scriptingEngines.ctx = context;
-    Object evaluate = scriptingEngines.evaluate("print String", "Python", mock(VariableScope.class));
-    assertThat(evaluate.toString(), is("Success"));
-  }
-
-  @SuppressWarnings("unchecked")
-  @Test(expected = ProcessEngineException.class)
-  public void evaluateSkriptWithSyntaxError() throws InvalidSyntaxException, ScriptException {
-    BundleContext context = mock(BundleContext.class);
-    ServiceReference<ScriptEngineResolver> serviceReference = mock(ServiceReference.class);
-    ScriptEngineResolver scriptEngineResolver = mock(ScriptEngineResolver.class);
-    when(context.getService(serviceReference)).thenReturn(scriptEngineResolver);
-    when(context.getServiceReferences(eq(ScriptEngineResolver.class), isNull(String.class))).thenReturn(Collections.singletonList(serviceReference));
-    ScriptEngine scriptEngine = mock(ScriptEngine.class);
-    when(scriptEngineResolver.resolveScriptEngine("Python")).thenReturn(scriptEngine);
-    ScriptBindingsFactory bindingsFactory = mock(ScriptBindingsFactory.class);
-    when(scriptEngine.eval(anyString(), isNull(Bindings.class))).thenThrow(new Class[] { ScriptException.class });
-    TestOsgiScriptingEngines scriptingEngines = new TestOsgiScriptingEngines(bindingsFactory);
-    scriptingEngines.ctx = context;
-    scriptingEngines.evaluate("print String", "Python", mock(VariableScope.class));
+    ScriptEngine engine = scriptingEngines.getScriptEngineForLanguage("Python");
+    assertThat(engine, is(scriptEngine));
   }
 
   @Test
