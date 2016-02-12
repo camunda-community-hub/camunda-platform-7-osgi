@@ -3,7 +3,9 @@ package org.camunda.bpm.extension.osgi.itest;
 import static org.ops4j.pax.exam.CoreOptions.*;
 
 import javax.inject.Inject;
+import javax.sql.DataSource;
 
+import org.h2.jdbcx.JdbcDataSource;
 import org.ops4j.pax.exam.ConfigurationFactory;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
@@ -70,5 +72,16 @@ public class OSGiTestEnvironment implements ConfigurationFactory {
     Bundle bundle = getBundle(bundleSymbolicName);
     bundle.start();
     return bundle;
+  }
+  
+  /**
+   * Creates a h2 in memory datasource for the tests.
+   */
+  public DataSource createDatasource(){
+    JdbcDataSource dataSource = new JdbcDataSource();
+    dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+    dataSource.setUser("sa");
+    dataSource.setPassword("");
+    return dataSource;
   }
 }

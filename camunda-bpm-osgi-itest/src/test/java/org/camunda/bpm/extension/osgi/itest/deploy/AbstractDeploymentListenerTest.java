@@ -88,13 +88,4 @@ public abstract class AbstractDeploymentListenerTest extends OSGiTestEnvironment
 			fail(e.toString());
 		}
 	}
-
-	private DataSource createDatasource() {
-		JdbcDataSource dataSource = new JdbcDataSource();
-		dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-		dataSource.setUser("sa");
-		dataSource.setPassword("");
-		return dataSource;
-
-	}
 }

@@ -75,14 +75,6 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
 		}
 	}
 
-	private DataSource createDatasource() {
-		JdbcDataSource dataSource = new JdbcDataSource();
-		dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-		dataSource.setUser("sa");
-		dataSource.setPassword("");
-		return dataSource;
-	}
-
 	private void deployProcessDefinition() {
 		File processDef = getProcessDefinition();
 		DeploymentBuilder builder = processEngine.getRepositoryService()
