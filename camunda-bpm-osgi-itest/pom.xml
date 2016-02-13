@@ -211,6 +211,18 @@
       <version>1.5.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-api</artifactId>
+      <scope>test</scope>
+      <version>2.2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-impl</artifactId>
+      <scope>test</scope>
+      <version>2.2.7</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

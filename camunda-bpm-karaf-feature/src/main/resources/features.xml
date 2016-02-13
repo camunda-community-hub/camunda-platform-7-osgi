@@ -8,17 +8,17 @@
   </feature>
 
   <feature name="camunda-optionals" version="${camunda-bpm.version}">
-  	<bundle>mvn:javax.persistence/com.springsource.javax.persistence/2.0.0</bundle>
-  	<bundle>mvn:javax.servlet/javax.servlet-api/3.0.1</bundle>
-  	<bundle>mvn:javax.transaction/com.springsource.javax.transaction/1.1.0</bundle>
-  	<bundle>mvn:javax.ejb/javax.ejb-api/3.2</bundle>
-  	<bundle>mvn:org.apache.xmlcommons/com.springsource.org.apache.xmlcommons/1.3.4</bundle>
-  	<bundle>mvn:javax.mail/com.springsource.javax.mail/1.4.5</bundle>
-  	<bundle>mvn:org.apache.catalina/com.springsource.org.apache.catalina/6.0.24</bundle>
-  	<bundle>mvn:org.apache.coyote/com.springsource.org.apache.coyote/6.0.24</bundle>
-  	<bundle>mvn:org.apache.juli/com.springsource.org.apache.juli.extras/6.0.24</bundle>
-  	<bundle>mvn:org.apache.commons/commons-email/1.3.2</bundle>
-  	<bundle>mvn:org.apache.ant/com.springsource.org.apache.tools.ant/1.7.1</bundle>
+    <bundle>mvn:javax.persistence/com.springsource.javax.persistence/2.0.0</bundle>
+    <bundle>mvn:javax.servlet/javax.servlet-api/3.0.1</bundle>
+    <bundle>mvn:javax.transaction/com.springsource.javax.transaction/1.1.0</bundle>
+    <bundle>mvn:javax.ejb/javax.ejb-api/3.2</bundle>
+    <bundle>mvn:org.apache.xmlcommons/com.springsource.org.apache.xmlcommons/1.3.4</bundle>
+    <bundle>mvn:javax.mail/com.springsource.javax.mail/1.4.5</bundle>
+    <bundle>mvn:org.apache.catalina/com.springsource.org.apache.catalina/6.0.24</bundle>
+    <bundle>mvn:org.apache.coyote/com.springsource.org.apache.coyote/6.0.24</bundle>
+    <bundle>mvn:org.apache.juli/com.springsource.org.apache.juli.extras/6.0.24</bundle>
+    <bundle>mvn:org.apache.commons/commons-email/1.3.2</bundle>
+    <bundle>mvn:org.apache.ant/com.springsource.org.apache.tools.ant/1.7.1</bundle>
     <bundle>mvn:commons-collections/commons-collections/3.2.1</bundle>
     <bundle>mvn:commons-beanutils/commons-beanutils/1.9.1</bundle>
   </feature>
@@ -26,6 +26,7 @@
   <feature name="camunda-commons" version="${camunda-commons.version}">
     <bundle>mvn:org.camunda.commons/camunda-commons-logging/${camunda-commons.version}</bundle>
     <bundle>mvn:org.camunda.commons/camunda-commons-utils/${camunda-commons.version}</bundle>
+    <bundle>mvn:org.camunda.commons/camunda-commons-typed-values/${camunda-commons.version}</bundle>
   </feature>
 
   <feature name="camunda-models" version="${camunda-bpm.version}">
@@ -39,9 +40,9 @@
     <bundle>mvn:net.minidev/json-smart/1.3</bundle>
     <bundle>mvn:org.codehaus.jackson/jackson-core-asl/1.9.13</bundle>
     <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/1.9.13</bundle>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.4.2</bundle>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.4.2</bundle>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.4.2</bundle>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.5.3</bundle>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.5.3</bundle>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.5.3</bundle>
     <bundle>mvn:com.jayway.jsonpath/json-path/0.9.1</bundle>
     <bundle>mvn:org.camunda.spin/camunda-spin-core/${camunda-spin.version}</bundle>
   </feature>
@@ -54,9 +55,21 @@
     <bundle>mvn:org.camunda.connect/camunda-connect-soap-http-client/${camunda-connect.version}</bundle>
     <bundle>mvn:org.camunda.connect/camunda-connect-http-client/${camunda-connect.version}</bundle>
   </feature>
+  
+  <feature name="camunda-dmn" version="${camunda-bpm.version}">
+    <feature version="${camunda-commons.version}">camunda-commons</feature>
+    <bundle>mvn:de.odysseus.juel/juel-api/2.2.7</bundle>
+    <bundle>mvn:de.odysseus.juel/juel-impl/2.2.7</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-feel-api/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-feel-juel/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.model/camunda-dmn-model/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.camunda.bpm.dmn/camunda-engine-dmn/${camunda-bpm.version}</bundle>
+  </feature>
 
   <feature name="camunda-core" version="${camunda-bpm.version}">
     <feature version="${camunda-bpm.version}">camunda-models</feature>
+    <feature version="${camunda-commons.version}">camunda-commons</feature>
+    <feature version="${camunda-bpm.version}">camunda-dmn</feature>
     <bundle>mvn:javax.activation/com.springsource.javax.activation/1.1.1</bundle>
     <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/1.1.1</bundle>
     <bundle>mvn:joda-time/joda-time/2.1</bundle>
@@ -66,8 +79,8 @@
     <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.drools/5.5.0.Final_2</bundle>
     <bundle>mvn:com.google.protobuf/protobuf-java/2.5.0</bundle>
     <bundle>mvn:org.jvnet.staxex/stax-ex/1.7.5</bundle>
-    <bundle>mvn:org.apache.felix/org.apache.felix.dependencymanager/3.2.0</bundle>
     <bundle>mvn:org.camunda.bpm/camunda-engine/${camunda-bpm.version}</bundle>
+    <bundle>mvn:org.apache.felix/org.apache.felix.dependencymanager/${dependency-manager.version}</bundle>
     <bundle>mvn:org.camunda.bpm.extension.osgi/camunda-bpm-osgi/${project.version}</bundle>
   </feature>
 
@@ -76,7 +89,7 @@
   </feature>
 
   <feature name="camunda-bpm-karaf-feature-full" version="${project.version}">
-  	<feature version="${spring.framework.version}">spring</feature>
+    <feature version="${spring.framework.version}">spring</feature>
     <feature version="${camunda-bpm.version}">camunda-optionals</feature>
     <feature version="${camunda-bpm.version}">camunda-core</feature>
     <feature version="${camunda-connect.version}">camunda-connect</feature>

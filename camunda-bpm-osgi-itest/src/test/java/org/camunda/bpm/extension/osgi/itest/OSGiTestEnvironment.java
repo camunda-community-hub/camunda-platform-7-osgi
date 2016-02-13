@@ -35,15 +35,26 @@ public class OSGiTestEnvironment implements ConfigurationFactory {
 
       // camunda core
       mavenBundle("org.camunda.bpm", "camunda-engine").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-feel-api").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-feel-juel").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.dmn", "camunda-engine-dmn").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-bpmn-model").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-cmmn-model").versionAsInProject(),
       mavenBundle("org.camunda.bpm.model", "camunda-xml-model").versionAsInProject(),
+      mavenBundle("org.camunda.bpm.model", "camunda-dmn-model").versionAsInProject(),
+      mavenBundle("org.camunda.commons", "camunda-commons-typed-values").versionAsInProject(),
+      mavenBundle("org.camunda.commons", "camunda-commons-logging").versionAsInProject(),
+      mavenBundle("org.camunda.commons", "camunda-commons-utils").versionAsInProject(),
       // camunda core dependencies
       mavenBundle("joda-time", "joda-time").versionAsInProject(),
       mavenBundle("com.h2database", "h2").versionAsInProject(),
       mavenBundle("org.mybatis", "mybatis").versionAsInProject(),
       mavenBundle("com.fasterxml.uuid", "java-uuid-generator").versionAsInProject(),
-      
+      mavenBundle("de.odysseus.juel", "juel-api").versionAsInProject(),
+      mavenBundle("de.odysseus.juel", "juel-impl").versionAsInProject(),
+      mavenBundle("org.slf4j", "slf4j-api", "1.7.7"),
+      mavenBundle("ch.qos.logback", "logback-core", "1.1.2"),
+      mavenBundle("ch.qos.logback", "logback-classic", "1.1.2"),
       //camunda osgi
       mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi").versionAsInProject(),
       
