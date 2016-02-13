@@ -1,4 +1,4 @@
-# Camunda BPM - OSGi Process Application Integration
+# Camunda BPM OSGi - Process Application Integration
 
 This module allows you to use the [Process Application mechanism](http://docs.camunda.org/7.3/guides/user-guide/#process-applications) in an OSGi environment. To use the module you have to use [Blueprint](http://wiki.osgi.org/wiki/Blueprint).
 

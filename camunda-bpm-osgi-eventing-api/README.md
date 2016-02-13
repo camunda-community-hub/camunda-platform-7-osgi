@@ -1,4 +1,4 @@
-# Camunda BPM - OSGi Event Bridge
+# camunda BPM OSGi - Event Bridge
 
 This modules enables it to send process events via the [OSGi EventAdmin](https://osgi.org/javadoc/r4v42/org/osgi/service/event/EventAdmin.html). Basically it works like the [CDI Event Bridge](http://docs.camunda.org/7.2/guides/user-guide/#cdi-and-java-ee-integration-cdi-event-bridge).
 

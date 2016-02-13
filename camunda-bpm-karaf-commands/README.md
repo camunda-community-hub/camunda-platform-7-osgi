@@ -1,3 +1,5 @@
+# camunda BPM OSGi - Karaf Commands
+
 This project contains an extension to the Apache Karaf runtime environment which activate additional camunda related commands.
 
 With the commands you can query data from the process engine of the actual Karaf container. For example you can:

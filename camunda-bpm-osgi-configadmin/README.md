@@ -1,4 +1,4 @@
-# camunda BPM OSGi ConfigAdmin
+# camunda BPM OSGi - ConfigAdmin
 
 The [Configuration Admin](http://wiki.osgi.org/wiki/Configuration_Admin) helps to manage services' configuration and makes it possible to provide those two separately.
 A `ManagedServiceFactory` implementation is provided by this module, so that you can use the Configuration Admin to create process engines.

@@ -1,4 +1,4 @@
-# camunda Engine feature
+# camunda BPM OSGi - Karaf Feature
 This project contains a feature.xml to install the camunda-engine and camunda-engine-osgi project into your Karaf installation.
 
 Check out this project and run mvm install on it. Then start Karaf and type the following depending on your Karaf version:

@@ -1,4 +1,4 @@
-# camunda BPM OSGi Fileinstall
+# camunda BPM OSGi - Fileinstall
 
 This module enables you to transform BPMN files automatically into bundles with the help of [Apache Felix Fileinstall](http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html).
 
