@@ -12,6 +12,14 @@ Export-Package: [...]
 Import-Package: [...]
 ```
 
+## Project structure
+
+Every module is supposed to fullfil a single purpose and to be used independently of the others.
+Three modules are an exception from this rule, namely
+- camunda-bpm-karaf-assembly, which is used to provide a Karaf distribution that you can download [here](https://github.com/camunda/camunda-bpm-platform-osgi/releases)
+- camunda-bpm-osgi-itest, which contains all the integration tests
+- camunda-bpm-osgi, which contains some core components and is the only one required by all the modules
+
 ## Get started
 
 ### Part 1 starting the camunda BPM OSGi bundle
@@ -38,13 +46,9 @@ Please note also, that the process engine won't be exported automatically. If yo
 
 If you want to use a special ELResolver (see part 4) you'll have to use the `ProcessEngineFactoryWithELResolver`.
 
-#### Using the camunda BPM Blueprint wrapper (deprecated)
+#### Using Blueprint
 
-There is already a project with a pre-filled Blueprint context.xml. Basically you'll only have to edit the Datasource properties or you use the pre-defined in memory H2 database.
-
-This approach uses the deprecated `ConfigurationFactory` right now, so please be careful. To see the reason why the `ConfigurationFactory` is deprecated see [here](https://groups.google.com/forum/#!topic/camunda-bpm-dev/toZEYMzUJpQ)
-
-If your Blueprint implementation supports non-void setters you can replace the `ConfigurationFactory` by directly configuring a `StandaloneProcessEngineConfiguration`. 
+See [camunda BPM OSGi - Blueprint Wrapper](camunda-bpm-blueprint-wrapper)
 
 #### Old school
 
@@ -53,11 +57,11 @@ Import the package `org.camunda.bpm.engine` and `org.camunda.bpm.engine.impl.cfg
 
 #### Using the ProcessApplication API
 
-See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
+See [camunda BPMN OSGi - Process Application Integration](camunda-bpm-osgi-processapplication)
 
 #### Using the ConfigurationAdmin service
 
-See [camunda BPM OSGi ConfigAdmin](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-configadmin).
+See [camunda BPM OSGi ConfigAdmin](camunda-bpm-osgi-configadmin).
 
 ### Part 3 Deploying process definitions
 
@@ -75,15 +79,13 @@ If you reference any `JavaDelegate`s or `ActivityBehavior`s from within your pro
 
 #### ProcessApplication API
 
-See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
+See [camunda BPMN OSGi - Process Application Integration](camunda-bpm-osgi-processapplication)
 
-### Part 4 referencing inside processes
+### Part 4 Referencing inside processes
 
 #### With the BlueprintELResolver
 
-The `BlueprintELResolver` can be used with `JavaDelegates`. You'll have to use the `BlueprintELResolver` as ELResolver and register it to listen for `JavaDelegates`.
-If you use the camunda BPM Blueprint wrapper this will be done for you automatically.
-The `BlueprintELResolver` then tries to match the expression with the Blueprint component name (the id in the context.xml).
+See [camunda BPM OSGi - Blueprint Wrapper](camunda-bpm-blueprint-wrapper)
 
 #### With the OSGiELResolver
 
@@ -103,16 +105,16 @@ The third steps works likes the second one, only that it searches for exported A
 
 #### ProcessApplication API
 
-See [camunda BPMN OSGi Process Application Integration](https://github.com/camunda/camunda-bpm-platform-osgi/tree/master/camunda-bpm-osgi-processapplication)
+See [camunda BPMN OSGi - Process Application Integration](camunda-bpm-osgi-processapplication)
 
 ## OSGi Event Bridge
 
-See [camunda BPM OSGi eventing API](https://github.com/camunda/camunda-bpm-platform-osgi/tree/messaging/camunda-bpm-osgi-eventing-api).
+See [camunda BPM OSGi - Eventing API](https://github.com/camunda/camunda-bpm-platform-osgi/tree/messaging/camunda-bpm-osgi-eventing-api).
 
 ## Resources
 
 * [Issue Tracker](https://github.com/camunda/camunda-bpm-platform-osgi/issues)
-* [Contributing](https://github.com/camunda/camunda-bpm-platform-osgi/blob/master/CONTRIBUTING.md)
+* [Contributing](CONTRIBUTING.md)
 
 
 ## Roadmap
