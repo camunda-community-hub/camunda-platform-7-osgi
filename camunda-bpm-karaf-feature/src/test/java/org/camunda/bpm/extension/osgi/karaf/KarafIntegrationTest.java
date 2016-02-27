@@ -5,7 +5,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFileExtend;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 
 import java.io.File;
 
@@ -17,7 +20,6 @@ import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
-import org.ops4j.pax.exam.options.MavenUrlReference;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.osgi.framework.Bundle;
@@ -39,14 +41,6 @@ public class KarafIntegrationTest {
         .artifactId("apache-karaf")
         .type("zip")
         .versionAsInProject();
-    MavenUrlReference karafStandardRepo =
-      maven()
-        .groupId("org.apache.karaf.features")
-        .artifactId("standard")
-        .classifier("features")
-        .type("xml")
-        .versionAsInProject();
-
     return new Option[] {
         // logLevel(LogLevel.TRACE),
         // debugConfiguration("5005", true),
@@ -64,7 +58,6 @@ public class KarafIntegrationTest {
         editConfigurationFileExtend("etc/system.properties",
           "maven.repo.local",
           System.getProperty("maven.repo.local", "")), keepRuntimeFolder(),
-        features(karafStandardRepo, "scr"),
         features(new File("target/classes/features.xml").toURI().toString(),
           "camunda-bpm-karaf-feature-minimal")
     };
