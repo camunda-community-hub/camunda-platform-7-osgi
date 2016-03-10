@@ -40,7 +40,7 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
     mavenBundle().groupId("commons-beanutils")
         .artifactId("commons-beanutils").version("1.9.1"),
     mavenBundle().groupId("commons-collections")
-        .artifactId("commons-collections").version("3.2.1"));
+        .artifactId("commons-collections").version("3.2.2"));
 		return OptionUtils.combine(beanUtils, super.createConfiguration());
 	}
 
