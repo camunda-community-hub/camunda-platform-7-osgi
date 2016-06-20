@@ -70,7 +70,7 @@ public class OSGiEventBridgeIntegrationTest extends OSGiTestEnvironment {
   public Option[] createConfiguration() {
     Option[] eventing = options(
         mavenBundle("org.apache.felix", "org.apache.felix.eventadmin").versionAsInProject(),
-        mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(), 
+        mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(),
         mavenBundle("org.apache.felix", "org.apache.felix.log").versionAsInProject(),
         mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi-eventing-api").versionAsInProject(),
         mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi-eventing").versionAsInProject()
@@ -93,7 +93,7 @@ public class OSGiEventBridgeIntegrationTest extends OSGiTestEnvironment {
     TestEventHandler eventHandler = new TestEventHandler();
     registerEventHandler(eventHandler);
     ProcessEngine processEngine = createProcessEngine();
-    deployProcess(processEngine, "testProcess", "src/test/resources/testProcess.bpmn");
+    deployProcess(processEngine, "testProcess", "src/test/resources/testprocess.bpmn");
     processEngine.getRuntimeService().startProcessInstanceByKey("Process_1");
     processEngine.close();
 
@@ -121,7 +121,7 @@ public class OSGiEventBridgeIntegrationTest extends OSGiTestEnvironment {
   /**
    * If we stop the eventing bundle and restart it afterwards we want to receive
    * events again.
-   * 
+   *
    * @throws FileNotFoundException
    * @throws BundleException
    * @throws InterruptedException
