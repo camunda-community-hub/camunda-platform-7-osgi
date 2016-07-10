@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
-import javax.sql.DataSource;
-
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
@@ -19,7 +17,6 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactoryWithELResolver;
 import org.camunda.bpm.extension.osgi.itest.OSGiTestEnvironment;
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
