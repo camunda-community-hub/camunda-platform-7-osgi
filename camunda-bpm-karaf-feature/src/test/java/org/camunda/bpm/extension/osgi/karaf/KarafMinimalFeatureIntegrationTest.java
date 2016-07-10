@@ -28,7 +28,7 @@ import org.osgi.framework.BundleException;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class KarafIntegrationTest {
+public class KarafMinimalFeatureIntegrationTest {
 
   @Inject
   protected BundleContext ctx;

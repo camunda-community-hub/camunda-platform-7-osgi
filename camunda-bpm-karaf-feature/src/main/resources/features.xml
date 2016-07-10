@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
 
-  <feature name="spring" version="${spring.framework.version}">
+  <feature name="camunda-spring" version="${spring.framework.version}">
     <bundle>mvn:org.springframework/spring-asm/${spring.framework.version}</bundle>
     <bundle>mvn:org.springframework/spring-core/${spring.framework.version}</bundle>
     <bundle>mvn:org.springframework/spring-beans/${spring.framework.version}</bundle>
   </feature>
 
-  <feature name="camunda-optionals" version="${camunda-bpm.version}">
-    <bundle>mvn:javax.persistence/com.springsource.javax.persistence/2.0.0</bundle>
-    <bundle>mvn:javax.servlet/javax.servlet-api/3.0.1</bundle>
-    <bundle>mvn:javax.transaction/com.springsource.javax.transaction/1.1.0</bundle>
+  <feature name="javax-bundles" version="${camunda-bpm.version}">
+    <bundle>mvn:javax.persistence/com.springsource.javax.persistence/1.99.0</bundle>
+    <bundle>mvn:javax.servlet/com.springsource.javax.servlet/2.5.0</bundle>
+    <bundle>mvn:javax.enterprise/cdi-api/1.2</bundle>
+    <bundle>mvn:javax.inject/com.springsource.javax.inject/1.0.0</bundle>
+    <bundle>mvn:javax.el/javax.el-api/2.2.5</bundle>
+    <bundle>mvn:javax.annotation/javax.annotation-api/1.2</bundle>
+    <bundle>mvn:javax.interceptor/javax.interceptor-api/1.2</bundle>
+    <bundle>mvn:javax.transaction/javax.transaction-api/1.2</bundle>
     <bundle>mvn:javax.ejb/javax.ejb-api/3.2</bundle>
-    <bundle>mvn:org.apache.xmlcommons/com.springsource.org.apache.xmlcommons/1.3.4</bundle>
     <bundle>mvn:javax.mail/com.springsource.javax.mail/1.4.5</bundle>
+  </feature>
+
+  <feature name="camunda-optionals" version="${camunda-bpm.version}">
+    <feature version="${camunda-bpm.version}">javax-bundles</feature>
     <bundle>mvn:org.apache.catalina/com.springsource.org.apache.catalina/6.0.24</bundle>
     <bundle>mvn:org.apache.coyote/com.springsource.org.apache.coyote/6.0.24</bundle>
     <bundle>mvn:org.apache.juli/com.springsource.org.apache.juli.extras/6.0.24</bundle>
@@ -90,7 +98,7 @@
   </feature>
 
   <feature name="camunda-bpm-karaf-feature-full" version="${project.version}">
-    <feature version="${spring.framework.version}">spring</feature>
+    <feature version="${spring.framework.version}">camunda-spring</feature>
     <feature version="${camunda-bpm.version}">camunda-optionals</feature>
     <feature version="${camunda-bpm.version}">camunda-core</feature>
     <feature version="${camunda-connect.version}">camunda-connect</feature>
