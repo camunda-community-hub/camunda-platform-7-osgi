@@ -65,6 +65,20 @@ public class BundleScriptEngineResolverTest {
     ScriptEngine scriptEngine = scriptEngineResolver.resolveScriptEngine("Uber-language");
     assertThat(scriptEngine, is(instanceOf(TestScriptEngineFactory.TestScriptEngine.class)));
   }
+  
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @Test
+  public void resolveTestScriptEngineWithCommentsInFile() throws MalformedURLException, ClassNotFoundException {
+    Bundle bundle = mock(Bundle.class);
+    BundleContext bundleContext = mock(BundleContext.class);
+    when(bundle.getBundleContext()).thenReturn(bundleContext);
+    Class factoryClazz = TestScriptEngineFactory.class;
+    when(bundle.loadClass(eq(factoryClazz.getName()))).thenReturn(factoryClazz);
+    URL configFile = new File("src/test/resources/javax.script.ScriptEngineFactoryComment").toURI().toURL();
+    BundleScriptEngineResolver scriptEngineResolver = new BundleScriptEngineResolver(bundle, configFile);
+    ScriptEngine scriptEngine = scriptEngineResolver.resolveScriptEngine("Uber-language");
+    assertThat(scriptEngine, is(instanceOf(TestScriptEngineFactory.TestScriptEngine.class)));
+  }
 
   @SuppressWarnings("unchecked")
   @Test

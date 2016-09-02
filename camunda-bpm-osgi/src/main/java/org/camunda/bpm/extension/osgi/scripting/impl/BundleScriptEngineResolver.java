@@ -1,6 +1,7 @@
 package org.camunda.bpm.extension.osgi.scripting.impl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
@@ -46,7 +47,7 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					configFile.openStream()));
-			String className = in.readLine();
+			String className = removeCommentsFromInput(in);
 			in.close();
 			Class<?> cls = bundle.loadClass(className);
 			if (!ScriptEngineFactory.class.isAssignableFrom(cls)) {
@@ -85,7 +86,22 @@ public class BundleScriptEngineResolver implements ScriptEngineResolver {
 		}
 	}
 
-	@Override
+	/**
+	 * Takes the input stream and ignores lines starting with a # and everything after a #
+	 */
+	private String removeCommentsFromInput(BufferedReader in) throws IOException {
+	  String l = in.readLine();
+	  //remove lines that start with a comment
+	  while(l.startsWith("#")){
+	    l = in.readLine();
+	  }
+	  if(l.contains("#")){
+	    l = l.substring(0, l.indexOf("#"));
+	  }
+	  return l.trim();
+  }
+
+  @Override
 	public String toString() {
 		return "OSGi script engine resolver for " + bundle.getSymbolicName();
 	}
