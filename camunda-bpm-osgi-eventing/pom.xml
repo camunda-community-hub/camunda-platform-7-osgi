@@ -3,12 +3,13 @@
   <parent>
     <artifactId>camunda-bpm-osgi-root</artifactId>
     <groupId>org.camunda.bpm.extension.osgi</groupId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <name>Camunda BPM - OSGi Eventing</name>
   <artifactId>camunda-bpm-osgi-eventing</artifactId>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <description>This bundle activates camunda business process events inside an OSGi environment.</description>
   <properties>

@@ -4,11 +4,12 @@
   <parent>
     <groupId>org.camunda.bpm.extension.osgi</groupId>
     <artifactId>camunda-bpm-osgi-root</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
   </parent>
 
   <name>Camunda BPM - Blueprint - Wrapper</name>
   <artifactId>camunda-bpm-blueprint-wrapper</artifactId>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <properties>
