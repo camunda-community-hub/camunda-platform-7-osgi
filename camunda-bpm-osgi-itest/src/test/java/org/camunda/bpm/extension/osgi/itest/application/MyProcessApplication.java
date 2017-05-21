@@ -30,7 +30,7 @@ public class MyProcessApplication extends OSGiProcessApplication {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("foo")
       .startEvent()
       .scriptTask()
-        .scriptText("println('Yoyo');")
+        .scriptText("print('Yoyo');")
         .scriptFormat("Javascript")
        .serviceTask()
          .camundaExpression("${myBean}")
