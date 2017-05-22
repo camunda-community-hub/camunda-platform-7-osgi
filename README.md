@@ -1,5 +1,7 @@
 # OSGi integration for camunda BPM platform
 
+[![Build Status](https://travis-ci.org/camunda/camunda-bpm-platform-osgi.svg?branch=master)](https://travis-ci.org/camunda/camunda-bpm-platform-osgi)
+
 camunda BPM community extension providing support for camunda BPM platform inside OSGi containers
 
 ```
