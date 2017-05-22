@@ -10,6 +10,7 @@ import org.ops4j.pax.exam.ConfigurationFactory;
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.OptionUtils;
+import org.ops4j.pax.exam.util.PathUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -28,6 +29,8 @@ public class OSGiTestEnvironment implements ConfigurationFactory {
 
   @Inject
   protected BundleContext ctx;
+  
+  
   
   @Override
   public Option[] createConfiguration() {
@@ -65,7 +68,10 @@ public class OSGiTestEnvironment implements ConfigurationFactory {
       bundle("reference:file:target/classes"));
     return OptionUtils.combine(
       camundaBundles,
-      CoreOptions.junitBundles()
+      CoreOptions.junitBundles(),
+      //for the logging
+      systemProperty("logback.configurationFile")
+      .value("file:" + PathUtils.getBaseDir() + "/src/test/resources/logback-test.xml")
     );
   }
   
