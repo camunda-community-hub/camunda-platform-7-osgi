@@ -50,6 +50,7 @@ public class ManagedProcessEngineFactoryImplIntegrationTest extends OSGiTestEnvi
     Option[] bundles = options(
         mavenBundle().groupId("commons-beanutils").artifactId("commons-beanutils").versionAsInProject(),
         mavenBundle().groupId("commons-collections").artifactId("commons-collections").versionAsInProject(),
+        mavenBundle().groupId("commons-logging").artifactId("commons-logging").version("1.1.2"),
         mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin").versionAsInProject(),
         mavenBundle().groupId("org.camunda.bpm.extension.osgi").artifactId("camunda-bpm-osgi-configadmin").versionAsInProject());
     return OptionUtils.combine(OptionUtils.combine(bundles, super.createConfiguration()));

@@ -9,15 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
 
-import javax.sql.DataSource;
-
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.extension.osgi.el.OSGiExpressionManager;
 import org.camunda.bpm.extension.osgi.engine.ProcessEngineFactory;
 import org.camunda.bpm.extension.osgi.itest.OSGiTestEnvironment;
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.ops4j.pax.exam.Configuration;
@@ -40,7 +37,9 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
     mavenBundle().groupId("commons-beanutils")
         .artifactId("commons-beanutils").version("1.9.1"),
     mavenBundle().groupId("commons-collections")
-        .artifactId("commons-collections").version("3.2.2"));
+        .artifactId("commons-collections").version("3.2.2"),
+    mavenBundle().groupId("commons-logging")
+        .artifactId("commons-logging").version("1.1.2"));
 		return OptionUtils.combine(beanUtils, super.createConfiguration());
 	}
 
