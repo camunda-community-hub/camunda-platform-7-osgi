@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.camunda.bpm.extension.osgi</groupId>
     <artifactId>camunda-bpm-osgi-root</artifactId>
-    <version>3.0.0</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
 
   <name>Camunda BPM - Karaf - Assembly</name>
