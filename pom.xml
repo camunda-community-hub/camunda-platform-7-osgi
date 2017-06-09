@@ -29,7 +29,7 @@
   </modules>
 
   <properties>    
-  	<camunda-bpm.version>7.6.0</camunda-bpm.version>
+  	<camunda-bpm.version>7.7.0</camunda-bpm.version>
     <camunda-spin.version>1.3.1</camunda-spin.version>
     <camunda-connect.version>1.0.4</camunda-connect.version>
     <camunda-commons.version>1.4.0</camunda-commons.version>
