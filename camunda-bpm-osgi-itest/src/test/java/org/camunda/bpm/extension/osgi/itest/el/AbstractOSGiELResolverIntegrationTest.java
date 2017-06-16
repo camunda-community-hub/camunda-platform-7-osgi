@@ -74,7 +74,7 @@ public abstract class AbstractOSGiELResolverIntegrationTest extends
 		}
 	}
 
-	private void deployProcessDefinition() {
+	protected void deployProcessDefinition() {
 		File processDef = getProcessDefinition();
 		DeploymentBuilder builder = processEngine.getRepositoryService()
 				.createDeployment();
