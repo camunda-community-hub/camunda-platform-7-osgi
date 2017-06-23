@@ -19,7 +19,7 @@ public class MyProcessApplication extends OSGiProcessApplication {
   }
 
   /**
-   * @param processEngine  
+   * @param processEngine
    */
   @PostDeploy
   public void sayHello(ProcessEngine processEngine) {
@@ -29,9 +29,6 @@ public class MyProcessApplication extends OSGiProcessApplication {
   public void createDeployment(String processArchiveName, DeploymentBuilder deploymentBuilder) {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("foo")
       .startEvent()
-      .scriptTask()
-        .scriptText("print('Yoyo');")
-        .scriptFormat("Javascript")
        .serviceTask()
          .camundaExpression("${myBean}")
       .endEvent()
