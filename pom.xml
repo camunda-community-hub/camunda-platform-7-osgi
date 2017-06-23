@@ -11,7 +11,7 @@
   <name>Camunda BPM - OSGi - Root</name>
   <groupId>org.camunda.bpm.extension.osgi</groupId>
   <artifactId>camunda-bpm-osgi-root</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.0</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -416,7 +416,7 @@
     <url>https://github.com/camunda/camunda-bpm-platform-osgi</url>
     <connection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</connection>
     <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform-osgi.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>4.0.0</tag>
   </scm>
 
   <distributionManagement>
