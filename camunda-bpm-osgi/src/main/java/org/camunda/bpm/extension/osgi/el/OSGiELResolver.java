@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.impl.javax.el.BeanELResolver;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
@@ -32,8 +33,13 @@ public class OSGiELResolver extends BeanELResolver {
           returnValue = checkRegisteredOsgiServices(JavaDelegate.class, key);
         }
         if (returnValue == null) {
-          // finally ActivitiBehaviors
+          // go on with ActivitiBehaviors
           returnValue = checkRegisteredOsgiServices(ActivityBehavior.class, key);
+        }
+
+        if (returnValue == null) {
+          // finally TaskListeners
+          returnValue = checkRegisteredOsgiServices(TaskListener.class, key);
         }
       } catch (InvalidSyntaxException e) {
         throw new RuntimeException(e);
@@ -57,7 +63,7 @@ public class OSGiELResolver extends BeanELResolver {
   /**
    * Checks the OSGi ServiceRegistry if a service matching the given filter is
    * present.
-   * 
+   *
    * @param filter
    *          the LDAP filter
    * @return null if no service could be found or the service object
@@ -86,7 +92,7 @@ public class OSGiELResolver extends BeanELResolver {
    * <code>
    * public class MyServiceTask extends JavaDelegate</code> <br/>
    * matches {@link JavaDelegate} with key "myServiceTask".
-   * 
+   *
    * @param serviceClazz
    * @param key
    *          the name of the class
@@ -113,7 +119,7 @@ public class OSGiELResolver extends BeanELResolver {
    * Gets the service objects from the {@link BundleContext} and compares the
    * class names to the given key. For the comparison see
    * {@link #checkRegisteredOsgiServices(String, String)}.
-   * 
+   *
    * @param references
    * @param key
    * @return
