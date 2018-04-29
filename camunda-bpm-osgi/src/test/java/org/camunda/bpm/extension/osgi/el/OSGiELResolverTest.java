@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.impl.javax.el.ELContext;
 import org.camunda.bpm.engine.impl.javax.el.MethodNotFoundException;
 import org.camunda.bpm.engine.impl.javax.el.PropertyNotFoundException;
@@ -149,6 +150,43 @@ public class OSGiELResolverTest {
     ServiceReference<ActivityBehavior> reference1 = mockService(behaviour1);
     ServiceReference<ActivityBehavior> reference2 = mockService(behaviour2);
     registerServiceRefsAtContext(ActivityBehavior.class, null, reference1, reference2);
+    resolver.getValue(elContext, null, lookupName);
+  }
+
+  @Test
+  public void getValueForSingleTaskService() throws InvalidSyntaxException {
+    String lookupName = "testTaskListener";
+    TaskListener serviceObject = new TestTaskListener();
+    ServiceReference<TaskListener> reference = mockService(serviceObject);
+    registerServiceRefsAtContext(TaskListener.class, null, reference);
+    TaskListener value = (TaskListener) resolver.getValue(elContext, null, lookupName);
+    assertThat(value, is(sameInstance(serviceObject)));
+    wasPropertyResolved();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void getValueForTwoTaskServices() throws InvalidSyntaxException {
+    String lookupName = "testTaskListener";
+    TaskListener serviceObject = new TestTaskListener();
+    TaskListener anotherServiceObject = mock(TaskListener.class);
+    ServiceReference<TaskListener> reference1 = mockService(serviceObject);
+    ServiceReference<TaskListener> reference2 = mockService(anotherServiceObject);
+    registerServiceRefsAtContext(TaskListener.class, null, reference1, reference2);
+    TaskListener value = (TaskListener) resolver.getValue(elContext, null, lookupName);
+    assertThat(value, is(sameInstance(serviceObject)));
+    wasPropertyResolved();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test(expected = RuntimeException.class)
+  public void getValueForTaskServicesWithSameName() throws InvalidSyntaxException {
+    String lookupName = "testTaskListener";
+    TaskListener behaviour1 = new TestTaskListener();
+    TaskListener behaviour2 = new TestTaskListener();
+    ServiceReference<TaskListener> reference1 = mockService(behaviour1);
+    ServiceReference<TaskListener> reference2 = mockService(behaviour2);
+    registerServiceRefsAtContext(TaskListener.class, null, reference1, reference2);
     resolver.getValue(elContext, null, lookupName);
   }
 
