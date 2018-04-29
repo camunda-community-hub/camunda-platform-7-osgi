@@ -61,11 +61,24 @@
 	<service ref="managementService" interface="org.camunda.bpm.engine.ManagementService" />
 	<!-- ############ End BPM services ############ -->
 
-	<reference-list id="activityProviders" availability="optional"
+  <!-- ### if you are using the BlueprintELResolver configure the bind / unbind methods -->
+	<reference-list id="delegateProviders" availability="optional"
 		interface="org.camunda.bpm.engine.delegate.JavaDelegate" activation="eager">
 		<reference-listener ref="blueprintELResolver"
 			bind-method="bindService" unbind-method="unbindService" />
 	</reference-list>
+
+  <reference-list id="taskListenerProviders" availability="optional"
+                  interface="org.camunda.bpm.engine.delegate.TaskListener" activation="eager">
+    <reference-listener ref="blueprintELResolver" bind-method="bindTaskListenerService"
+                        unbind-method="unbindTaskListenerService"/>
+  </reference-list>
+
+  <reference-list id="activityProviders" availability="optional"
+                  interface="org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior" activation="eager">
+    <reference-listener ref="blueprintELResolver" bind-method="bindActivityBehaviourService"
+                        unbind-method="unbindActivityBehaviourService"/>
+  </reference-list>
 
 </blueprint>
 

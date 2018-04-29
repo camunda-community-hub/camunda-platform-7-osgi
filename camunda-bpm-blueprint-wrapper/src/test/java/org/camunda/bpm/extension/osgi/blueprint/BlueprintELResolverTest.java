@@ -9,8 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.impl.juel.SimpleContext;
+import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.extension.osgi.blueprint.BlueprintELResolver;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,6 +51,30 @@ public class BlueprintELResolverTest {
 				"delegate");
 		assertThat(object, is(nullValue()));
 	}
+
+  @Test
+  public void bindTaskListenerService() {
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(OSGI_SERVICE_BLUEPRINT_COMPNAME, "taskListener");
+    MockTaskListener taskListener = new MockTaskListener();
+    resolver.bindTaskListenerService(taskListener, props);
+    SimpleContext context = new SimpleContext();
+    Object object = resolver.getValue(context, null, "taskListener");
+    assertThat(object == taskListener, is(true));
+    assertThat(context.isPropertyResolved(), is(true));
+  }
+
+  @Test
+  public void bindActivityBehaviourService() {
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(OSGI_SERVICE_BLUEPRINT_COMPNAME, "activityBehaviour");
+    MockActivityBehaviour activityBehaviour = new MockActivityBehaviour();
+    resolver.bindActivityBehaviourService(activityBehaviour, props);
+    SimpleContext context = new SimpleContext();
+    Object object = resolver.getValue(context, null, "activityBehaviour");
+    assertThat(object == activityBehaviour, is(true));
+    assertThat(context.isPropertyResolved(), is(true));
+  }
 
 	@Test
 	public void getValueWithNullProperty() {
@@ -112,7 +140,7 @@ public class BlueprintELResolverTest {
 	public void unbindServiceWithEmptyProperties() {
 		resolver.unbindService(new MockDelegate(), new HashMap<Object, Object>());
 	}
-	
+
 	@Test
 	public void unbindService(){
 		Map<String, String> props = new HashMap<String, String>();
@@ -126,9 +154,47 @@ public class BlueprintELResolverTest {
 		assertThat(context.isPropertyResolved(), is(false));
 	}
 
+  @Test
+  public void unbindTaskListenerService(){
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(OSGI_SERVICE_BLUEPRINT_COMPNAME, "taskListener");
+    MockTaskListener taskListener = new MockTaskListener();
+    resolver.bindTaskListenerService(taskListener, props);
+    resolver.unbindTaskListenerService(taskListener, props);
+    SimpleContext context = new SimpleContext();
+    Object value = resolver.getValue(context, null, "taskListener");
+    assertThat(value, is(nullValue()));
+    assertThat(context.isPropertyResolved(), is(false));
+  }
+
+  @Test
+  public void unbindActivityBehaviourService(){
+    Map<String, String> props = new HashMap<String, String>();
+    props.put(OSGI_SERVICE_BLUEPRINT_COMPNAME, "activityBehaviour");
+    MockActivityBehaviour activityBehaviour = new MockActivityBehaviour();
+    resolver.bindActivityBehaviourService(activityBehaviour, props);
+    resolver.unbindActivityBehaviourService(activityBehaviour, props);
+    SimpleContext context = new SimpleContext();
+    Object value = resolver.getValue(context, null, "activityBehaviour");
+    assertThat(value, is(nullValue()));
+    assertThat(context.isPropertyResolved(), is(false));
+  }
+
 	private class MockDelegate implements JavaDelegate {
 		@Override
 		public void execute(DelegateExecution execution) throws Exception {
 		}
 	}
+
+	private class MockTaskListener implements TaskListener {
+    @Override
+    public void notify(DelegateTask delegateTask) {
+    }
+  }
+
+  private class MockActivityBehaviour implements ActivityBehavior {
+    @Override
+    public void execute(ActivityExecution execution) throws Exception {
+    }
+  }
 }
