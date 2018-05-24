@@ -16,13 +16,13 @@ For more information about the Kafar console check the [official documetation](h
 To install from the (local or remote) maven repository, simple use the ```install``` karaf command:
 
 ```
-instal -s mvn:org.camunda.bpm.extension.osgi/camunda-engine-karaf-commands/VERSION
+install -s mvn:org.camunda.bpm.extension.osgi/camunda-bpm-karaf-commands/VERSION
 ```
 
 Where VERSION string should be replaced with the latest version. For example:
 
 ```
-install -s mvn:org.camunda.bpm.extension.osgi/camunda-engine-karaf-commands/1.0.0-SNAPSHOT
+install -s mvn:org.camunda.bpm.extension.osgi/camunda-bpm-karaf-commands/1.0.0-SNAPSHOT
 ```
 
 ## Usage
