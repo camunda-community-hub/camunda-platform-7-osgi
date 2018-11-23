@@ -118,11 +118,6 @@
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.url</groupId>
-        <artifactId>pax-url-aether</artifactId>
-        <version>1.6.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ops4j.pax.url</groupId>
         <artifactId>pax-url-reference</artifactId>
         <version>1.6.0</version>
       </dependency>
@@ -322,7 +317,7 @@
         						<ignore />
         					</action>
         				</pluginExecution>
-        				      				<pluginExecution>
+                <pluginExecution>
         					<pluginExecutionFilter>
         						<groupId>
         							org.apache.servicemix.tooling
