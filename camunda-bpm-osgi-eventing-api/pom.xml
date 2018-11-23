@@ -3,7 +3,7 @@
   <parent>
     <artifactId>camunda-bpm-osgi-root</artifactId>
     <groupId>org.camunda.bpm.extension.osgi</groupId>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>5.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
