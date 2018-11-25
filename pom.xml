@@ -363,10 +363,10 @@
       <id>ci</id>
       <properties>
         <!-- Override -->
-        <camunda-bpm.version>${env.camunda_bpm_version}</camunda-bpm.version>
-        <camunda-commons.version>${env.camunda_commons_version}</camunda-commons.version>
-        <camunda-spin.version>${env.camunda_spin_version}</camunda-spin.version>
-        <camunda-connect.version>${env.camunda_connect_version}</camunda-connect.version>
+        <camunda-bpm.version>${env.CAMUNDA_BPM_VERSION}</camunda-bpm.version>
+        <camunda-commons.version>${env.CAMUNDA_COMMONS_VERSION}</camunda-commons.version>
+        <camunda-spin.version>${env.CAMUNDA_SPIN_VERSION}</camunda-spin.version>
+        <camunda-connect.version>${env.CAMUNDA_CONNECT_VERSION}</camunda-connect.version>
       </properties>
     </profile>
   </profiles>
