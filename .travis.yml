@@ -29,4 +29,4 @@ matrix:
       camunda_spin_version: 1.4.1
       camunda_connect_version: 1.0.5
       jdk: openjdk8
-script: mvn install
+script: mvn install -P ci

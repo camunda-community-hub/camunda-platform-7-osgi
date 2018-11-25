@@ -361,11 +361,6 @@
   	</profile>
     <profile>
       <id>ci</id>
-      <activation>
-        <property>
-          <name>camunda_bpm_version</name>
-        </property>
-      </activation>
       <properties>
         <!-- Override -->
         <camunda-bpm.version>${env.camunda_bpm_version}</camunda-bpm.version>
