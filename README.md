@@ -38,6 +38,9 @@ The information is based on the MANIFEST files and not directly based on binary 
 |                       4.x.0  |         |         |         |         |         |         |    X    |         |         |
 |                       5.0.0  |         |         |         |         |         |         |         |         |    X    |
 
+Starting with version 5.1.0 the versioning scheme changed slightly. Like the 1.x.0 version, an update of the camunda BPM platform is back to being a minor version increase.
+Additionally, as long as there are no binary incompatibilities camunda OSGi is kept backwards compatible as much as possible.
+
 For more detailed descriptions please check the release notes of the individual releases.
 
 ## Get started

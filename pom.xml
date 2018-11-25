@@ -29,10 +29,12 @@
   </modules>
 
   <properties>
-  	<camunda-bpm.version>7.9.0</camunda-bpm.version>
-    <camunda-spin.version>1.5.1</camunda-spin.version>
-    <camunda-connect.version>1.0.6</camunda-connect.version>
-    <camunda-commons.version>1.5.0</camunda-commons.version>
+  	<camunda-bpm.version>7.8.0</camunda-bpm.version>
+    <!-- the lower bound for the MANIFEST -->
+    <camunda-bpm.min.version>7.6.0</camunda-bpm.min.version>
+    <camunda-spin.version>1.4.1</camunda-spin.version>
+    <camunda-connect.version>1.0.5</camunda-connect.version>
+    <camunda-commons.version>1.4.0</camunda-commons.version>
 
     <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
 
@@ -48,7 +50,7 @@
     <dependency-manager.version>3.2.0</dependency-manager.version>
     <!-- bundle properties -->
     <camunda.osgi.import.camunda.engine.version>
-      version="[$(version;==;${camunda.bpm.version.clean}),$(version;=+;${camunda.bpm.version.clean}))"
+      version="[${camunda-bpm.min.version},$(version;=+;${camunda.bpm.version.clean}))"
     </camunda.osgi.import.camunda.engine.version>
     <camunda.osgi.activator />
     <camunda.osgi.export.pkg />
@@ -357,6 +359,21 @@
 			</pluginManagement>
   		</build>
   	</profile>
+    <profile>
+      <id>ci</id>
+      <activation>
+        <property>
+          <name>env.camunda-bpm-version</name>
+        </property>
+      </activation>
+      <properties>
+        <!-- Override -->
+        <camunda-bpm.version>${env.camunda-bpm-version}</camunda-bpm.version>
+        <camunda-commons.version>${env.camunda-commons-version}</camunda-commons.version>
+        <camunda-spin.version>${env.camunda-spin-version}</camunda-spin.version>
+        <camunda-connect.version>${env.camunda-connect-version}</camunda-connect.version>
+      </properties>
+    </profile>
   </profiles>
 
   <pluginRepositories>
