@@ -32,9 +32,9 @@
   	<camunda-bpm.version>7.9.0</camunda-bpm.version>
     <!-- the lower bound for the MANIFEST -->
     <camunda-bpm.min.version>7.6.0</camunda-bpm.min.version>
-    <camunda-spin.version>1.4.1</camunda-spin.version>
-    <camunda-connect.version>1.0.5</camunda-connect.version>
-    <camunda-commons.version>1.4.0</camunda-commons.version>
+    <camunda-spin.version>1.5.1</camunda-spin.version>
+    <camunda-connect.version>1.0.6</camunda-connect.version>
+    <camunda-commons.version>1.5.0</camunda-commons.version>
 
     <spring.framework.version>3.1.2.RELEASE</spring.framework.version>
 

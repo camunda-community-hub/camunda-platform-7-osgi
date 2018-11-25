@@ -50,8 +50,8 @@ matrix:
       jdk: openjdk8
     - name: "camunda 7.9.0 JDK 11"
       camunda_bpm_version: 7.9.0
-      camunda_commons_version: 1.4.0
-      camunda_spin_version: 1.4.1
-      camunda_connect_version: 1.0.5
+      camunda_commons_version: 1.5.0
+      camunda_spin_version: 1.5.1
+      camunda_connect_version: 1.0.6
       jdk: openjdk11
 script: mvn install
