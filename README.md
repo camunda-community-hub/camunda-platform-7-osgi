@@ -22,6 +22,24 @@ Three modules are an exception from this rule, namely
 - camunda-bpm-osgi-itest, which contains all the integration tests
 - camunda-bpm-osgi, which contains some core components and is the only one required by all the modules
 
+## Compatability Matrix
+
+This matrix shows the compatibilities of the different camunda OSGi version and camunda BPM platform versions.
+The information is based on the MANIFEST files and not directly based on binary compatibility.
+
+| camunda OSGi // camunda BPM  |  7.1.x  |  7.2.x  |  7.3.x  |  7.4.x  |  7.5.x  |  7.6.x  |  7.7.x  |  7.8.x  |  7.9.x  |
+|-----------------------------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+|                       1.0.0  |    X    |         |         |         |         |         |         |         |         |
+|                       1.1.0  |         |    X    |         |         |         |         |         |         |         |
+|                       1.2.0  |         |         |    X    |         |         |         |         |         |         |
+|                       1.3.0  |         |         |         |    X    |         |         |         |         |         |
+|                       2.0.0  |         |         |         |         |    X    |         |         |         |         |
+|                       3.0.0  |         |         |         |         |         |    X    |         |         |         |
+|                       4.x.0  |         |         |         |         |         |         |    X    |         |         |
+|                       5.0.0  |         |         |         |         |         |         |         |         |    X    |
+
+For more detailed descriptions please check the release notes of the individual releases.
+
 ## Get started
 
 ### Part 1 starting the camunda BPM OSGi bundle
