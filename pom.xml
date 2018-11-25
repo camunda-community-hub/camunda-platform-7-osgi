@@ -363,7 +363,7 @@
       <id>ci</id>
       <activation>
         <property>
-          <name>env.camunda_bpm_version</name>
+          <name>camunda_bpm_version</name>
         </property>
       </activation>
       <properties>
