@@ -58,9 +58,9 @@ public class OSGiTestEnvironment implements ConfigurationFactory {
       mavenBundle("org.slf4j", "slf4j-api", "1.7.7"),
       mavenBundle("ch.qos.logback", "logback-core", "1.1.2"),
       mavenBundle("ch.qos.logback", "logback-classic", "1.1.2"),
+      mavenBundle("com.sun.activation", "javax.activation", "1.2.0"),
       //camunda osgi
       mavenBundle("org.camunda.bpm.extension.osgi", "camunda-bpm-osgi").versionAsInProject(),
-      
       //camunda osgi dependencies
       mavenBundle("org.apache.felix", "org.apache.felix.dependencymanager").versionAsInProject(),
 

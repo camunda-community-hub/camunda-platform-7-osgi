@@ -27,16 +27,17 @@ Three modules are an exception from this rule, namely
 This matrix shows the compatibilities of the different camunda OSGi version and camunda BPM platform versions.
 The information is based on the MANIFEST files and not directly based on binary compatibility.
 
-| camunda OSGi // camunda BPM  |  7.1.x  |  7.2.x  |  7.3.x  |  7.4.x  |  7.5.x  |  7.6.x  |  7.7.x  |  7.8.x  |  7.9.x  |
-|-----------------------------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|                       1.0.0  |    X    |         |         |         |         |         |         |         |         |
-|                       1.1.0  |         |    X    |         |         |         |         |         |         |         |
-|                       1.2.0  |         |         |    X    |         |         |         |         |         |         |
-|                       1.3.0  |         |         |         |    X    |         |         |         |         |         |
-|                       2.0.0  |         |         |         |         |    X    |         |         |         |         |
-|                       3.0.0  |         |         |         |         |         |    X    |         |         |         |
-|                       4.x.0  |         |         |         |         |         |         |    X    |         |         |
-|                       5.0.0  |         |         |         |         |         |         |         |         |    X    |
+| camunda OSGi // camunda BPM  |  7.1.x  |  7.2.x  |  7.3.x  |  7.4.x  |  7.5.x  |  7.6.x  |  7.7.x  |  7.8.x  |  7.9.x  |  7.10.x |
+|-----------------------------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:--------:
+|                       1.0.0  |    X    |         |         |         |         |         |         |         |         |         |
+|                       1.1.0  |         |    X    |         |         |         |         |         |         |         |         |
+|                       1.2.0  |         |         |    X    |         |         |         |         |         |         |         |
+|                       1.3.0  |         |         |         |    X    |         |         |         |         |         |         |
+|                       2.0.0  |         |         |         |         |    X    |         |         |         |         |         |
+|                       3.0.0  |         |         |         |         |         |    X    |         |         |         |         |
+|                       4.x.0  |         |         |         |         |         |         |    X    |         |         |         |
+|                       5.0.0  |         |         |         |         |         |         |         |         |    X    |         |
+|                       5.1.0  |         |         |         |         |         |    X    |    X    |    X    |    X    |    X    |
 
 Starting with version 5.1.0 the versioning scheme changed slightly. Like the 1.x.0 version, an update of the camunda BPM platform is back to being a minor version increase.
 Additionally, as long as there are no binary incompatibilities camunda OSGi is kept backwards compatible as much as possible.

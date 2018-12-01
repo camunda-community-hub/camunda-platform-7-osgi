@@ -32,6 +32,7 @@
   </feature>
 
   <feature name="camunda-commons" version="${camunda-commons.version}">
+    <bundle>mvn:com.sun.activation/javax.activation/1.2.0</bundle>
     <bundle>mvn:org.camunda.commons/camunda-commons-logging/${camunda-commons.version}</bundle>
     <bundle>mvn:org.camunda.commons/camunda-commons-utils/${camunda-commons.version}</bundle>
     <bundle>mvn:org.camunda.commons/camunda-commons-typed-values/${camunda-commons.version}</bundle>
