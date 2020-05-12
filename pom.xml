@@ -374,7 +374,7 @@
   <pluginRepositories>
     <pluginRepository>
       <id>maven central</id>
-      <url>http://repo1.maven.org/</url>
+      <url>https://repo1.maven.org/</url>
     </pluginRepository>
   </pluginRepositories>
 
