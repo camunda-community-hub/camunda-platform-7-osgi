@@ -14,15 +14,16 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - name: Wait for build to succeed
-      uses: fountainhead/action-wait-for-check@v1.0.0
-      id: wait-for-build
+    - name: 'Wait for Travis'
+      id: wait-for-travis
+      uses: "WyriHaximus/github-action-wait-for-status@f8bbe3bb321919ec6a009bc98121f39874dc8ee0"
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        checkName: continuous-integration/travis-ci/pr
-        ref: github.event.pull_request.head.sha || github.sha
+        ignoreActions: automerge
+        checkInterval: 13
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Cancel deploy if Travis fails
-      if: steps.wait-for-build.outputs.conclusion == 'failure'
+      if: steps.wait-for-travis.outputs.status != 'success'
       run: exit 1
     - uses: actions/checkout@v2
     - name: Detect release type
