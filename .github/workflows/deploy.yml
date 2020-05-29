@@ -14,6 +14,16 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+    - name: Wait for build to succeed
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      id: wait-for-build
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        checkName: continuous-integration/travis-ci/pr
+        ref: github.event.pull_request.head.sha || github.sha
+    - name: Cancel deploy if Travis fails
+      if: steps.wait-for-build.outputs.conclusion == 'failure'
+      run: exit 1
     - uses: actions/checkout@v2
     - name: Detect release type
       run: |-
