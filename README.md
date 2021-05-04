@@ -1,8 +1,11 @@
-# OSGi integration for camunda BPM platform
+# OSGi integration for Camunda Platform
 
 [![Build Status](https://travis-ci.org/camunda/camunda-bpm-platform-osgi.svg?branch=master)](https://travis-ci.org/camunda/camunda-bpm-platform-osgi)
+[![Community Extension Badge](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
+[![Lifecycle: Abandoned Badge](https://img.shields.io/badge/Lifecycle-Abandoned-lightgrey)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#abandoned-)
+[![Lifecycle: Needs Maintainer](https://img.shields.io/badge/Lifecycle-Needs%20Maintainer%20-ff69b4)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#abandoned-)
 
-camunda BPM community extension providing support for camunda BPM platform inside OSGi containers
+Camunda Platform community extension providing support for Camunda Platform inside OSGi containers
 
 ```
 Manifest-Version: 1.0
