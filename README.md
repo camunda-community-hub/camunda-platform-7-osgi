@@ -4,7 +4,7 @@
 [![Community Extension Badge](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
 [![Lifecycle: Abandoned Badge](https://img.shields.io/badge/Lifecycle-Abandoned-lightgrey)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#abandoned-)
 [![Lifecycle: Needs Maintainer](https://img.shields.io/badge/Lifecycle-Needs%20Maintainer%20-ff69b4)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#abandoned-)
-![Compatible with: Camunda Platform](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%207-26d07c)
+![Compatible with: Camunda Platform 7](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%207-26d07c)
 
 Camunda Platform community extension providing support for Camunda Platform inside OSGi containers
 
