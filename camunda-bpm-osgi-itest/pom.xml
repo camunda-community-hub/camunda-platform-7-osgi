@@ -14,7 +14,7 @@
     <camunda.osgi.dynamic.import>
       *
     </camunda.osgi.dynamic.import>
-    <apache.aries.version>1.0.0</apache.aries.version>
+    <apache.aries.version>1.10.3</apache.aries.version>
   </properties>
   <dependencies>
   <!-- main dependencies needed for the tests -->
