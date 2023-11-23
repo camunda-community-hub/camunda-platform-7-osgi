@@ -41,7 +41,7 @@
     <osgi.version>5.0.0</osgi.version>
     <osgi-enterprise.version>5.0.0</osgi-enterprise.version>
     <karaf.version>4.0.9</karaf.version>
-    <apache.felix.version>4.4.1</apache.felix.version>
+    <apache.felix.version>4.6.1</apache.felix.version>
 
     <junit.version>4.13.1</junit.version>
     <paxexam.version>4.11.0</paxexam.version>
